@@ -14,3 +14,8 @@ class Fixture {
     }
 
 }
+
+
+function set_active_fixture(){
+
+}

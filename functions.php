@@ -176,5 +176,24 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+/*
+add_filter('rest_post_dispatch','my_func',10,3);
+
+function my_func($result,$server,$request){
+
+	//error_log(json_encode($result));
+
+	return $result;
+	
+}
+*/
+
+
+// Scoremasters App
+if( file_exists( dirname( __FILE__) . '/vendor/autoload.php' )){
+    require_once dirname( __FILE__) . '/vendor/autoload.php';
+}
+
 require_once( dirname(__FILE__) . '/app/scoremasters.php');
+
 

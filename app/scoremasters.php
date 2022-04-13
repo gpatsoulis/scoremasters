@@ -2,6 +2,11 @@
 
 defined('ABSPATH') or die;
 
-if( file_exists( dirname( __FILE__) . '../vendor/autoload.php' )){
-    require_once dirname( __FILE__) . '../vendor/autoload.php';
-}
+use Scoremasters\Inc\Classes\FixtureSetup;
+use Scoremasters\Inc\Classes\PlayerSetup;
+use Scoremasters\Inc\Classes\CompetitionSetup;
+
+
+FixtureSetup::init();
+PlayerSetup::init();
+CompetitionSetup::init(); 

@@ -33,27 +33,6 @@ class Player {
 }
 
 
-//
-add_action('user_register','setup_custom_user_meta');
-
-function setup_custom_user_meta($user){
-
-    if(metadata_exists( 'user', $user->ID, 'stored_predictions' )){
-        throw new Exception('\"stored_predictions\" metadata exists for user with id: ' . $user->ID);
-    }
-
-    $id = update_user_meta( $user->ID, 'stored_predictions', '', true );
-
-    if( true === $id){
-        throw new Exception('\"stored_predictions\" metadata exists for user with id: ' . $user->ID);
-    }
-
-    if( false === $id){
-        throw new Exception('fail to create \"stored_predictions\" metadata for user with id: ' . $user->ID);
-    }
-}
-
-
 /*
 prediction schema
 
