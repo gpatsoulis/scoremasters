@@ -3,7 +3,7 @@
  * @package scoremasters
  */
 
-namespace Scoremasters\Inc\Classes;
+namespace Scoremasters\Inc\Base;
 
 class PlayerSetup {
 
