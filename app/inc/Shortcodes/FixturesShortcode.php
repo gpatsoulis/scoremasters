@@ -39,7 +39,7 @@ class FixturesShortcode
             return "<!-- No valid scm-fixture -->";
         }
 
-        $output .= $this->template->$container_start;
+        $output .= $this->template->container_start;
 
         $post = $posts[0];
 
