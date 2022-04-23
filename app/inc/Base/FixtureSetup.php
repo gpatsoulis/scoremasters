@@ -5,6 +5,8 @@
 
 namespace Scoremasters\Inc\Base;
 
+use Scoremasters\Inc\Shortcodes\FixtureShortcode;
+
 class FixtureSetup {
 
     public static function init(){

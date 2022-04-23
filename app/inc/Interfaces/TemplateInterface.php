@@ -8,7 +8,7 @@ namespace Scoremasters\Inc\Interfaces;
 
 interface  TemplateInterface {
 
-    public function render_html();
-    public function render_css();
+    public function get_html(array $data ):string;
+    public function get_css( array $data = array() ):string;
 
 }

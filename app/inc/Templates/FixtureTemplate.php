@@ -9,25 +9,35 @@ use Scoremasters\Inc\Interfaces\TemplateInterface;
 
 final class FixtureTemplate implements TemplateInterface
 {
+	public string $container_start;
+	public string $container_end;
 
-    public function render_html(array $data)
+	public function __construct(string $container = 'div',string $class_name = '', string $id_name = '',array $data_items = array()){
+		$this->container_start = "<{$container} class='{$class_name}' id='{$id_name}'>";
+		$this->container_end = "</{$container}>";
+	}
+
+    public function get_html(array $data):string
     {
-        $template = <<<HTML
+        $template_html = <<<HTML
         <div class="scm-fixture-list">
-           <div class="scm-fixture-list-row">
+           <div class="scm-fixture-list-row" data-match_id={$data['match-id']}>
                <div class="home-container">
                            <div class="team-image">
                                {$data["home-team-image"]}
                            </div>
-                           <h4 class="scm-home-team">
+                           <h4 class="scm-home-team" data-team_id="{$data["home-team-id"]}">
                                {$data["home-team-name"]}
                            </h4>
                </div>
                <div class="match-details">
                            <div class="bet-button">
+							   <button class='activate-prediction-popup'>Παίξε</button>
+							   <!--
                                <form action="<? bloginfo('url'); ?>" method="get">
                                    <input type="submit" name="submit" value="Παίξε">
                                </form>
+	-->
                            </div>
                            <div class="match-sub-details">
                                <div class="stadium">
@@ -42,7 +52,7 @@ final class FixtureTemplate implements TemplateInterface
                    <h4 class="scm-away-team">
                        {$data["away-team-name"]}
                    </h4>
-                   <div class="team-image">
+                   <div class="team-image" data-team_id="{$data["away-team-id"]}">
                        {$data["away-team-image"]}
                    </div>
                </div>
@@ -50,12 +60,12 @@ final class FixtureTemplate implements TemplateInterface
        </div>
 HTML;
 
-        echo $template;
+        return $template_html;
     }
 
-    public function render_css(array $data = array())
+    public function get_css( array $data = array()):string
     {
-        $template = <<<HTML
+        $template_css = <<<HTML
 		<style>
 			.scm-fixture-list {
 				list-style: none;
@@ -137,6 +147,6 @@ HTML;
 		</style>
 HTML;
 
-        echo $template;
+        return $template_css;
     }
 }

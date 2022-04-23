@@ -1,6 +1,11 @@
 <?php
 /**
  * @package scoremasters
+ * 
+ * When new competition is created set publish date 
+ * same as the current scm-seasom. Every active competion
+ * will have the same publish date as the current 
+ * active season.
  */
 
 namespace Scoremasters\Inc\Base;

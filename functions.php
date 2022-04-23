@@ -142,7 +142,7 @@ function scoremasters_scripts() {
 	wp_style_add_data( 'scoremasters-style', 'rtl', 'replace' );
 
 	wp_enqueue_script( 'scoremasters-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
-
+	wp_enqueue_script( 'scoremasters-activate-prediction-popup', get_template_directory_uri() . '/app/js/activate-prediction-popup.js', array(), _S_VERSION, true );
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
@@ -187,6 +187,77 @@ function my_func($result,$server,$request){
 	
 }
 */
+/** Main Menu **/
+function my_wp_nav_menu_args( $args = '' ) {
+
+	if( is_user_logged_in() ) { 
+		$args['menu'] = 'Main Menu logged-in'; //This value stands for the actual name you give to the menu when you create it.
+	} else { 
+		$args['menu'] = 'Main Menu logged-out';
+	} 
+		return $args;
+}
+
+add_filter( 'wp_nav_menu_args', 'my_wp_nav_menu_args' );
+	
+/**Redirect after login**/
+function redirect_on_login() {
+		$some_url = 'http://scoremasters.gr/?page_id=594';
+		wp_redirect( $some_url );
+		exit;
+}
+
+add_action( 'wp_login', 'redirect_on_login', 1 );
+
+/**Redirect after logout and override wp_nonce**/
+
+function logout_without_confirm($action, $result)
+	{
+		/**
+		 * Allow logout without confirmation
+		 */
+		if ($action == "log-out" && !isset($_GET['_wpnonce'])) {
+			$redirect_to = isset($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : 'http://scoremasters.gr/';
+			$location = str_replace('&amp;', '&', wp_logout_url($redirect_to));
+			header("Location: $location");
+			die;
+		}
+}
+
+add_action('check_admin_referer', 'logout_without_confirm', 10, 2);
+
+/** Shortcode for week selection in SCM-Fixture*/
+function fill_select_week_fixture() {
+	$args=array (
+		'post_type' => 'scm-fixture',
+		'post_status' => 'publish',
+		'order'   => 'ASC',
+		'numberposts' => -1,
+	);
+
+	$posts=get_posts($args);
+	?>
+	<form action="#" method="get">
+			<select name="scm-fixtures-selection" id="scm-fixtures-selection-week">			
+			<?php foreach( $posts as $post ) : setup_postdata($post);
+				/*$end_date_string=get_post_meta( $post->ID, 'week-end-date', true );
+				$end_date=DateTime::createFromFormat('Ymd', $end_date_string);
+				$start_date_string=get_post_meta( $post->ID, 'week-start-date', true );
+				$start_date=DateTime::createFromFormat('Ymd', $start_date_string);
+				*/
+				echo '<option value="'.$post->ID.'">'.$post->post_title.' ( '.get_post_meta( $post->ID, 'week-start-date', true ).' - '.get_post_meta( $post->ID, 'week-end-date', true ).' )</option>';
+			endforeach;?>
+			</select>
+		<input type="submit" name="submit" value="Προβολή" />
+	</form>
+	<?php
+	wp_reset_postdata();
+}
+
+add_shortcode('scm-select-week','fill_select_week_fixture');
+
+
+
 
 
 // Scoremasters App
