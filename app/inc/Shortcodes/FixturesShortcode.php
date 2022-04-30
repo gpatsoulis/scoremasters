@@ -25,6 +25,7 @@ class FixturesShortcode
     public function output()
     {
         $output = '';
+        $data = array();
 
         $args = array(
             'post_type' => 'scm-fixture',
@@ -48,6 +49,7 @@ class FixturesShortcode
         if ($matches) {
             foreach ($matches[0]['week-match'] as $match) {
 
+                $data["player-id"] = get_current_user_id( );
                 $data['match-id'] = $match->ID;
                 $repeater_teams = get_field("match-teams", $match->ID);
 
@@ -74,7 +76,7 @@ class FixturesShortcode
     public function get_template()
     {
 
-        $this->template = new \Scoremasters\Inc\Templates\FixtureTemplate('div');
+        $this->template = new \Scoremasters\Inc\Templates\FixtureTemplate('div','scm-fixture-games-list','',array('name' => 'player_id','value' =>get_current_user_id( ) ));
 
     }
 

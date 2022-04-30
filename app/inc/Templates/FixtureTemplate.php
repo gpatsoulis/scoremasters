@@ -13,15 +13,15 @@ final class FixtureTemplate implements TemplateInterface
 	public string $container_end;
 
 	public function __construct(string $container = 'div',string $class_name = '', string $id_name = '',array $data_items = array()){
-		$this->container_start = "<{$container} class='{$class_name}' id='{$id_name}'>";
+		$this->container_start = "<{$container} class='{$class_name}' id='{$id_name}' data-{$data_items['name']}='{$data_items['value']}'>";
 		$this->container_end = "</{$container}>";
 	}
 
     public function get_html(array $data):string
     {
         $template_html = <<<HTML
-        <div class="scm-fixture-list">
-           <div class="scm-fixture-list-row" data-match_id={$data['match-id']}>
+        <div class="scm-fixture-list" data-player_id="{$data["player-id"]}">
+           <div class="scm-fixture-list-row" data-match_id={$data["match-id"]}>
                <div class="home-container">
                            <div class="team-image">
                                {$data["home-team-image"]}
@@ -49,10 +49,10 @@ final class FixtureTemplate implements TemplateInterface
                            </div>
                </div>
                <div class="away-container">
-                   <h4 class="scm-away-team">
+                   <h4 class="scm-away-team" data-team_id="{$data["away-team-id"]}">
                        {$data["away-team-name"]}
                    </h4>
-                   <div class="team-image" data-team_id="{$data["away-team-id"]}">
+                   <div class="team-image">
                        {$data["away-team-image"]}
                    </div>
                </div>
