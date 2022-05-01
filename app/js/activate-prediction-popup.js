@@ -68,6 +68,7 @@ function setProductURLData(event) {
     }
 
     let match_id = match.dataset.match_id;
+    let match_date_gmt = match.dataset.match_date_gmt;
 
     const url = new URL(window.location);
 
@@ -75,6 +76,7 @@ function setProductURLData(event) {
     url.searchParams.set('match_id', match_id);
     url.searchParams.set('homeTeam_id', homeTeam_id);
     url.searchParams.set('awayTeam_id', awayTeam_id);
+    url.searchParams.set('match_date_gmt', match_date_gmt);
 
     window.history.pushState({}, '', url);
 
@@ -91,8 +93,6 @@ function editPopupContent(event, id, instance) {
 
         setModalData(data, popup);
 
-    
-
 }
 
 function readURLSearchParams() {
@@ -104,12 +104,14 @@ function readURLSearchParams() {
     let match_id = params.get('match_id');
     let homeTeam_id = params.get('homeTeam_id');
     let awayTeam_id = params.get('awayTeam_id');
+    let match_date_gmt = params.get('match_date_gmt');
 
     const data = [
         {name:'player_id',value:player_id},
         {name:'match_id',value:match_id},
         {name:'homeTeam_id',value:homeTeam_id},
         {name:'awayTeam_id',value:awayTeam_id},
+        {name:'match_date_gmt',value:match_date_gmt},
     ];
         
 
@@ -121,9 +123,6 @@ function setModalData(data, popup) {
     //<input type="hidden" name="post_id" value="872">
 
     let placeholder = popup.querySelector('form.elementor-form');
-
-    
-
 
     data.forEach( data => {
         let data_name = data.name;

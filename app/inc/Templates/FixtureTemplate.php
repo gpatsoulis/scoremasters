@@ -21,7 +21,7 @@ final class FixtureTemplate implements TemplateInterface
     {
         $template_html = <<<HTML
         <div class="scm-fixture-list" data-player_id="{$data["player-id"]}">
-           <div class="scm-fixture-list-row" data-match_id={$data["match-id"]}>
+           <div class="scm-fixture-list-row" data-match_id="{$data["match-id"]}" data-match_date_gmt="{$data["match-date-gmt"]}">
                <div class="home-container">
                            <div class="team-image">
                                {$data["home-team-image"]}

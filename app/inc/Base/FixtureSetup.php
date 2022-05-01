@@ -39,12 +39,51 @@ class FixtureSetup {
     public static function scm_player_prediction($record, $ajax_handler){
 
         $form_name = $record->get_form_settings('form_name');
-        //if($form_name != 'scm-prediction-form') return;
-         //debug
-        file_put_contents(__DIR__ . '/name_form_data.txt', json_encode($form_name) . "\n",FILE_APPEND);
+
+        if($form_name !== 'scm-prediction-form'){
+            error_log( static::class . ' - invalid form name');
+            //send error message to ajax handler
+            return;
+        }
+
+        //debug
+        //file_put_contents(__DIR__ . '/name_form_data.txt', json_encode($form_name) . "\n",FILE_APPEND);
         $form_data = $record->get_formatted_data();
-         //debug
-        file_put_contents(__DIR__ . '/form_data.txt', json_encode($form_data) . "\n",FILE_APPEND);
+        //debug
+        //file_put_contents(__DIR__ . '/form_data.txt', json_encode($form_data) . "\n",FILE_APPEND);
+
+        $form_meta = $record->get_form_meta(array('page_url'));
+        //debug
+        //file_put_contents(__DIR__ . '/form_meta.txt', json_encode($form_meta) . "\n",FILE_APPEND);
+        
+        $raw_req_url = $form_meta['page_url']['value'];
+
+        if(!filter_var($raw_req_url, FILTER_VALIDATE_URL, FILTER_FLAG_QUERY_REQUIRED)){
+            error_log( static::class . ' - invalid form url');
+            //send error message to ajax handler
+            return;
+        }
+
+        $req_url = parse_url($raw_req_url);
+
+        parse_str($req_url['query'],$url_query_params);
+        $filtered_url_query_params = array();
+
+        //{"page_id":"692","player_id":"2","match_id":"850","homeTeam_id":"133","awayTeam_id":"138"}
+
+        $valid_keys = array('page_id','player_id','match_id','homeTeam_id','awayTeam_id','match_date_gmt');
+        foreach($url_query_params as $param_key => $param_value){
+
+            if(!in_array($param_key,$valid_keys,true)) continue;
+
+            if(!filter_var($param_value, FILTER_VALIDATE_INT)) continue;
+
+            $filtered_url_query_params[$param_key] = $param_value;
+        }
+
+
+
+        //if $req_url === false log error, stop action, return error message to fron end 
 
         //todo: check valid form name
         //todo: check if player can make predictions
@@ -53,17 +92,33 @@ class FixtureSetup {
 
         //save or update data
 
-        /*
-        $prediction_post = array(
-            'post_author' => $player_id,
-            'post_date' => $scm_match_start_date,
-            'post_content' => serilize($data),
-            'post_title' => $match_id . '|' . $player_id,
+        $post_date_gmt = gmdate('Y-m-d H:i:s' ,$filtered_url_query_params['match_date_gmt']);
+        $post_date = get_date_from_gmt( $post_date_gmt );
+
+        $player_prediction_post = array(
+            'post_author' => $filtered_url_query_params['player_id'],
+            'post_date' => $post_date,
+            'post_date_gmt' => $post_date_gmt,
+            'post_content' => serialize($form_data),
+            'post_title' => $filtered_url_query_params['match_id'] . '|' . $filtered_url_query_params['player_id'],
             'post_type' => 'scm-prediction',
         );
 
-        wp_insert_post();
-*/
+        $existing_player_prediction = get_page_by_title( $player_prediction_post['post_title'],OBJECT,'scm-prediction');
+
+        
+        if(is_array($existing_player_prediction)){
+            $existing_player_prediction = $existing_player_prediction[0];
+            error_log( static::class . ' - too many posts with type: "scm-prediction", should be only one');
+        }
+
+        if($existing_player_prediction){
+            $player_prediction_post['ID'] = $existing_player_prediction->ID;
+        }
+
+
+        wp_insert_post($player_prediction_post);
+
     }
 
 }

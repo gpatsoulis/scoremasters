@@ -24,6 +24,9 @@ class FixturesShortcode
 
     public function output()
     {
+        //todo: check for valid match date
+        // if date has passed disable "play button" from shortcode
+       
         $output = '';
         $data = array();
 
@@ -51,6 +54,9 @@ class FixturesShortcode
 
                 $data["player-id"] = get_current_user_id( );
                 $data['match-id'] = $match->ID;
+
+                $data['match-date-gmt'] = strtotime($match->post_date_gmt);
+
                 $repeater_teams = get_field("match-teams", $match->ID);
 
                 $data["home-team-image"] = get_the_post_thumbnail($repeater_teams[0]["home-team"][0]->ID);
@@ -75,9 +81,7 @@ class FixturesShortcode
 
     public function get_template()
     {
-
         $this->template = new \Scoremasters\Inc\Templates\FixtureTemplate('div','scm-fixture-games-list','',array('name' => 'player_id','value' =>get_current_user_id( ) ));
-
     }
 
 }
