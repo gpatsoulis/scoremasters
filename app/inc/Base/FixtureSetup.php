@@ -95,6 +95,9 @@ class FixtureSetup {
         $post_date_gmt = gmdate('Y-m-d H:i:s' ,$filtered_url_query_params['match_date_gmt']);
         $post_date = get_date_from_gmt( $post_date_gmt );
 
+        $form_data['homeTeam_id'] = $filtered_url_query_params['homeTeam_id'];
+        $form_data['awayTeam_id'] = $filtered_url_query_params['awayTeam_id'];
+
         $player_prediction_post = array(
             'post_author' => $filtered_url_query_params['player_id'],
             'post_date' => $post_date,
