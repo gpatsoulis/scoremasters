@@ -19,6 +19,12 @@ final class FixtureTemplate implements TemplateInterface
 
     public function get_html(array $data):string
     {
+		$popup_btn = "<button class='activate-prediction-popup'>Παίξε</button>";
+		
+		if ($data['openForPredictions'] === false){
+			$popup_btn = '<div class="scm-match-finished"><h3>FINISHED</h3><h3 class="scm-match-score">'. $data["match-score"] .'</h3></div>';
+		}
+
         $template_html = <<<HTML
         <div class="scm-fixture-list" data-player_id="{$data["player-id"]}">
            <div class="scm-fixture-list-row" data-match_id="{$data["match-id"]}" data-match_date_gmt="{$data["match-date-gmt"]}">
@@ -32,7 +38,8 @@ final class FixtureTemplate implements TemplateInterface
                </div>
                <div class="match-details">
                            <div class="bet-button">
-							   <button class='activate-prediction-popup'>Παίξε</button>
+							   {$popup_btn}
+							   <!--<button class='activate-prediction-popup'>Παίξε</button>-->
 							   <!--
                                <form action="<? bloginfo('url'); ?>" method="get">
                                    <input type="submit" name="submit" value="Παίξε">
@@ -154,6 +161,15 @@ HTML;
 				justify-content: space-around;
 			}
 
+			.scm-match-finished {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				
+			}
+			.scm-match-finished h3 {
+				margin: 5px 0 0 0 ;
+			}
 		</style>
 HTML;
 

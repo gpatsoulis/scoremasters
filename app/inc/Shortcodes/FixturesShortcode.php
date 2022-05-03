@@ -49,8 +49,28 @@ class FixturesShortcode
 
         $matches = get_field('week-matches', $post->ID);
 
+        $current_date = new \DateTime();
+        $current_date->setTimezone(new \DateTimeZone('Europe/Athens'));
+
         if ($matches) {
             foreach ($matches[0]['week-match'] as $match) {
+
+                $data['openForPredictions'] =  true;
+                $match_date = new \DateTime($match->post_date);
+
+                //scm-full-time-score
+                //scm-full-time-home-score
+                //scm-full-time-away-score
+
+                if($current_date > $match_date){
+                    $data['openForPredictions'] = false;
+
+                    $score_acf_group = get_field('scm-full-time-score',$match->ID);
+                    $score_home = $score_acf_group['scm-full-time-home-score'];
+                    $score_away = $score_acf_group['scm-full-time-away-score'];
+
+                    $data["match-score"] = $score_home . ' - ' . $score_away;
+                }
 
                 $data["player-id"] = get_current_user_id( );
                 $data['match-id'] = $match->ID;
