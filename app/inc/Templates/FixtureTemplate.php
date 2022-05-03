@@ -144,6 +144,16 @@ HTML;
 				text-align: center;
 			}
 
+			/*  popup styles  */ 
+			.team-names-container h3 {
+				color: black;
+			}
+
+			.team-names-container {
+				display: flex;
+				justify-content: space-around;
+			}
+
 		</style>
 HTML;
 

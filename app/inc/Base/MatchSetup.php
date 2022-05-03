@@ -18,10 +18,10 @@ class MatchSetup {
             return $value;
         }
        
-        //(string)$value format: 20220406
-        $start_date = \DateTime::createFromFormat('Ymd',$value)->setTime(0,0);
+        //(string)$value format: 20220406 todo: change acf time format to 'Y-m-d H:i:s'
+        $start_date = \DateTime::createFromFormat('Y-m-d H:i:s',$value);
         //wp post_date format: 0000-00-00 00:00:00
-        
+
         $wp_formated_date = $start_date->format('Y-m-d H:i:s');
         
         $updated = wp_update_post(array('ID' => $post_id,'post_date' =>  $wp_formated_date));
