@@ -7,14 +7,50 @@ namespace Scoremasters\Inc\Classes;
 
 class FootballMatch {
 
+    /**
+    * Post type scm-teams 
+    * @param WP_Post $home_team
+    */
     public $home_team;
+
+    /**
+     * @param int $home_team_dynamikotita
+     */
     public $home_team_dynamikotita;
+
+    /**
+    * Post type scm-teams 
+    * @param WP_Post $home_team
+    */
     public $away_team;
+
+    /**
+     * @param int $away_team_dynamikotita
+     */
     public $away_team_dynamikotita;
+
+    /**
+     * Array with scm-pro-players ids
+     * @param array $scorers
+     */
     public $scorers;
+
+    /**
+     * scm-match 
+     * @param WP_Post $post_data
+     */
     public $post_data;
+
+    /**
+     * @param array $points_table
+     */
     public $points_table;
+
     //todo
+    /**
+     * acf group field
+     * @param array $final_score
+     */
     public $final_score;
     public $Half_time_score;
 
@@ -63,8 +99,10 @@ class FootballMatch {
     }
 
     protected function get_score(){
+
         $this->Half_time_score = get_field('scm-half-time-score',$this->post_data->ID);
         $this->final_score = get_field('scm-full-time-score',$this->post_data->ID);
+
     }
 
 }
