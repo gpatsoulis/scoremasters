@@ -76,7 +76,7 @@ function setProductURLData(event) {
     }
 
     let match_id = match.dataset.match_id;
-    let match_date_gmt = match.dataset.match_date_gmt;
+    let match_date = match.dataset.match_date;
 
     const url = new URL(window.location);
 
@@ -86,7 +86,7 @@ function setProductURLData(event) {
     url.searchParams.set('homeTeam_name', homeTeam_name);
     url.searchParams.set('awayTeam_id', awayTeam_id);
     url.searchParams.set('awayTeam_name', awayTeam_name);
-    url.searchParams.set('match_date_gmt', match_date_gmt);
+    url.searchParams.set('match_date', match_date);
 
     window.history.pushState({}, '', url);
 
@@ -122,7 +122,7 @@ function readURLSearchParams() {
     let homeTeam_name = params.get('homeTeam_name');
     let awayTeam_id = params.get('awayTeam_id');
     let awayTeam_name = params.get('awayTeam_name');
-    let match_date_gmt = params.get('match_date_gmt');
+    let match_date = params.get('match_date');
 
     const data = [
         {name:'player_id',value:player_id},
@@ -131,7 +131,7 @@ function readURLSearchParams() {
         {name:'homeTeam_name',value:homeTeam_name},
         {name:'awayTeam_id',value:awayTeam_id},
         {name:'awayTeam_name',value:awayTeam_name},
-        {name:'match_date_gmt',value:match_date_gmt},
+        {name:'match_date',value:match_date},
     ];
         
 

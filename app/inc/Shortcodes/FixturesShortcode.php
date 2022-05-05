@@ -75,7 +75,7 @@ class FixturesShortcode
                 $data["player-id"] = get_current_user_id( );
                 $data['match-id'] = $match->ID;
 
-                $data['match-date-gmt'] = strtotime($match->post_date_gmt);
+                $data['match-date'] = strtotime($match->post_date);
 
                 $repeater_teams = get_field("match-teams", $match->ID);
 
@@ -84,7 +84,7 @@ class FixturesShortcode
                 $data["home-team-id"] = $repeater_teams[0]["home-team"][0]->ID;
 
                 $data["stadium"] = $repeater_teams[0]["home-team"][0]->post_content;
-                $data["match-date"] = $match->post_date_gmt;
+                $data["match-date-string"] = $match->post_date;
 
                 $data["away-team-name"] = $repeater_teams[0]["away-team"][0]->post_title;
                 $data["away-team-id"] = $repeater_teams[0]["away-team"][0]->ID;

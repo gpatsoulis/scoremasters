@@ -71,7 +71,7 @@ class FixtureSetup {
 
         //{"page_id":"692","player_id":"2","match_id":"850","homeTeam_id":"133","awayTeam_id":"138"}
 
-        $valid_keys = array('page_id','player_id','match_id','homeTeam_id','awayTeam_id','match_date_gmt');
+        $valid_keys = array('page_id','player_id','match_id','homeTeam_id','awayTeam_id','match_date');
         foreach($url_query_params as $param_key => $param_value){
 
             if(!in_array($param_key,$valid_keys,true)) continue;
@@ -92,16 +92,22 @@ class FixtureSetup {
 
         //save or update data
 
-        $post_date_gmt = gmdate('Y-m-d H:i:s' ,$filtered_url_query_params['match_date_gmt']);
-        $post_date = get_date_from_gmt( $post_date_gmt );
+        //$post_date = gmdate('Y-m-d H:i:s' ,$filtered_url_query_params['match_date']);
+
+        $post_date = new \DateTime();
+        $post_date->setTimestamp($filtered_url_query_params['match_date']);
+
+        //file_put_contents(__DIR__ . '/date.txt', json_encode($filtered_url_query_params['match_date']) . "\n",FILE_APPEND);
+        //file_put_contents(__DIR__ . '/date.txt', json_encode($post_date->format('Y-m-d H:i:s')) . "\n",FILE_APPEND);
+        //$post_date = get_date_from_gmt( $post_date_gmt );
 
         $form_data['homeTeam_id'] = $filtered_url_query_params['homeTeam_id'];
         $form_data['awayTeam_id'] = $filtered_url_query_params['awayTeam_id'];
 
         $player_prediction_post = array(
             'post_author' => $filtered_url_query_params['player_id'],
-            'post_date' => $post_date,
-            'post_date_gmt' => $post_date_gmt,
+            'post_date' => $post_date->format('Y-m-d H:i:s'),
+            //'post_date_gmt' => $post_date_gmt,
             'post_content' => serialize($form_data),
             'post_title' => $filtered_url_query_params['match_id'] . '|' . $filtered_url_query_params['player_id'],
             'post_type' => 'scm-prediction',
