@@ -24,6 +24,8 @@ function onPopupEvent(event, id, instance) {
     //console.log(event, id);
     // populate popup with match data
     editPopupContent(event, id, instance);
+
+    restrictions(event, id, instance);
     //addPlayersList(event, id, instance);
 }
 
@@ -265,4 +267,124 @@ function setUpPlayersList(data, popup){
     documentFragTeams.appendChild(teamsNames);
 
     teamsNamesPlaceholder.prepend(documentFragTeams);
+ }
+
+ function restrictions(event, id, instance){
+
+    let popup = instance["$element"][0];
+
+    let shmeioSelect = popup.querySelector('#form-field-field_b324dff');
+
+    let underOverSelect = popup.querySelector('#form-field-field_eba581d');
+
+    let scoreSelect = popup.querySelector('#form-field-field_4879a1e');
+
+    let scorerSelect = popup.querySelector('#form-field-scm_scorer');
+
+    //let doubleSelect = popup.querySelector('#form-field-field_c61b597');
+
+
+    //[5/5, 13:50] Tassos Mountakis: Δε μπορούν να βάλουν σημείο άσσο και σκορ 0-1
+    //[5/5, 13:50] Tassos Mountakis: Δε μπορούν να επιλέξουν σκορ και Άντερ/οβερ
+    //[5/5, 13:51] Tassos Mountakis: Δε μπορούν να επιλέξουν σκόρερ της φιλοξενούμενης ομάδας αν πχ έχουν επιλέξει σκορ 2-0
+    //[5/5, 13:52] Tassos Mountakis: Αν επιλέξουν σκορ 0-0, δεν μπορούν να επιλέξουν σκόρερ. Και φυσικά να απενεργοποιείται η επιλογή διπλασιασμό στο σκόρερ
+
+
+    shmeioSelect.addEventListener( 'change', shmeioSelect_restrictions );
+
+    function shmeioSelect_restrictions(event){
+        if(event.target.value !== '-'){
+            //disable under/over select
+            underOverSelect.disabled = true;
+        }
+
+        if(event.target.value === '-'){
+            //disable under/over select
+            underOverSelect.disabled = false;
+            let optionsDisble = scoreSelect.querySelectorAll('option');
+            [...optionsDisble].map( x => x.disabled = false);
+        }
+
+        console.log(event.target.value);
+        if(['-/1','1/1','X/1','2/1'].includes(event.target.value) ){
+            //shmeioSelect.disabled = false;
+            let optionsDisble = scoreSelect.querySelectorAll('option');
+            [...optionsDisble].map( x => {
+                x.disabled = false;
+
+                if(['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(x.value)){
+                    x.disabled = true;
+                }
+                if(['0-0','1-1','2-2','3-3'].includes(x.value)){
+                    x.disabled = true;
+                }
+                
+            });
+        }
+
+        if(['-/2','2/2','X/2','1/2'].includes(event.target.value) ){
+            //shmeioSelect.disabled = false;
+            let optionsDisble = scoreSelect.querySelectorAll('option');
+            [...optionsDisble].map( x => {
+                x.disabled = true;
+
+                if(['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(x.value)){
+                    x.disabled = false;
+                }
+                if(['0-0','1-1','2-2','3-3'].includes(x.value)){
+                    x.disabled = true;
+                }
+                
+            });
+        }
+
+        if(['-/X','1/X','X/X','2/X'].includes(event.target.value) ){
+            //shmeioSelect.disabled = false;
+            let optionsDisble = scoreSelect.querySelectorAll('option');
+            [...optionsDisble].map( x => {
+
+                x.disabled = true;
+
+                if(['0-0','1-1','2-2','3-3'].includes(x.value)){
+                    x.disabled = false;
+                }
+                
+            });
+        }
+    }
+
+    underOverSelect.addEventListener( 'change', underOverSelect_restrictions );
+
+    function underOverSelect_restrictions(event) {
+        if(event.target.value !== '-'){
+            //disable shmeio select
+            shmeioSelect.disabled = true;
+        }
+
+        if(event.target.value === '-'){
+            //disable shmeio select
+            shmeioSelect.disabled = false;
+        }
+    }
+
+    scoreSelect.addEventListener( 'change', scoreSelect_restrictions );
+
+    function scoreSelect_restrictions(event){
+        if(event.target.value === '0-0'){
+            //disable scorer select
+            scorerSelect.disabled = true;
+
+            //let optionScorer = doubleSelect.querySelector('option[value="SCORER"]');
+            //optionScorer.disabled = true;
+        }
+
+        if(event.target.value !== '0-0'){
+            scorerSelect.disabled = false;
+
+            //let optionScorer = doubleSelect.querySelector('option[value="SCORER"]');
+            //optionScorer.disabled = false;
+            
+        }
+    }
+
  }
