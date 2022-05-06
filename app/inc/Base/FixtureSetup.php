@@ -98,7 +98,7 @@ class FixtureSetup {
         $post_date->setTimestamp($filtered_url_query_params['match_date']);
 
         //file_put_contents(__DIR__ . '/date.txt', json_encode($filtered_url_query_params['match_date']) . "\n",FILE_APPEND);
-        //file_put_contents(__DIR__ . '/date.txt', json_encode($post_date->format('Y-m-d H:i:s')) . "\n",FILE_APPEND);
+        file_put_contents(__DIR__ . '/date.txt', json_encode($post_date->format('Y-m-d H:i:s')) . "\n",FILE_APPEND);
         //$post_date = get_date_from_gmt( $post_date_gmt );
 
         $form_data['homeTeam_id'] = $filtered_url_query_params['homeTeam_id'];
@@ -109,7 +109,7 @@ class FixtureSetup {
             'post_date' => $post_date->format('Y-m-d H:i:s'),
             //'post_date_gmt' => $post_date_gmt,
             'post_content' => serialize($form_data),
-            'post_title' => $filtered_url_query_params['match_id'] . '|' . $filtered_url_query_params['player_id'],
+            'post_title' => $filtered_url_query_params['match_id'] . '-' . $filtered_url_query_params['player_id'],
             'post_type' => 'scm-prediction',
         );
 

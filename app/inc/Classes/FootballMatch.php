@@ -93,8 +93,8 @@ class FootballMatch {
 
     protected function get_dynamicotites(){
 
-        $this->dynamikotita_home_team = intval(get_post_meta($home_team->ID));
-        $this->dynamikotita_away_team = intval(get_post_meta($away_team->ID));
+        $this->dynamikotita_home_team = intval(get_field('scm-team-capabilityrange',$this->home_team->ID));
+        $this->dynamikotita_away_team = intval(get_field('scm-team-capabilityrange',$this->away_team->ID));
 
     }
 

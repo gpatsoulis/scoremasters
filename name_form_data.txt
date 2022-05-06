@@ -1,3 +1,0 @@
-"scm-prediction-form"
-"scm-prediction-form"
-"scm-prediction-form"
