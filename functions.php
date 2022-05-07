@@ -262,6 +262,7 @@ add_shortcode('scm-select-week','fill_select_week_fixture');
 function my_awesome_func( $request) {
 
 	//$product_id = $request->get_param( 'prediction_title' );
+	//if(!isset($request['pre_title'])) return;
 
 	//return $request['pre_title'];
 	$args = array(
@@ -271,6 +272,7 @@ function my_awesome_func( $request) {
 		's' => $request['pre_title'],
 	);
 	$posts = get_posts( $args);
+
 	  
    
 	if ( empty( $posts ) ) {

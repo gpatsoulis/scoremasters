@@ -125,7 +125,10 @@ class FixtureSetup {
             $player_prediction_post['ID'] = $existing_player_prediction->ID;
         }
 
-        $current_dateTime = new DateTime();
+        $current_dateTime = new \DateTime();
+
+        $player_prediction = wp_insert_post($player_prediction_post);
+        
 
         if($current_dateTime <= $post_date){
 

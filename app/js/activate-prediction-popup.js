@@ -1,4 +1,8 @@
 let btns = document.querySelectorAll('.activate-prediction-popup');
+let testDomain = 'http://scoremasters.test';
+let productionDomain = 'https://scoremasters.gr';
+
+let currentDomain = productionDomain;
 
 [...btns].map( x => {
     //safari fix
@@ -52,7 +56,7 @@ function get_submited_predictions(popup){
 
     //https://scoremasters.gr
     //let url = 'http://scoremasters.test/wp-json/scm/v1/scm_prediction_title/'+prediction_title;
-    let url = 'https://scoremasters.gr/wp-json/scm/v1/scm_prediction_title/'+prediction_title;
+    let url = currentDomain + '/wp-json/scm/v1/scm_prediction_title/'+prediction_title;
     console.log(url);
 
     let responce =  fetch(url,{
@@ -260,7 +264,7 @@ function setModalData(data, popup) {
 async function getPlayersList(team_id){
 
     //let url = 'http://scoremasters.test/wp-json/wp/v2/scm-pro-player?';
-    let url = 'https://scoremasters.gr/wp-json/wp/v2/scm-pro-player?';
+    let url = currentDomain + '/wp-json/wp/v2/scm-pro-player?';
     let params = 'meta_key=scm-player-team&meta_value=' + team_id + '&per_page=30&_fields=id,status,type,featured_media,acf,title';
 
     let responce = await fetch(url+params,{
