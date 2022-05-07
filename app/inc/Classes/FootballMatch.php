@@ -52,7 +52,7 @@ class FootballMatch {
      * @param array $final_score
      */
     public $final_score;
-    public $Half_time_score;
+    public $half_time_score;
 
     public function __construct(int $match_id){
 
@@ -93,14 +93,16 @@ class FootballMatch {
 
     protected function get_dynamicotites(){
 
-        $this->dynamikotita_home_team = intval(get_field('scm-team-capabilityrange',$this->home_team->ID));
-        $this->dynamikotita_away_team = intval(get_field('scm-team-capabilityrange',$this->away_team->ID));
+        $this->home_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->home_team->ID));
+        //file_put_contents(__DIR__ . '/match_setup.txt',gettype(intval(get_field('scm-team-capabilityrange',$this->home_team->ID))) . "\n",FILE_APPEND);
+
+        $this->away_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->away_team->ID));
 
     }
 
     protected function get_score(){
 
-        $this->Half_time_score = get_field('scm-half-time-score',$this->post_data->ID);
+        $this->half_time_score = get_field('scm-half-time-score',$this->post_data->ID);
         $this->final_score = get_field('scm-full-time-score',$this->post_data->ID);
 
     }
