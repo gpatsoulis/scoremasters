@@ -100,15 +100,15 @@ function render_submited_prediction_data(popup,data){
 
         select = popup.querySelector('select#'+select_id);
 
-        console.log(select);
-        console.log('option[value="'+value+'"]');
+        //console.log(select);
+        //console.log('option[value="'+value+'"]');
 
         if(value == ''){
             continue;
         }
 
         let option = select.querySelector('option[value="'+value+'"');
-        console.log(option);
+        //console.log(option);
         option.selected = true;
     }
     
@@ -287,7 +287,7 @@ async function getPlayersList(team_id){
 function setUpPlayersList(data, popup){
 
     let playersPlaceholder = popup.querySelector('select#form-field-scm_scorer');
-    console.log(playersPlaceholder);
+    //console.log(playersPlaceholder);
     let documentFragPlayers = new DocumentFragment();
     
 
@@ -377,7 +377,7 @@ function setUpPlayersList(data, popup){
  function restrictions(event, id, instance){
 
     let popup = instance["$element"][0];
-    console.log(popup);
+    //console.log(popup);
 
     let shmeioSelect = popup.querySelector('#form-field-field_b324dff');
 
@@ -397,7 +397,8 @@ function setUpPlayersList(data, popup){
 
     //initial restriction
 
-    addEventListener('click',runScoreRestrictions);
+    //scoreSelect.addEventListener('click',runScoreRestrictions);
+    scoreSelect.addEventListener('click',runScoreRestrictions);
 
     function runScoreRestrictions(event){
 
@@ -413,12 +414,8 @@ function setUpPlayersList(data, popup){
 
     function shmeioSelect_restrictions(event){
 
-        console.log('------------------------');
-        console.log(event);
-
-        set_reset_first_to_first_option(scoreSelect);
-
         if(event.target.value !== '-'){
+
             //disable under/over select
 
             //last-minute
@@ -427,6 +424,9 @@ function setUpPlayersList(data, popup){
         }
 
         if(event.target.value === '-'){
+
+            set_reset_first_to_first_option(scoreSelect);
+
             //disable under/over select
             
             //last-minute
@@ -441,6 +441,7 @@ function setUpPlayersList(data, popup){
 
         if(['-/1','1/1','X/1','2/1'].includes(event.target.value) ){
             //shmeioSelect.disabled = false;
+
             let optionsDisble = scoreSelect.querySelectorAll('option');
             [...optionsDisble].map( x => {
                 x.disabled = false;
@@ -453,7 +454,15 @@ function setUpPlayersList(data, popup){
                 }
                 
             });
+
+            if(['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(scoreSelect.value)){
+                set_reset_first_to_first_option(scoreSelect);
+            }
+            if(['0-0','1-1','2-2','3-3'].includes(scoreSelect.value)){
+                set_reset_first_to_first_option(scoreSelect);
+            }
         }
+        
 
         if(['-/2','2/2','X/2','1/2'].includes(event.target.value) ){
             //shmeioSelect.disabled = false;
@@ -469,6 +478,13 @@ function setUpPlayersList(data, popup){
                 }
                 
             });
+
+            if(['0-0','1-1','2-2','3-3'].includes(scoreSelect.value)){
+                set_reset_first_to_first_option(scoreSelect);
+            }
+            if(!['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(scoreSelect.value)){
+                set_reset_first_to_first_option(scoreSelect);
+            }
         }
 
         if(['-/X','1/X','X/X','2/X'].includes(event.target.value) ){
@@ -483,6 +499,10 @@ function setUpPlayersList(data, popup){
                 }
                 
             });
+
+            if(!['0-0','1-1','2-2','3-3'].includes(scoreSelect.value)){
+                set_reset_first_to_first_option(scoreSelect);
+            }
         }
     }
 
@@ -507,7 +527,7 @@ function setUpPlayersList(data, popup){
 
         if(event.target.value === '0-0'){
             //disable scorer select
-            set_reset_first_to_first_option(scoreSelect);
+            set_reset_first_to_first_option(scorerSelect);
             scorerSelect.disabled = true;
 
             //let optionScorer = doubleSelect.querySelector('option[value="SCORER"]');
