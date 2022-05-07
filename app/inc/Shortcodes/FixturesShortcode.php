@@ -5,6 +5,7 @@
 
 namespace Scoremasters\Inc\Shortcodes;
 
+//[Scoremasters\Inc\Shortcodes\FixturesShortcode]
 class FixturesShortcode
 {
     public $template;
@@ -56,12 +57,12 @@ class FixturesShortcode
             foreach ($matches[0]['week-match'] as $match) {
 
                 $data['openForPredictions'] =  true;
-                $match_date = new \DateTime($match->post_date);
+                $match_date = new \DateTime($match->post_date, new \DateTimeZone('Europe/Athens'));
 
                 //scm-full-time-score
                 //scm-full-time-home-score
                 //scm-full-time-away-score
-
+                
                 if($current_date > $match_date){
                     $data['openForPredictions'] = false;
 

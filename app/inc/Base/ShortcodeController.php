@@ -6,6 +6,7 @@
 namespace Scoremasters\Inc\Base;
 
 use \Scoremasters\Inc\Shortcodes\FixturesShortcode;
+use \Scoremasters\Inc\Shortcodes\FixturesWeeklyPlayerPointsShortcode;
 
 class ShortcodeController {
 
@@ -16,7 +17,7 @@ class ShortcodeController {
     public static function get_shortcodes(){
         return array(
             \Scoremasters\Inc\Shortcodes\FixturesShortcode::class,
-       
+			\Scoremasters\Inc\Shortcodes\FixturesWeeklyPlayerPointsShortcode::class,
         );
     }
 
