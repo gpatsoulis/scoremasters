@@ -3,6 +3,7 @@ let testDomain = 'http://scoremasters.test';
 let productionDomain = 'https://scoremasters.gr';
 
 let currentDomain = productionDomain;
+//let currentDomain = testDomain;
 
 [...btns].map( x => {
     //safari fix
@@ -394,10 +395,27 @@ function setUpPlayersList(data, popup){
     //[5/5, 13:51] Tassos Mountakis: Δε μπορούν να επιλέξουν σκόρερ της φιλοξενούμενης ομάδας αν πχ έχουν επιλέξει σκορ 2-0
     //[5/5, 13:52] Tassos Mountakis: Αν επιλέξουν σκορ 0-0, δεν μπορούν να επιλέξουν σκόρερ. Και φυσικά να απενεργοποιείται η επιλογή διπλασιασμό στο σκόρερ
 
+    //initial restriction
+
+    addEventListener('click',runScoreRestrictions);
+
+    function runScoreRestrictions(event){
+
+        if(shmeioSelect.value != '-') {
+            let ev = { target:  shmeioSelect };
+            shmeioSelect_restrictions(ev);
+        }
+
+    }
+   
 
     shmeioSelect.addEventListener( 'change', shmeioSelect_restrictions );
 
     function shmeioSelect_restrictions(event){
+
+        console.log('------------------------');
+        console.log(event);
+
         set_reset_first_to_first_option(scoreSelect);
 
         if(event.target.value !== '-'){
@@ -419,7 +437,7 @@ function setUpPlayersList(data, popup){
             //[...optionsDisble].map( x => x.disabled = false);
         }
 
-        console.log(event.target.value);
+        //console.log(event.target.value);
 
         if(['-/1','1/1','X/1','2/1'].includes(event.target.value) ){
             //shmeioSelect.disabled = false;
@@ -486,6 +504,7 @@ function setUpPlayersList(data, popup){
     scoreSelect.addEventListener( 'change', scoreSelect_restrictions );
 
     function scoreSelect_restrictions(event){
+
         if(event.target.value === '0-0'){
             //disable scorer select
             set_reset_first_to_first_option(scoreSelect);
@@ -509,6 +528,7 @@ function setUpPlayersList(data, popup){
             //last-minute
             set_reset_first_to_first_option(underOverSelect);
             underOverSelect.disabled = true;
+
         }
 
         if(event.target.value === '-'){
