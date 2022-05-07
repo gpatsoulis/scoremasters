@@ -70,6 +70,17 @@ class MatchSetup
             return $value;
         }
 
+        $end_time = get_post_meta($post_id,'scm-match-end-time');
+
+        if($end_time[0] === $value){
+            return $value;
+        }
+
+        //file_put_contents(__DIR__ . '/event_debug.txt', '----------------------------- '. "\n",FILE_APPEND);
+        //file_put_contents(__DIR__ . '/event_debug.txt', 'from wp ---- '.json_encode($end_time) . "\n",FILE_APPEND);
+        //file_put_contents(__DIR__ . '/event_debug.txt', 'from acf original ---- '.json_encode($original) . "\n",FILE_APPEND);
+        //file_put_contents(__DIR__ . '/event_debug.txt', 'from acf value ---- '.json_encode($value) . "\n",FILE_APPEND);
+        
         //calculate score
         //todo: run function in async with rest api
         $data_to_insert_in_db = self::calculate_player_points(intval($post_id));

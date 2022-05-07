@@ -402,20 +402,25 @@ function setUpPlayersList(data, popup){
 
         if(event.target.value !== '-'){
             //disable under/over select
-            set_reset_first_to_first_option(underOverSelect);
-            underOverSelect.disabled = true;
+
+            //last-minute
+            //set_reset_first_to_first_option(underOverSelect);
+            //underOverSelect.disabled = true;
         }
 
         if(event.target.value === '-'){
             //disable under/over select
             
-            set_reset_first_to_first_option(underOverSelect);
-            underOverSelect.disabled = false;
-            let optionsDisble = scoreSelect.querySelectorAll('option');
-            [...optionsDisble].map( x => x.disabled = false);
+            //last-minute
+            //set_reset_first_to_first_option(underOverSelect);
+            //underOverSelect.disabled = false;
+
+            //let optionsDisble = scoreSelect.querySelectorAll('option');
+            //[...optionsDisble].map( x => x.disabled = false);
         }
 
         console.log(event.target.value);
+
         if(['-/1','1/1','X/1','2/1'].includes(event.target.value) ){
             //shmeioSelect.disabled = false;
             let optionsDisble = scoreSelect.querySelectorAll('option');
@@ -468,13 +473,13 @@ function setUpPlayersList(data, popup){
     function underOverSelect_restrictions(event) {
         if(event.target.value !== '-'){
             //disable shmeio select
-            set_reset_first_to_first_option(shmeioSelect);
-            shmeioSelect.disabled = true;
+            set_reset_first_to_first_option(scoreSelect);
+            scoreSelect.disabled = true;
         }
 
         if(event.target.value === '-'){
             //disable shmeio select
-            shmeioSelect.disabled = false;
+            scoreSelect.disabled = false;
         }
     }
 
@@ -497,6 +502,27 @@ function setUpPlayersList(data, popup){
             //optionScorer.disabled = false;
             
         }
+
+        if(event.target.value !== '-'){
+            //disable under/over select
+
+            //last-minute
+            set_reset_first_to_first_option(underOverSelect);
+            underOverSelect.disabled = true;
+        }
+
+        if(event.target.value === '-'){
+            //disable under/over select
+            
+            //last-minute
+            set_reset_first_to_first_option(underOverSelect);
+            underOverSelect.disabled = false;
+
+            let optionsDisble = scoreSelect.querySelectorAll('option');
+            [...optionsDisble].map( x => x.disabled = false);
+        }
+
+
     }
 
  }
