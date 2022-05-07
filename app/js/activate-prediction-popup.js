@@ -50,8 +50,9 @@ function get_submited_predictions(popup){
 
     let prediction_title = match_id + '-' + player_id;
 
-
-    let url = 'http://scoremasters.test/wp-json/scm/v1/scm_prediction_title/'+prediction_title;
+    //https://scoremasters.gr
+    //let url = 'http://scoremasters.test/wp-json/scm/v1/scm_prediction_title/'+prediction_title;
+    let url = 'https://scoremasters.gr/wp-json/scm/v1/scm_prediction_title/'+prediction_title;
     console.log(url);
 
     let responce =  fetch(url,{
@@ -251,14 +252,15 @@ function setModalData(data, popup) {
 
 }
 
-
+//https://scoremasters.gr
 //http://scoremasters.test/wp-json/wp/v2/scm-pro-player?
 //meta_key=scm-player-team&meta_value=109&per_page=30&_fields=id,status,type,featured_media,acf,title
 
 
 async function getPlayersList(team_id){
 
-    let url = 'http://scoremasters.test/wp-json/wp/v2/scm-pro-player?';
+    //let url = 'http://scoremasters.test/wp-json/wp/v2/scm-pro-player?';
+    let url = 'https://scoremasters.gr/wp-json/wp/v2/scm-pro-player?';
     let params = 'meta_key=scm-player-team&meta_value=' + team_id + '&per_page=30&_fields=id,status,type,featured_media,acf,title';
 
     let responce = await fetch(url+params,{
