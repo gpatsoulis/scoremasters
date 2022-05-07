@@ -26,6 +26,10 @@ function onPopupEvent(event, id, instance) {
     editPopupContent(event, id, instance);
 
     restrictions(event, id, instance);
+
+    //get_submited_predictions(event, id, instance);
+
+    disable_form_on_date(event, id, instance);
     //addPlayersList(event, id, instance);
 }
 
@@ -35,6 +39,99 @@ function safariFix() {
     [...buttons].map(x => x.addEventListener('click', setProductURLData));
 }
 */
+
+function get_submited_predictions(popup){
+
+    //let popup = instance["$element"][0];
+
+    let player_id = popup.querySelector('input[name="player_id"]').value;
+    
+    let match_id = popup.querySelector('input[name="match_id"]').value;
+
+    let prediction_title = match_id + '-' + player_id;
+
+
+    let url = 'http://scoremasters.test/wp-json/scm/v1/scm_prediction_title/'+prediction_title;
+    console.log(url);
+
+    let responce =  fetch(url,{
+        method: 'GET',
+        //mode: 'cors',
+        //credentials: 'same-origin',
+        //headers: {
+        //    'Content-Type': 'application/json'
+         // }
+    })
+    .then( data => data.json())
+    .then( data => {
+        console.log(data);
+    
+    
+        render_submited_prediction_data(popup,data);
+    
+    }
+        
+        );
+
+    //let data = await responce.json();
+
+
+}
+
+function render_submited_prediction_data(popup,data){
+    
+    //find select elements by text content
+    let array_of_labels = popup.querySelectorAll('label');
+    //console.log(data);
+
+    for (const [key,value] of Object.entries(data)){
+        
+        let select_id = find_element_by_text_content(key,[...array_of_labels]);
+
+        if(select_id == ''){
+            continue;
+        }
+
+        select = popup.querySelector('select#'+select_id);
+
+        console.log(select);
+        console.log('option[value="'+value+'"]');
+
+        if(value == ''){
+            continue;
+        }
+
+        let option = select.querySelector('option[value="'+value+'"');
+        console.log(option);
+        option.selected = true;
+    }
+    
+    
+}
+
+function find_element_by_text_content(prediction_text,array_of_labels){
+    //console.log(prediction_text);
+    //x.textContet.includes(prediction_text
+    let label =  array_of_labels.filter( x => {
+        //console.log(x.textContent);
+        if(x.textContent.includes(prediction_text)){
+             return x;
+        }
+    });
+
+    //console.log(label);
+
+    if(label.length === 0){
+        return '';
+    }
+
+    select_id = label[0].htmlFor;
+    //console.log(select_id);
+
+    return select_id
+    
+
+}
 
 function setProductURLData(event) {
 
@@ -90,6 +187,7 @@ function setProductURLData(event) {
     url.searchParams.set('awayTeam_name', awayTeam_name);
     url.searchParams.set('match_date', match_date);
 
+    window.history.replaceState({}, window.location, "/πρόγραμμα-εβδομάδας/");
     window.history.pushState({}, '', url);
 
 }
@@ -108,8 +206,6 @@ function editPopupContent(event, id, instance) {
         setUpTeamsNames(data, popup);
 
         setUpPlayersList(data, popup);
-
-        
 
 }
 
@@ -213,6 +309,8 @@ function setUpPlayersList(data, popup){
         optionData.map( x => documentFragPlayers.appendChild( x ));
         playersPlaceholder.appendChild(documentFragPlayers);
 
+        get_submited_predictions(popup);
+
     });
 
     let homeTeamsPlayers = getPlayersList(homeTeam_id);
@@ -272,6 +370,7 @@ function setUpPlayersList(data, popup){
  function restrictions(event, id, instance){
 
     let popup = instance["$element"][0];
+    console.log(popup);
 
     let shmeioSelect = popup.querySelector('#form-field-field_b324dff');
 
@@ -293,13 +392,18 @@ function setUpPlayersList(data, popup){
     shmeioSelect.addEventListener( 'change', shmeioSelect_restrictions );
 
     function shmeioSelect_restrictions(event){
+        set_reset_first_to_first_option(scoreSelect);
+
         if(event.target.value !== '-'){
             //disable under/over select
+            set_reset_first_to_first_option(underOverSelect);
             underOverSelect.disabled = true;
         }
 
         if(event.target.value === '-'){
             //disable under/over select
+            
+            set_reset_first_to_first_option(underOverSelect);
             underOverSelect.disabled = false;
             let optionsDisble = scoreSelect.querySelectorAll('option');
             [...optionsDisble].map( x => x.disabled = false);
@@ -358,6 +462,7 @@ function setUpPlayersList(data, popup){
     function underOverSelect_restrictions(event) {
         if(event.target.value !== '-'){
             //disable shmeio select
+            set_reset_first_to_first_option(shmeioSelect);
             shmeioSelect.disabled = true;
         }
 
@@ -372,6 +477,7 @@ function setUpPlayersList(data, popup){
     function scoreSelect_restrictions(event){
         if(event.target.value === '0-0'){
             //disable scorer select
+            set_reset_first_to_first_option(scoreSelect);
             scorerSelect.disabled = true;
 
             //let optionScorer = doubleSelect.querySelector('option[value="SCORER"]');
@@ -385,6 +491,43 @@ function setUpPlayersList(data, popup){
             //optionScorer.disabled = false;
             
         }
+    }
+
+ }
+
+ function set_reset_first_to_first_option(select){
+    options = select.querySelectorAll('option');
+    [...options].map( x => {
+        if(x.selected == true){
+            x.selected = false;
+        }
+    });
+
+    options[0].selected = true;
+ }
+
+
+ function disable_form_on_date(event, id, instance){
+    let popup = instance["$element"][0];
+
+    let button = popup.querySelector('button[type="submit"]');
+
+    let current = new Date();
+    //current = current.toUTCString();
+    console.log(current);
+
+    let matchDateTimestamp = popup.querySelector('input[name="match_date"]');
+    console.log(matchDateTimestamp.value);
+
+    let matchDate = new Date(parseInt(matchDateTimestamp.value * 1000));
+    matchDate.setTime(matchDate.getTime() + matchDate.getTimezoneOffset()*60*1000 );
+    //matchDate.setTime(matchDate.getTime() + 180*60*1000 );
+
+    console.log(matchDate);
+
+    if(current.getTime() >= matchDate.getTime()){
+        console.log('match time');
+        button.disabled = true;
     }
 
  }

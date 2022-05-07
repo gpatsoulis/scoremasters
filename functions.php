@@ -259,9 +259,36 @@ function fill_select_week_fixture() {
 
 add_shortcode('scm-select-week','fill_select_week_fixture');
 
+function my_awesome_func( $request) {
 
+	//$product_id = $request->get_param( 'prediction_title' );
 
+	//return $request['pre_title'];
+	$args = array(
+		'post_type' => 'scm-prediction',
+		'post_status' => 'any',
+		//'s' => '850-2',
+		's' => $request['pre_title'],
+	);
+	$posts = get_posts( $args);
+	  
+   
+	if ( empty( $posts ) ) {
+		return new WP_Error( 'no_author', 'Invalid prediction title', array( 'status' => 404 ) );
+	}
+   
+	//return $posts[0]->post_title;
+	return new WP_REST_Response( unserialize($posts[0]->post_content), 200 );
+  }
 
+  //
+  add_action( 'rest_api_init', function () {
+	register_rest_route( 'scm/v1', 'scm_prediction_title/(?P<pre_title>[0-9\-]+)', array(
+	  'methods' => 'GET',
+	  'callback' => 'my_awesome_func',
+	  'permission_callback' => '__return_true',
+	) );
+  } );
 
 // Scoremasters App
 if( file_exists( dirname( __FILE__) . '/vendor/autoload.php' )){
