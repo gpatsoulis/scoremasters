@@ -125,8 +125,23 @@ class FixtureSetup {
             $player_prediction_post['ID'] = $existing_player_prediction->ID;
         }
 
+        $current_dateTime = new DateTime();
 
-        wp_insert_post($player_prediction_post);
+        if($current_dateTime <= $post_date){
+
+            $player_prediction = wp_insert_post($player_prediction_post);
+
+            $ajax_handler->is_success = true;
+
+        }else{
+            $msg = 'Δεν επιτρέπεται η αλλάγη της πρόβλεψης μετά την έναρξη του αγώνα';
+            $ajax_handler->add_error_message($msg);
+            //$ajax_handler->add_error($field['id'], $msg);
+            $ajax_handler->is_success = false;
+            return;
+        }
+
+        
 
     }
 

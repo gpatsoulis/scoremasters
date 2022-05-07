@@ -536,4 +536,3 @@ function setUpPlayersList(data, popup){
      }
 
  }
-
