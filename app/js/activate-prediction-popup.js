@@ -70,7 +70,7 @@ function get_submited_predictions(popup) {
 
     //https://scoremasters.gr
     //let url = 'http://scoremasters.test/wp-json/scm/v1/scm_prediction_title/'+prediction_title;
-    let url = currentDomain + '/wp-json/scm/v1/scm_prediction_title/' + prediction_title;
+    let url = currentDomain + '/wp-json/scm/v1/scm_prediction_title/pre_title=' + prediction_title + '&pre_author=' + player_id;
     console.log(url);
 
     let responce = fetch(url, {

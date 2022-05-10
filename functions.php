@@ -284,12 +284,24 @@ function my_awesome_func($request)
     //if(!isset($request['pre_title'])) return;
 
     //return $request['pre_title'];
+
+    $author = filter_var($request['pre_author'], FILTER_VALIDATE_INT);
+    
+    
+    if($author === false){
+        return new WP_Error('error data', 'Invalid prediction title', array('status' => 404)); 
+    }
+    
+    //pre_title=1350-2&pre_author=2
+
     $args = array(
+        
         'post_type' => 'scm-prediction',
         'post_status' => 'any',
-        //'s' => '850-2',
+        //'author' => $author,
         's' => $request['pre_title'],
     );
+
     $posts = get_posts($args);
 
     $user_id = explode('-', $request['pre_title'])[1];  
@@ -316,7 +328,9 @@ function my_awesome_func($request)
 
 //
 add_action('rest_api_init', function () {
-    register_rest_route('scm/v1', 'scm_prediction_title/(?P<pre_title>[0-9\-]+)', array(
+    //register_rest_route('scm/v1', 'scm_prediction_title/(?P<pre_title>[0-9\-]+)/?(P<pre_author>[0-9]+)', array(
+    //register_rest_route('scm/v1', 'scm_prediction_title/?pre_title=(?P<pre_title>[0-9\-]+)&amp;pre_author=(?P<pre_author>[0-9]+)', array(
+    register_rest_route('scm/v1', 'scm_prediction_title/?pre_title=(?P<pre_title>[0-9\-]+)&?pre_author=(?P<pre_author>[0-9]+)', array(        
         'methods' => 'GET',
         'callback' => 'my_awesome_func',
         'permission_callback' => '__return_true',
