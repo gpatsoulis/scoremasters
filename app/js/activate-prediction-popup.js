@@ -1,17 +1,29 @@
+import {
+    restrictions
+} from '/wp-content/themes/scoremasters/app/js/restrictions.js';
+
+import {
+    disable_form_on_date
+} from '/wp-content/themes/scoremasters/app/js/dateRestrictions.js';
+
+
+
 let btns = document.querySelectorAll('.activate-prediction-popup');
+
 let testDomain = 'http://scoremasters.test';
 let productionDomain = 'https://scoremasters.gr';
 
-let currentDomain = productionDomain;
-//let currentDomain = testDomain;
+//let currentDomain = productionDomain;
+let currentDomain = window.location.origin;
 
-[...btns].map( x => {
+
+[...btns].map(x => {
     //safari fix
     x.addEventListener('click', setProductURLData);
-    x.addEventListener('click',activatePopup);
+    x.addEventListener('click', activatePopup);
 });
 
-function activatePopup(event){
+function activatePopup(event) {
     elementorFrontend.documentsManager.documents[872].showModal();
 }
 
@@ -22,7 +34,7 @@ jQuery(document).ready(function ($) {
     $(document).on('elementor/popup/show', {
         data: "ns4u data"
     }, onPopupEvent);
-   
+
 });
 
 function onPopupEvent(event, id, instance) {
@@ -36,6 +48,7 @@ function onPopupEvent(event, id, instance) {
 
     disable_form_on_date(event, id, instance);
     //addPlayersList(event, id, instance);
+    possible_player_points(event, id, instance);
 }
 
 /*
@@ -45,97 +58,95 @@ function safariFix() {
 }
 */
 
-function get_submited_predictions(popup){
+function get_submited_predictions(popup) {
 
     //let popup = instance["$element"][0];
 
     let player_id = popup.querySelector('input[name="player_id"]').value;
-    
+
     let match_id = popup.querySelector('input[name="match_id"]').value;
 
     let prediction_title = match_id + '-' + player_id;
 
     //https://scoremasters.gr
     //let url = 'http://scoremasters.test/wp-json/scm/v1/scm_prediction_title/'+prediction_title;
-    let url = currentDomain + '/wp-json/scm/v1/scm_prediction_title/'+prediction_title;
+    let url = currentDomain + '/wp-json/scm/v1/scm_prediction_title/' + prediction_title;
     console.log(url);
 
-    let responce =  fetch(url,{
-        method: 'GET',
-        //mode: 'cors',
-        //credentials: 'same-origin',
-        //headers: {
-        //    'Content-Type': 'application/json'
-         // }
-    })
-    .then( data => data.json())
-    .then( data => {
-        console.log(data);
-    
-    
-        render_submited_prediction_data(popup,data);
-    
-    }
-        
+    let responce = fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(data => data.json())
+        .then(data => {
+                console.log(data);
+
+
+                render_submited_prediction_data(popup, data);
+
+            }
+
         );
 
     //let data = await responce.json();
-
-
 }
 
-function render_submited_prediction_data(popup,data){
-    
+function render_submited_prediction_data(popup, data) {
+
     //find select elements by text content
     let array_of_labels = popup.querySelectorAll('label');
     //console.log(data);
 
-    for (const [key,value] of Object.entries(data)){
-        
-        let select_id = find_element_by_text_content(key,[...array_of_labels]);
+    for (const [key, value] of Object.entries(data)) {
 
-        if(select_id == ''){
+        let select_id = find_element_by_text_content(key, [...array_of_labels]);
+
+        if (select_id == '') {
             continue;
         }
 
-        select = popup.querySelector('select#'+select_id);
+        let select = popup.querySelector('select#' + select_id);
 
         //console.log(select);
         //console.log('option[value="'+value+'"]');
 
-        if(value == ''){
+        if (value == '') {
             continue;
         }
 
-        let option = select.querySelector('option[value="'+value+'"');
+        let option = select.querySelector('option[value="' + value + '"');
         //console.log(option);
         option.selected = true;
     }
-    
-    
+
+
 }
 
-function find_element_by_text_content(prediction_text,array_of_labels){
+function find_element_by_text_content(prediction_text, array_of_labels) {
     //console.log(prediction_text);
     //x.textContet.includes(prediction_text
-    let label =  array_of_labels.filter( x => {
+    let label = array_of_labels.filter(x => {
         //console.log(x.textContent);
-        if(x.textContent.includes(prediction_text)){
-             return x;
+        if (x.textContent.includes(prediction_text)) {
+            return x;
         }
     });
 
     //console.log(label);
 
-    if(label.length === 0){
+    if (label.length === 0) {
         return '';
     }
 
-    select_id = label[0].htmlFor;
+    let select_id = label[0].htmlFor;
     //console.log(select_id);
 
     return select_id
-    
+
 
 }
 
@@ -203,15 +214,15 @@ function editPopupContent(event, id, instance) {
 
     if (id !== 872) return;
 
-        let data = readURLSearchParams();
+    let data = readURLSearchParams();
 
-        let popup = instance["$element"][0];
+    let popup = instance["$element"][0];
 
-        setModalData(data, popup);
+    setModalData(data, popup);
 
-        setUpTeamsNames(data, popup);
+    setUpTeamsNames(data, popup);
 
-        setUpPlayersList(data, popup);
+    setUpPlayersList(data, popup);
 
 }
 
@@ -228,16 +239,36 @@ function readURLSearchParams() {
     let awayTeam_name = params.get('awayTeam_name');
     let match_date = params.get('match_date');
 
-    const data = [
-        {name:'player_id',value:player_id},
-        {name:'match_id',value:match_id},
-        {name:'homeTeam_id',value:homeTeam_id},
-        {name:'homeTeam_name',value:homeTeam_name},
-        {name:'awayTeam_id',value:awayTeam_id},
-        {name:'awayTeam_name',value:awayTeam_name},
-        {name:'match_date',value:match_date},
+    const data = [{
+            name: 'player_id',
+            value: player_id
+        },
+        {
+            name: 'match_id',
+            value: match_id
+        },
+        {
+            name: 'homeTeam_id',
+            value: homeTeam_id
+        },
+        {
+            name: 'homeTeam_name',
+            value: homeTeam_name
+        },
+        {
+            name: 'awayTeam_id',
+            value: awayTeam_id
+        },
+        {
+            name: 'awayTeam_name',
+            value: awayTeam_name
+        },
+        {
+            name: 'match_date',
+            value: match_date
+        },
     ];
-        
+
 
     return data;
 }
@@ -248,7 +279,7 @@ function setModalData(data, popup) {
 
     let placeholder = popup.querySelector('form.elementor-form');
 
-    data.forEach( data => {
+    data.forEach(data => {
         let data_name = data.name;
         let data_value = data.value;
         let template = `<input type="hidden" name="${data_name}" value="${data_value}">`;
@@ -260,21 +291,22 @@ function setModalData(data, popup) {
 //https://scoremasters.gr
 //http://scoremasters.test/wp-json/wp/v2/scm-pro-player?
 //meta_key=scm-player-team&meta_value=109&per_page=30&_fields=id,status,type,featured_media,acf,title
+//window.location
 
 
-async function getPlayersList(team_id){
+async function getPlayersList(team_id) {
 
     //let url = 'http://scoremasters.test/wp-json/wp/v2/scm-pro-player?';
     let url = currentDomain + '/wp-json/wp/v2/scm-pro-player?';
     let params = 'meta_key=scm-player-team&meta_value=' + team_id + '&per_page=30&_fields=id,status,type,featured_media,acf,title';
 
-    let responce = await fetch(url+params,{
+    let responce = await fetch(url + params, {
         method: 'GET',
         mode: 'cors',
         credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
-          }
+        }
     });
 
     let data = await responce.json();
@@ -284,36 +316,36 @@ async function getPlayersList(team_id){
     return data;
 }
 
-function setUpPlayersList(data, popup){
+function setUpPlayersList(data, popup) {
 
     let playersPlaceholder = popup.querySelector('select#form-field-scm_scorer');
     //console.log(playersPlaceholder);
     let documentFragPlayers = new DocumentFragment();
-    
 
 
-    let homeTeam_id = data.filter( x => x.name == 'homeTeam_id')[0].value;
-    let homeTeam_name = data.filter( x => x.name == 'homeTeam_name')[0].value;
-    
-    let awayTeam_id = data.filter( x => x.name == 'awayTeam_id')[0].value;
-    let awayTeam_name = data.filter( x => x.name == 'awayTeam_name')[0].value;
-   
+
+    let homeTeam_id = data.filter(x => x.name == 'homeTeam_id')[0].value;
+    let homeTeam_name = data.filter(x => x.name == 'homeTeam_name')[0].value;
+
+    let awayTeam_id = data.filter(x => x.name == 'awayTeam_id')[0].value;
+    let awayTeam_name = data.filter(x => x.name == 'awayTeam_name')[0].value;
+
 
     let awayTeamPlayers = getPlayersList(awayTeam_id);
     //console.log(awayTeamPlayers);
-    awayTeamPlayers.then( pdata => {
+    awayTeamPlayers.then(pdata => {
         let optionData = pdata.map(
             x => {
                 let playerID = x.id;
                 let playerName = x.title.rendered;
-        
-                let option = new Option(awayTeam_name +' - '+ playerName,playerID);
-            
+
+                let option = new Option(awayTeam_name + ' - ' + playerName, playerID);
+
                 return option;
             }
         );
 
-        optionData.map( x => documentFragPlayers.appendChild( x ));
+        optionData.map(x => documentFragPlayers.appendChild(x));
         playersPlaceholder.appendChild(documentFragPlayers);
 
         get_submited_predictions(popup);
@@ -322,34 +354,34 @@ function setUpPlayersList(data, popup){
 
     let homeTeamsPlayers = getPlayersList(homeTeam_id);
 
-    homeTeamsPlayers.then( pdata => {
+    homeTeamsPlayers.then(pdata => {
         let optionData = pdata.map(
             x => {
                 let playerID = x.id;
                 let playerName = x.title.rendered;
-        
-                let option = new Option(homeTeam_name + ' - ' + playerName,playerID);
-            
+
+                let option = new Option(homeTeam_name + ' - ' + playerName, playerID);
+
                 return option;
             }
         );
 
-        optionData.map( x => documentFragPlayers.appendChild( x ));
+        optionData.map(x => documentFragPlayers.appendChild(x));
         playersPlaceholder.appendChild(documentFragPlayers);
 
     });
 
- }
+}
 
- function setUpTeamsNames(data, popup){
+function setUpTeamsNames(data, popup) {
 
     let teamsNamesPlaceholder = popup.querySelector('div.elementor-element-d9d5193');
-    if(!teamsNamesPlaceholder) return;
+    if (!teamsNamesPlaceholder) return;
 
     let documentFragTeams = new DocumentFragment();
 
-    let homeTeam_name = data.filter( x => x.name == 'homeTeam_name')[0].value;
-    let awayTeam_name = data.filter( x => x.name == 'awayTeam_name')[0].value;
+    let homeTeam_name = data.filter(x => x.name == 'homeTeam_name')[0].value;
+    let awayTeam_name = data.filter(x => x.name == 'awayTeam_name')[0].value;
 
     let homeH3 = document.createElement('h3');
     homeH3.innerText = homeTeam_name;
@@ -372,213 +404,216 @@ function setUpPlayersList(data, popup){
     documentFragTeams.appendChild(teamsNames);
 
     teamsNamesPlaceholder.prepend(documentFragTeams);
- }
+}
 
- function restrictions(event, id, instance){
+/*
 
-    let popup = instance["$element"][0];
-    //console.log(popup);
+function restrictions(event, id, instance){
 
-    let shmeioSelect = popup.querySelector('#form-field-field_b324dff');
+   let popup = instance["$element"][0];
+   //console.log(popup);
 
-    let underOverSelect = popup.querySelector('#form-field-field_eba581d');
+   let shmeioSelect = popup.querySelector('#form-field-field_b324dff');
 
-    let scoreSelect = popup.querySelector('#form-field-field_4879a1e');
+   let underOverSelect = popup.querySelector('#form-field-field_eba581d');
 
-    let scorerSelect = popup.querySelector('#form-field-scm_scorer');
+   let scoreSelect = popup.querySelector('#form-field-field_4879a1e');
 
-    //let doubleSelect = popup.querySelector('#form-field-field_c61b597');
+   let scorerSelect = popup.querySelector('#form-field-scm_scorer');
 
-
-    //[5/5, 13:50] Tassos Mountakis: Δε μπορούν να βάλουν σημείο άσσο και σκορ 0-1
-    //[5/5, 13:50] Tassos Mountakis: Δε μπορούν να επιλέξουν σκορ και Άντερ/οβερ
-    //[5/5, 13:51] Tassos Mountakis: Δε μπορούν να επιλέξουν σκόρερ της φιλοξενούμενης ομάδας αν πχ έχουν επιλέξει σκορ 2-0
-    //[5/5, 13:52] Tassos Mountakis: Αν επιλέξουν σκορ 0-0, δεν μπορούν να επιλέξουν σκόρερ. Και φυσικά να απενεργοποιείται η επιλογή διπλασιασμό στο σκόρερ
-
-    //initial restriction
-
-    //scoreSelect.addEventListener('click',runScoreRestrictions);
-    scoreSelect.addEventListener('click',runScoreRestrictions);
-
-    function runScoreRestrictions(event){
-
-        if(shmeioSelect.value != '-') {
-            let ev = { target:  shmeioSelect };
-            shmeioSelect_restrictions(ev);
-        }
-
-    }
-   
-
-    shmeioSelect.addEventListener( 'change', shmeioSelect_restrictions );
-
-    function shmeioSelect_restrictions(event){
-
-        if(event.target.value !== '-'){
-
-            //disable under/over select
-
-            //last-minute
-            //set_reset_first_to_first_option(underOverSelect);
-            //underOverSelect.disabled = true;
-        }
-
-        if(event.target.value === '-'){
-
-            set_reset_first_to_first_option(scoreSelect);
-
-            //disable under/over select
-            
-            //last-minute
-            //set_reset_first_to_first_option(underOverSelect);
-            //underOverSelect.disabled = false;
-
-            //let optionsDisble = scoreSelect.querySelectorAll('option');
-            //[...optionsDisble].map( x => x.disabled = false);
-        }
-
-        //console.log(event.target.value);
-
-        if(['-/1','1/1','X/1','2/1'].includes(event.target.value) ){
-            //shmeioSelect.disabled = false;
-
-            let optionsDisble = scoreSelect.querySelectorAll('option');
-            [...optionsDisble].map( x => {
-                x.disabled = false;
-
-                if(['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(x.value)){
-                    x.disabled = true;
-                }
-                if(['0-0','1-1','2-2','3-3'].includes(x.value)){
-                    x.disabled = true;
-                }
-                
-            });
-
-            if(['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(scoreSelect.value)){
-                set_reset_first_to_first_option(scoreSelect);
-            }
-            if(['0-0','1-1','2-2','3-3'].includes(scoreSelect.value)){
-                set_reset_first_to_first_option(scoreSelect);
-            }
-        }
-        
-
-        if(['-/2','2/2','X/2','1/2'].includes(event.target.value) ){
-            //shmeioSelect.disabled = false;
-            let optionsDisble = scoreSelect.querySelectorAll('option');
-            [...optionsDisble].map( x => {
-                x.disabled = true;
-
-                if(['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(x.value)){
-                    x.disabled = false;
-                }
-                if(['0-0','1-1','2-2','3-3'].includes(x.value)){
-                    x.disabled = true;
-                }
-                
-            });
-
-            if(['0-0','1-1','2-2','3-3'].includes(scoreSelect.value)){
-                set_reset_first_to_first_option(scoreSelect);
-            }
-            if(!['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(scoreSelect.value)){
-                set_reset_first_to_first_option(scoreSelect);
-            }
-        }
-
-        if(['-/X','1/X','X/X','2/X'].includes(event.target.value) ){
-            //shmeioSelect.disabled = false;
-            let optionsDisble = scoreSelect.querySelectorAll('option');
-            [...optionsDisble].map( x => {
-
-                x.disabled = true;
-
-                if(['0-0','1-1','2-2','3-3'].includes(x.value)){
-                    x.disabled = false;
-                }
-                
-            });
-
-            if(!['0-0','1-1','2-2','3-3'].includes(scoreSelect.value)){
-                set_reset_first_to_first_option(scoreSelect);
-            }
-        }
-    }
-
-    underOverSelect.addEventListener( 'change', underOverSelect_restrictions );
-
-    function underOverSelect_restrictions(event) {
-        if(event.target.value !== '-'){
-            //disable shmeio select
-            set_reset_first_to_first_option(scoreSelect);
-            scoreSelect.disabled = true;
-        }
-
-        if(event.target.value === '-'){
-            //disable shmeio select
-            scoreSelect.disabled = false;
-        }
-    }
-
-    scoreSelect.addEventListener( 'change', scoreSelect_restrictions );
-
-    function scoreSelect_restrictions(event){
-
-        if(event.target.value === '0-0'){
-            //disable scorer select
-            set_reset_first_to_first_option(scorerSelect);
-            scorerSelect.disabled = true;
-
-            //let optionScorer = doubleSelect.querySelector('option[value="SCORER"]');
-            //optionScorer.disabled = true;
-        }
-
-        if(event.target.value !== '0-0'){
-            scorerSelect.disabled = false;
-
-            //let optionScorer = doubleSelect.querySelector('option[value="SCORER"]');
-            //optionScorer.disabled = false;
-            
-        }
-
-        if(event.target.value !== '-'){
-            //disable under/over select
-
-            //last-minute
-            set_reset_first_to_first_option(underOverSelect);
-            underOverSelect.disabled = true;
-
-        }
-
-        if(event.target.value === '-'){
-            //disable under/over select
-            
-            //last-minute
-            set_reset_first_to_first_option(underOverSelect);
-            underOverSelect.disabled = false;
-
-            let optionsDisble = scoreSelect.querySelectorAll('option');
-            [...optionsDisble].map( x => x.disabled = false);
-        }
+   //let doubleSelect = popup.querySelector('#form-field-field_c61b597');
 
 
-    }
+   //[5/5, 13:50] Tassos Mountakis: Δε μπορούν να βάλουν σημείο άσσο και σκορ 0-1
+   //[5/5, 13:50] Tassos Mountakis: Δε μπορούν να επιλέξουν σκορ και Άντερ/οβερ
+   //[5/5, 13:51] Tassos Mountakis: Δε μπορούν να επιλέξουν σκόρερ της φιλοξενούμενης ομάδας αν πχ έχουν επιλέξει σκορ 2-0
+   //[5/5, 13:52] Tassos Mountakis: Αν επιλέξουν σκορ 0-0, δεν μπορούν να επιλέξουν σκόρερ. Και φυσικά να απενεργοποιείται η επιλογή διπλασιασμό στο σκόρερ
 
- }
+   //initial restriction
 
- function set_reset_first_to_first_option(select){
-    options = select.querySelectorAll('option');
-    [...options].map( x => {
-        if(x.selected == true){
-            x.selected = false;
-        }
-    });
+   //scoreSelect.addEventListener('click',runScoreRestrictions);
+   scoreSelect.addEventListener('click',runScoreRestrictions);
 
-    options[0].selected = true;
- }
+   function runScoreRestrictions(event){
+
+       if(shmeioSelect.value != '-') {
+           let ev = { target:  shmeioSelect };
+           shmeioSelect_restrictions(ev);
+       }
+
+   }
+  
+
+   shmeioSelect.addEventListener( 'change', shmeioSelect_restrictions );
+
+   function shmeioSelect_restrictions(event){
+
+       if(event.target.value !== '-'){
+
+           //disable under/over select
+
+           //last-minute
+           //set_reset_first_to_first_option(underOverSelect);
+           //underOverSelect.disabled = true;
+       }
+
+       if(event.target.value === '-'){
+
+           set_reset_first_to_first_option(scoreSelect);
+
+           //disable under/over select
+           
+           //last-minute
+           //set_reset_first_to_first_option(underOverSelect);
+           //underOverSelect.disabled = false;
+
+           //let optionsDisble = scoreSelect.querySelectorAll('option');
+           //[...optionsDisble].map( x => x.disabled = false);
+       }
+
+       //console.log(event.target.value);
+
+       if(['-/1','1/1','X/1','2/1'].includes(event.target.value) ){
+           //shmeioSelect.disabled = false;
+
+           let optionsDisble = scoreSelect.querySelectorAll('option');
+           [...optionsDisble].map( x => {
+               x.disabled = false;
+
+               if(['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(x.value)){
+                   x.disabled = true;
+               }
+               if(['0-0','1-1','2-2','3-3'].includes(x.value)){
+                   x.disabled = true;
+               }
+               
+           });
+
+           if(['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(scoreSelect.value)){
+               set_reset_first_to_first_option(scoreSelect);
+           }
+           if(['0-0','1-1','2-2','3-3'].includes(scoreSelect.value)){
+               set_reset_first_to_first_option(scoreSelect);
+           }
+       }
+       
+
+       if(['-/2','2/2','X/2','1/2'].includes(event.target.value) ){
+           //shmeioSelect.disabled = false;
+           let optionsDisble = scoreSelect.querySelectorAll('option');
+           [...optionsDisble].map( x => {
+               x.disabled = true;
+
+               if(['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(x.value)){
+                   x.disabled = false;
+               }
+               if(['0-0','1-1','2-2','3-3'].includes(x.value)){
+                   x.disabled = true;
+               }
+               
+           });
+
+           if(['0-0','1-1','2-2','3-3'].includes(scoreSelect.value)){
+               set_reset_first_to_first_option(scoreSelect);
+           }
+           if(!['0-1','0-2','0-3','0-4','1-2','1-3','1-4','2-3','2-4','3-4'].includes(scoreSelect.value)){
+               set_reset_first_to_first_option(scoreSelect);
+           }
+       }
+
+       if(['-/X','1/X','X/X','2/X'].includes(event.target.value) ){
+           //shmeioSelect.disabled = false;
+           let optionsDisble = scoreSelect.querySelectorAll('option');
+           [...optionsDisble].map( x => {
+
+               x.disabled = true;
+
+               if(['0-0','1-1','2-2','3-3'].includes(x.value)){
+                   x.disabled = false;
+               }
+               
+           });
+
+           if(!['0-0','1-1','2-2','3-3'].includes(scoreSelect.value)){
+               set_reset_first_to_first_option(scoreSelect);
+           }
+       }
+   }
+
+   underOverSelect.addEventListener( 'change', underOverSelect_restrictions );
+
+   function underOverSelect_restrictions(event) {
+       if(event.target.value !== '-'){
+           //disable shmeio select
+           set_reset_first_to_first_option(scoreSelect);
+           scoreSelect.disabled = true;
+       }
+
+       if(event.target.value === '-'){
+           //disable shmeio select
+           scoreSelect.disabled = false;
+       }
+   }
+
+   scoreSelect.addEventListener( 'change', scoreSelect_restrictions );
+
+   function scoreSelect_restrictions(event){
+
+       if(event.target.value === '0-0'){
+           //disable scorer select
+           set_reset_first_to_first_option(scorerSelect);
+           scorerSelect.disabled = true;
+
+           //let optionScorer = doubleSelect.querySelector('option[value="SCORER"]');
+           //optionScorer.disabled = true;
+       }
+
+       if(event.target.value !== '0-0'){
+           scorerSelect.disabled = false;
+
+           //let optionScorer = doubleSelect.querySelector('option[value="SCORER"]');
+           //optionScorer.disabled = false;
+           
+       }
+
+       if(event.target.value !== '-'){
+           //disable under/over select
+
+           //last-minute
+           set_reset_first_to_first_option(underOverSelect);
+           underOverSelect.disabled = true;
+
+       }
+
+       if(event.target.value === '-'){
+           //disable under/over select
+           
+           //last-minute
+           set_reset_first_to_first_option(underOverSelect);
+           underOverSelect.disabled = false;
+
+           let optionsDisble = scoreSelect.querySelectorAll('option');
+           [...optionsDisble].map( x => x.disabled = false);
+       }
 
 
+   }
+
+}
+
+function set_reset_first_to_first_option(select){
+   options = select.querySelectorAll('option');
+   [...options].map( x => {
+       if(x.selected == true){
+           x.selected = false;
+       }
+   });
+
+   options[0].selected = true;
+}
+*/
+
+/*
  function disable_form_on_date(event, id, instance){
     let popup = instance["$element"][0];
 
@@ -608,3 +643,23 @@ function setUpPlayersList(data, popup){
      }
 
  }
+ */
+
+function possible_player_points(event, id, instance) {
+    let popup = instance["$element"][0];
+
+    let form = popup.querySelector('form');
+
+    let selectParents = form.querySelectorAll('div.elementor-field-type-select');
+
+    [...selectParents].map(
+
+        parentEl => {
+            let points_text = document.createElement('span');
+            points_text.classList.add('scm-possible-points');
+            //points_text.textContent = 'Πιθανοί Πόντοι: ';
+
+            parentEl.appendChild(points_text);
+        }
+    );
+}

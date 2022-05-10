@@ -156,6 +156,17 @@ function scoremasters_scripts()
 }
 add_action('wp_enqueue_scripts', 'scoremasters_scripts');
 
+function add_type_attribute($tag, $handle, $src) {
+    // if not your script, do nothing and return original $tag
+    if ( 'scoremasters-activate-prediction-popup' !== $handle ) {
+        return $tag;
+    }
+    // change the script tag by adding type="module" and return it.
+    $tag = '<script type="module" src="' . esc_url( $src ) . '"></script>';
+    return $tag;
+}
+
+add_filter('script_loader_tag', 'add_type_attribute' , 10, 3);
 /**
  * Implement the Custom Header feature.
  */
@@ -281,9 +292,7 @@ function my_awesome_func($request)
     );
     $posts = get_posts($args);
 
-    $user_id = explode('-', $request['pre_title'])[1];
-
-    
+    $user_id = explode('-', $request['pre_title'])[1];  
 
     if (empty($posts)) {
         return new WP_Error('no_author', 'Invalid prediction title', array('status' => 404));
@@ -314,9 +323,15 @@ add_action('rest_api_init', function () {
     ));
 });
 
+
 // Scoremasters App
 if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
     require_once dirname(__FILE__) . '/vendor/autoload.php';
 }
 
 require_once dirname(__FILE__) . '/app/scoremasters.php';
+
+
+
+//exporter
+//require_once dirname(__FILE__) . '/app/tools/export_predictions.php';

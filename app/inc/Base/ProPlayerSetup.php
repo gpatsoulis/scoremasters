@@ -23,9 +23,11 @@ class ProPlayerSetup {
 
         if(!isset($request['meta_value']) || !isset($request['meta_key'])) return $args;
 
+        $meta_value_len = strlen($request['meta_value']);
+
         $args += array(
             'meta_key' => $request['meta_key'],
-            'meta_value' => sprintf('a:1:{i:0;s:3:"%s";}', $request['meta_value']),
+            'meta_value' => sprintf('a:1:{i:0;s:%d:"%s";}',$meta_value_len, $request['meta_value']),
             'meta_query' => (isset($request['meta_query'])) ? $request['meta_query']:'',
         );
         

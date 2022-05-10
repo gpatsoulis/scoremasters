@@ -57,6 +57,8 @@ class FixturesShortcode
             foreach ($matches[0]['week-match'] as $match) {
 
                 $data['openForPredictions'] =  true;
+
+                //when creating new datetime always set timezone
                 $match_date = new \DateTime($match->post_date, new \DateTimeZone('Europe/Athens'));
 
                 //scm-full-time-score

@@ -98,6 +98,7 @@ class MatchSetup
 
         $match_date = new \DateTime($match->post_data->post_date);
 
+        //todo: add comments to the process
         $args = array(
             'post_type' => 'scm-prediction',
             'post_status' => 'any',
