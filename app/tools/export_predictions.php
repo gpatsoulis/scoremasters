@@ -60,9 +60,6 @@ $args = array(
 
 $matches = get_posts($args);
 
-//var_dump($matches );
-//exit;
-
 
 /*$args = array(
     'post_type' => 'scm-prediction',
