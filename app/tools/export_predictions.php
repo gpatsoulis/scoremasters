@@ -1,5 +1,6 @@
 <?php
 
+/*
 use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\Player;
 
@@ -12,6 +13,7 @@ $predictions = $player->get_current_week_predictions();
 var_dump($player->can_play_double());
 
 exit;
+*/
  
 //find curretn fixture
 //find all finished matches
