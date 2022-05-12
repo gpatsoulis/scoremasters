@@ -78,7 +78,8 @@ class FixturesShortcode
                 $data["player-id"] = get_current_user_id( );
                 $data['match-id'] = $match->ID;
 
-                $data['match-date'] = strtotime($match->post_date);
+                //error
+                $data['match-date'] = $match_date->getTimestamp();
 
                 $repeater_teams = get_field("match-teams", $match->ID);
 
