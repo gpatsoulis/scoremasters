@@ -22,7 +22,8 @@ final class FixtureTemplate implements TemplateInterface
 		$popup_btn = "<button class='activate-prediction-popup'>Παίξε</button>";
 		
 		if ($data['openForPredictions'] === false){
-			$popup_btn = '<div class="scm-match-finished"><h3>FINISHED</h3><h3 class="scm-match-score">'. $data["match-score"] .'</h3></div>';
+			//$popup_btn = '<div class="scm-match-finished"><h3>FINISHED</h3><h3 class="scm-match-score">'. $data["match-score"] .'</h3></div>';
+			$popup_btn = '<div class="scm-match-finished"><h3 class="scm-match-score">'. $data["match-score"] .'</h3></div>';
 		}
 
         $template_html = <<<HTML
@@ -153,7 +154,9 @@ HTML;
 
 			/*  popup styles  */ 
 			.team-names-container h3 {
-				color: black;
+				color: #fff !important;
+				font-size: 20px !important;
+				justify-content: space-between !important;
 			}
 
 			.team-names-container {
@@ -170,6 +173,41 @@ HTML;
 			.scm-match-finished h3 {
 				margin: 5px 0 0 0 ;
 			}
+
+			@media only screen and (max-width: 600px){
+    
+				.scm-fixture-list-row .scm-home-team, .scm-fixture-list-row .scm-away-team{
+					font-size: 12px !important;
+					text-align:center !important;
+				}
+
+				.home-container {
+					padding: 30px 30px 0px 15px !important;
+					flex-direction: column !important;
+					gap: 0px !important;
+					justify-content:space-around !important;
+				}
+
+				.away-container {
+					padding: 30px 15px 0px 30px !important;
+					flex-direction: column-reverse !important;
+					gap: 0px !important;
+					justify-content:space-around !important;
+				}
+
+				.stadium h5, .match-date h5{
+					letter-spacing:0px !important;
+					font-size:12px !important;
+				}
+
+				.team-image {
+					width: 60% !important;
+					align-self:center;
+
+				}
+
+			}
+
 		</style>
 HTML;
 

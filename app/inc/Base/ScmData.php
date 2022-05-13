@@ -98,6 +98,30 @@ final class ScmData
         return $all_predictions;
     }
 
+    public static function get_all_player_prediction_for_fixture_by_title(array $matches,  $player_id = ''){
+
+        $all_predictions = array();
+
+        foreach($matches as $match){
+
+            $args = array(
+                'post_type' => 'scm-prediction',
+                'post_status' => 'any',
+                'posts_per_page' => -1,
+                'author' => $player_id,
+                's' => $match->ID . '-',
+            );
+    
+            $predictions = get_posts($args);
+
+            foreach($predictions as $prediction){
+                $all_predictions[] = $prediction;
+            }
+        }
+
+        return $all_predictions;
+    }
+
     public static function get_all_player_predictions_for_fixture(\WP_Post $fixture,  $player_id = ''){
 
 

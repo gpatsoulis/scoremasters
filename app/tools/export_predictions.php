@@ -1,9 +1,10 @@
 <?php
 
-/*
+
 use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\Player;
 
+/*
 $current_user = wp_get_current_user();
 
 $player = new Player($current_user);
@@ -43,10 +44,17 @@ if (empty($matches)) {
 }
 
 $all_predictions = ScmData::get_player_predictions_for_finished_matches($matches);
+var_dump(count($all_predictions));
 
 if (empty($all_predictions)) {
     error_log('exporter ---- no available predictions');
 }
+
+$all_predictions_alter = ScmData::get_all_player_prediction_for_fixture_by_title($matches);
+
+var_dump(count($all_predictions_alter));
+$all_predictions = $all_predictions_alter;
+//alt solution based on search
 
 $export_string = '';
 
@@ -80,7 +88,7 @@ foreach ($all_predictions as $prediction) {
 $current_date = new \DateTime();
 $current_date->setTimezone(new \DateTimeZone('Europe/Athens'));
 
-file_put_contents(__DIR__ . '/export_' . $current_date->format('Y-m-d H:i') . '.csv', $export_string);
-var_dump($export_string);
+//file_put_contents(__DIR__ . '/export_' . $current_date->format('Y-m-d H:i') . '.csv', $export_string);
+//var_dump($export_string);
 
 exit;
