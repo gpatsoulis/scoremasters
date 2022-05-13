@@ -98,21 +98,29 @@ final class ScmData
         return $all_predictions;
     }
 
+    public static function get_players_predictions_for_match($match, $player_id = ''){
+
+        $args = array(
+            'post_type' => 'scm-prediction',
+            'post_status' => 'any',
+            'posts_per_page' => -1,
+            'author' => $player_id,
+            's' => $match->ID . '-',
+        );
+
+        $predictions = get_posts($args);
+
+        return $predictions;
+
+    }
+
     public static function get_all_player_prediction_for_fixture_by_title(array $matches,  $player_id = ''){
 
         $all_predictions = array();
 
         foreach($matches as $match){
 
-            $args = array(
-                'post_type' => 'scm-prediction',
-                'post_status' => 'any',
-                'posts_per_page' => -1,
-                'author' => $player_id,
-                's' => $match->ID . '-',
-            );
-    
-            $predictions = get_posts($args);
+            $predictions = self::get_players_predictions_for_match($match,$player_id);
 
             foreach($predictions as $prediction){
                 $all_predictions[] = $prediction;
@@ -163,3 +171,12 @@ final class ScmData
     }
 
 }
+
+/*
+   getPredictions->by(FootballMatch $match)
+   getPredictions->by(Player $player)
+   getPredictions->by(Fixture $fixture)
+   getPredictions->by(\DateTime $after_date,\DateTime $before_date)
+   getPredictions->by(string $title)
+   getPredictions->by($player_id)
+*/
