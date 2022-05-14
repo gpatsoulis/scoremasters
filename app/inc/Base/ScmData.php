@@ -163,6 +163,7 @@ final class ScmData
                     'day' => (int) $fixture_end_date->format('j'),
                 ),
             ),
+            //'inclusive' => true,
         );
 
         $predictions = get_posts($args);

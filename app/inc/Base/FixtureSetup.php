@@ -140,7 +140,8 @@ class FixtureSetup
         $double_points = $form_data['Double Points'];
 
         //if player has selected "double points"
-        if ($double_points) {
+        //if ($double_points) {
+            if (false) {
             //if this is not an existing prediction
             if (!$existing_player_prediction || unserialize($existing_player_prediction->post_content)['Double Points'] == '' ) {
 
@@ -148,7 +149,7 @@ class FixtureSetup
                 $player = new Player(get_user_by('id', $player_id));
 
                 //if player can't make predictions then
-                if (!$player->can_play_double()) {
+                if (!$player->can_play_double()) { 
 
                     $msg = 'Η επιλογή δηπλασιασμού επιτρέπεται μέχρι δύο φορές.';
                     $ajax_handler->add_error_message($msg);
