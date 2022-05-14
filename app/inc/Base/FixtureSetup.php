@@ -140,8 +140,8 @@ class FixtureSetup
         $double_points = $form_data['Double Points'];
 
         //if player has selected "double points"
-        //if ($double_points) {
-            if (false) {
+        if ($double_points) {
+            //if (false) {
             //if this is not an existing prediction
             if (!$existing_player_prediction || unserialize($existing_player_prediction->post_content)['Double Points'] == '' ) {
 
@@ -165,8 +165,7 @@ class FixtureSetup
         $current_dateTime = new \DateTime();
         $current_dateTime->setTimezone(new \DateTimeZone('Europe/Athens'));
 
-        if (false) {
-        //if ($current_dateTime > $post_date) {
+        if ($current_dateTime > $post_date) {
 
             $msg = 'Δεν επιτρέπεται η αλλάγη της πρόβλεψης μετά την έναρξη του αγώνα';
             $ajax_handler->add_error_message($msg);
