@@ -7,6 +7,7 @@ namespace Scoremasters\Inc\Base;
 
 use Scoremasters\Inc\Classes\FootballMatch;
 use Scoremasters\Inc\Base\ScmData;
+use Scoremasters\Inc\Base\CalculateScore;
 
 class MatchSetup
 {
@@ -99,27 +100,9 @@ class MatchSetup
 
         $match_date = new \DateTime($match->post_data->post_date);
 
-        //todo: add comments to the process
-        /*
-        $args = array(
-            'post_type' => 'scm-prediction',
-            'post_status' => 'any',
-            'date_query' => array(
-                'year' => (int) $match_date->format('Y'),
-                'month' => (int) $match_date->format('n'),
-                'day' => (int) $match_date->format('j'),
-                'hour' => (int) $match_date->format('G'),
-                'minute' => (int) $match_date->format('i'),
-                'second' => (int) $match_date->format('s'),
-            ),
-        );
-
-        $predictions = get_posts($args);
-        */
-
         $predictions = ScmData::get_players_predictions_for_match($match->post_data);
 
-        file_put_contents(__DIR__ . '/my_predictions.txt', json_encode(count($predictions)) . "\n", FILE_APPEND);
+        //file_put_contents(__DIR__ . '/my_predictions.txt', json_encode(count($predictions)) . "\n", FILE_APPEND);
         //----------------------------------------
 
         $points_table = get_option('points_table');
@@ -133,7 +116,8 @@ class MatchSetup
 
         foreach ($predictions as $prediction) {
 
-            $points = self::calculate_points_after_prediction_submit($prediction, $match);
+            //$points = self::calculate_points_after_prediction_submit($prediction, $match);
+            CalculateScore::calculate_points_after_prediction_submit($prediction, $match);
 
             //file_put_contents(__DIR__ . '/calc_pred_match.txt', 'total points: '.$points . "\n",FILE_APPEND);
 

@@ -243,6 +243,10 @@ class CalculateScore
 
             }
 
+            if(!$prediction_points_scorer){
+                $prediction_points_scorer = 0;
+            }
+
             $total_points = $total_points + $prediction_points_scorer;
             $double_scorer = true;
         }

@@ -5,7 +5,7 @@ function disable_form_on_date(event, id, instance){
 
     let button = popup.querySelector('button[type="submit"]');
 
-    button.addEventListener('click',disableBtn);
+    //button.addEventListener('click',disableBtn);
 
     function disableBtn(event){
 
