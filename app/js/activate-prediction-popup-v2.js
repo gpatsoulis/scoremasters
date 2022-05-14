@@ -1,10 +1,10 @@
 import {
     restrictions
-} from '/wp-content/themes/scoremasters/app/js/restrictions.js';
+} from '/wp-content/themes/scoremasters/app/js/restrictions-v2.js';
 
 import {
     disable_form_on_date
-} from '/wp-content/themes/scoremasters/app/js/dateRestrictions.js';
+} from '/wp-content/themes/scoremasters/app/js/dateRestrictions-v2.js';
 
 
 
