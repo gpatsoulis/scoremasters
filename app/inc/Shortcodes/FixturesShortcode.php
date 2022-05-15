@@ -78,14 +78,19 @@ class FixturesShortcode
                 $data["player-id"] = get_current_user_id( );
                 $data['match-id'] = $match->ID;
 
+                
+
                 //error
                 $data['match-date'] = $match_date->getTimestamp();
 
                 $repeater_teams = get_field("match-teams", $match->ID);
 
-                $data["home-team-image"] = get_the_post_thumbnail($repeater_teams[0]["home-team"][0]->ID);
+                
+
                 $data["home-team-name"] = $repeater_teams[0]["home-team"][0]->post_title;
                 $data["home-team-id"] = $repeater_teams[0]["home-team"][0]->ID;
+                $data["home-team-image"] = get_the_post_thumbnail($repeater_teams[0]["home-team"][0]->ID);
+                $data['home-team-capability'] = get_field('scm-team-capabilityrange',$repeater_teams[0]["home-team"][0]->ID);
 
                 $data["stadium"] = $repeater_teams[0]["home-team"][0]->post_content;
                 $data["match-date-string"] = $match->post_date;
@@ -93,6 +98,7 @@ class FixturesShortcode
                 $data["away-team-name"] = $repeater_teams[0]["away-team"][0]->post_title;
                 $data["away-team-id"] = $repeater_teams[0]["away-team"][0]->ID;
                 $data["away-team-image"] = get_the_post_thumbnail($repeater_teams[0]["away-team"][0]->ID);
+                $data['away-team-capability'] = get_field('scm-team-capabilityrange',$repeater_teams[0]["away-team"][0]->ID);
 
                 $output .= $this->template->get_html($data);
             }

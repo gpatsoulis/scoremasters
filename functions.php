@@ -140,6 +140,7 @@ add_action('widgets_init', 'scoremasters_widgets_init');
 /**
  * Enqueue scripts and styles.
  */
+
 function scoremasters_scripts()
 {
     wp_enqueue_style('scoremasters-style', get_stylesheet_uri(), array(), _S_VERSION);
@@ -147,7 +148,13 @@ function scoremasters_scripts()
 
     wp_enqueue_script('scoremasters-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true);
     if (!is_admin()) {
-        wp_enqueue_script('scoremasters-activate-prediction-popup', get_template_directory_uri() . '/app/js/activate-prediction-popup-v2.1.js', array(), '1.0.1', true);
+        //wp_enqueue_script('scoremasters-activate-prediction-popup', get_template_directory_uri() . '/app/js/activate-prediction-popup-v2.1.js', array(), '1.0.1', true);
+        wp_register_script(
+            'scoremasters-activate-prediction-popup',
+            get_template_directory_uri() . '/app/js/activate-prediction-popup-v2.1.js',
+            array('jquery'), '1.0.1', false);
+        wp_enqueue_script('scoremasters-activate-prediction-popup');
+        wp_localize_script('scoremasters-activate-prediction-popup', 'scm_points_table', get_option('points_table'));
     }
 
     if (is_singular() && comments_open() && get_option('thread_comments')) {
@@ -156,17 +163,19 @@ function scoremasters_scripts()
 }
 add_action('wp_enqueue_scripts', 'scoremasters_scripts');
 
-function add_type_attribute($tag, $handle, $src) {
+
+function add_type_attribute($tag, $handle, $src)
+{
     // if not your script, do nothing and return original $tag
-    if ( 'scoremasters-activate-prediction-popup' !== $handle ) {
+    if ('scoremasters-activate-prediction-popup' !== $handle) {
         return $tag;
     }
     // change the script tag by adding type="module" and return it.
-    $tag = '<script type="module" src="' . esc_url( $src ) . '"></script>';
+    $tag = '<script type="module" src="' . esc_url($src) . '"></script>';
     return $tag;
 }
 
-add_filter('script_loader_tag', 'add_type_attribute' , 10, 3);
+add_filter('script_loader_tag', 'add_type_attribute', 10, 3);
 /**
  * Implement the Custom Header feature.
  */
@@ -286,16 +295,15 @@ function my_awesome_func($request)
     //return $request['pre_title'];
 
     $author = filter_var($request['pre_author'], FILTER_VALIDATE_INT);
-    
-    
-    if($author === false){
-        return new WP_Error('error data', 'Invalid prediction title', array('status' => 404)); 
+
+    if ($author === false) {
+        return new WP_Error('error data', 'Invalid prediction title', array('status' => 404));
     }
-    
+
     //pre_title=1350-2&pre_author=2
 
     $args = array(
-        
+
         'post_type' => 'scm-prediction',
         'post_status' => 'any',
         //'author' => $author,
@@ -304,21 +312,21 @@ function my_awesome_func($request)
 
     $posts = get_posts($args);
 
-    $user_id = explode('-', $request['pre_title'])[1];  
+    $user_id = explode('-', $request['pre_title'])[1];
 
     if (empty($posts)) {
         return new WP_Error('no_author', 'Invalid prediction title', array('status' => 404));
     }
 
-	$current_user_prediction = '';
+    $current_user_prediction = '';
 
-	foreach($posts as $post){
-		if($post->post_author == $user_id){
-			$current_user_prediction = $post;
-		}
-	}
+    foreach ($posts as $post) {
+        if ($post->post_author == $user_id) {
+            $current_user_prediction = $post;
+        }
+    }
 
-	if ( $current_user_prediction == '') {
+    if ($current_user_prediction == '') {
         return new WP_Error('no_author', 'Invalid prediction title', array('status' => 404));
     }
 
@@ -330,13 +338,12 @@ function my_awesome_func($request)
 add_action('rest_api_init', function () {
     //register_rest_route('scm/v1', 'scm_prediction_title/(?P<pre_title>[0-9\-]+)/?(P<pre_author>[0-9]+)', array(
     //register_rest_route('scm/v1', 'scm_prediction_title/?pre_title=(?P<pre_title>[0-9\-]+)&amp;pre_author=(?P<pre_author>[0-9]+)', array(
-    register_rest_route('scm/v1', 'scm_prediction_title/?pre_title=(?P<pre_title>[0-9\-]+)&?pre_author=(?P<pre_author>[0-9]+)', array(        
+    register_rest_route('scm/v1', 'scm_prediction_title/?pre_title=(?P<pre_title>[0-9\-]+)&?pre_author=(?P<pre_author>[0-9]+)', array(
         'methods' => 'GET',
         'callback' => 'my_awesome_func',
         'permission_callback' => '__return_true',
     ));
 });
-
 
 // Scoremasters App
 if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
@@ -345,8 +352,6 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
 
 require_once dirname(__FILE__) . '/app/scoremasters.php';
 
-
-
 //exporter
 //require_once dirname(__FILE__) . '/app/tools/export_predictions.php';
-    
+//require_once dirname(__FILE__) . '/app/tools/test_calc_points.php';

@@ -424,3 +424,15 @@ function possible_player_points(event, id, instance) {
         }
     );
 }
+
+function calc_possible_points(){
+    //get points_table
+    //get dynamikotita
+    //calc dynamikotita
+    //get points array
+    //find points
+
+    let scoreTable = scm_points_table;
+
+
+}
