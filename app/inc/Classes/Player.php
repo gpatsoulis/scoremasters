@@ -32,12 +32,15 @@ class Player {
 
     }
 
-    public function get_current_week_predictions(){
+    public function get_current_week_predictions(): array
+    {
 
         $current_fixture = ScmData::get_current_fixture();
 
         $player_predictions = ScmData::get_all_player_predictions_for_fixture($current_fixture, $this->wp_player->ID);
-        
+        $matches = ScmData::get_all_matches_for_current_fixture();
+        $player_predictions =  ScmData::get_all_player_prediction_for_fixture_by_title($matches,$this->wp_player->ID);
+   
         return $player_predictions;
     }
 
@@ -46,9 +49,8 @@ class Player {
 
         $predictions = $this->get_current_week_predictions();
 
-
         if(empty($predictions)){
-            error_log('there are no predictions');
+            error_log(static::class . ' there are no predictions');
             return true;
         }
 

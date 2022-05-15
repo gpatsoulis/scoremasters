@@ -8,7 +8,7 @@ namespace Scoremasters\Inc\Base;
 final class ScmData
 {
 
-    public static function get_current_fixture()
+    public static function get_current_fixture(): \WP_Post
     {
 
         $args = array(
@@ -22,7 +22,7 @@ final class ScmData
 
         if (empty($posts)) {
             error_log('exporter---- no active fixture');
-            $current_fixture = array();
+            throw new Exception(static::class . ' no active fixture');
         }
 
         $current_fixture = $posts[0];
@@ -30,7 +30,7 @@ final class ScmData
         return $current_fixture;
     }
 
-    public static function get_finished_matches_for_fixture(\WP_Post $current_fixture)
+    public static function get_finished_matches_for_fixture(\WP_Post $current_fixture): array
     {
         $current_date = new \DateTime();
         $current_date->setTimezone(new \DateTimeZone('Europe/Athens'));
@@ -64,7 +64,8 @@ final class ScmData
         return $matches;
     }
 
-    public static function get_player_predictions_for_finished_matches(array $matches,  $player_id = '')
+    //give's false results if match date changed by user
+    public static function get_player_predictions_for_finished_matches(array $matches, $player_id = ''): array
     {
         $all_predictions = array();
 
@@ -98,7 +99,8 @@ final class ScmData
         return $all_predictions;
     }
 
-    public static function get_players_predictions_for_match($match, $player_id = ''){
+    public static function get_players_predictions_for_match($match, $player_id = ''): array
+    {
 
         $args = array(
             'post_type' => 'scm-prediction',
@@ -114,15 +116,30 @@ final class ScmData
 
     }
 
-    public static function get_all_player_prediction_for_fixture_by_title(array $matches,  $player_id = ''){
+    public static function get_all_matches_for_current_fixture(){
+
+        $current_fixture = self::get_current_fixture();
+
+        // wrong use of repeater field 'week-matches' !!!!
+        $matches = get_field('week-matches',$current_fixture->ID)[0]['week-match'];
+
+        if(!$matches){
+            throw new Exception(static::class . ' get_field("week-matches") error');
+        }
+
+        return $matches;
+    }
+
+    public static function get_all_player_prediction_for_fixture_by_title(array $matches, $player_id = ''): array
+    {
 
         $all_predictions = array();
 
-        foreach($matches as $match){
+        foreach ($matches as $match) {
 
-            $predictions = self::get_players_predictions_for_match($match,$player_id);
+            $predictions = self::get_players_predictions_for_match($match, $player_id);
 
-            foreach($predictions as $prediction){
+            foreach ($predictions as $prediction) {
                 $all_predictions[] = $prediction;
             }
         }
@@ -130,22 +147,23 @@ final class ScmData
         return $all_predictions;
     }
 
-    public static function get_all_player_predictions_for_fixture(\WP_Post $fixture,  $player_id = ''){
+    public static function get_all_player_predictions_for_fixture(\WP_Post $fixture, $player_id = ''): array
+    {
 
+        $fixture_start_date_str = get_field('week-start-date', $fixture->ID);
 
-        $fixture_start_date_str = get_field('week-start-date',$fixture->ID);
-        if(!$fixture_start_date_str){
-            error_log( 'ScmData::get_all_player_predictions_for_fixture\ error value in acf field week-start-date');
-            //return array();
+        if (!$fixture_start_date_str) {
+            error_log('ScmData::get_all_player_predictions_for_fixture\ error value in acf field week-start-date');
+            throw new Exception(static::class . ' no active fixture');
         }
-        $fixture_start_date = new \DateTime( $fixture_start_date_str, new \DateTimeZone('Europe/Athens'));
+        $fixture_start_date = new \DateTime($fixture_start_date_str, new \DateTimeZone('Europe/Athens'));
 
-        $fixture_end_date_str = get_field('week-end-date',$fixture->ID);
-        if(!$fixture_start_date_str){
-            error_log( 'ScmData::get_all_player_predictions_for_fixture\ error value in acf field week-end-date');
-            //return array();
+        $fixture_end_date_str = get_field('week-end-date', $fixture->ID);
+        if (!$fixture_end_date_str) {
+            error_log('ScmData::get_all_player_predictions_for_fixture\ error value in acf field week-end-date');
+            throw new Exception(static::class . ' no fixture_end_date_str');
         }
-        $fixture_end_date = new \DateTime( $fixture_end_date_str, new \DateTimeZone('Europe/Athens'));
+        $fixture_end_date = new \DateTime($fixture_end_date_str, new \DateTimeZone('Europe/Athens'));
 
         $args = array(
             'aurhor' => $player_id,
@@ -163,7 +181,7 @@ final class ScmData
                     'day' => (int) $fixture_end_date->format('j'),
                 ),
             ),
-            //'inclusive' => true,
+            'inclusive' => true,
         );
 
         $predictions = get_posts($args);
@@ -174,10 +192,10 @@ final class ScmData
 }
 
 /*
-   getPredictions->by(FootballMatch $match)
-   getPredictions->by(Player $player)
-   getPredictions->by(Fixture $fixture)
-   getPredictions->by(\DateTime $after_date,\DateTime $before_date)
-   getPredictions->by(string $title)
-   getPredictions->by($player_id)
-*/
+getPredictions->by(FootballMatch $match)
+getPredictions->by(Player $player)
+getPredictions->by(Fixture $fixture)
+getPredictions->by(\DateTime $after_date,\DateTime $before_date)
+getPredictions->by(string $title)
+getPredictions->by($player_id)
+ */

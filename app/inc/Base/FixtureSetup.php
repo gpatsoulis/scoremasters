@@ -50,16 +50,8 @@ class FixtureSetup
             return;
         }
 
-        $raw_fields = $record->get('fields');
-        //debug
-        //file_put_contents(__DIR__ . '/name_form_data.txt', json_encode($form_name) . "\n",FILE_APPEND);
         $form_data = $record->get_formatted_data();
-        //debug
-        //file_put_contents(__DIR__ . '/form_data.txt', json_encode($form_data) . "\n",FILE_APPEND);
-
         $form_meta = $record->get_form_meta(array('page_url'));
-        //debug
-        //file_put_contents(__DIR__ . '/form_meta.txt', json_encode($form_meta) . "\n",FILE_APPEND);
 
         $raw_req_url = $form_meta['page_url']['value'];
 
@@ -77,6 +69,7 @@ class FixtureSetup
         //{"page_id":"692","player_id":"2","match_id":"850","homeTeam_id":"133","awayTeam_id":"138"}
 
         $valid_keys = array('page_id', 'player_id', 'match_id', 'homeTeam_id', 'awayTeam_id', 'match_date');
+
         foreach ($url_query_params as $param_key => $param_value) {
 
             if (!in_array($param_key, $valid_keys, true)) {
@@ -96,9 +89,7 @@ class FixtureSetup
         //todo: check if player can make predictions
         //todo: check if is for active week
         //todo: check for valid data
-
         //save or update data
-
         //$post_date = gmdate('Y-m-d H:i:s' ,$filtered_url_query_params['match_date']);
 
         $post_date = new \DateTime();
@@ -118,7 +109,6 @@ class FixtureSetup
         $player_prediction_post = array(
             'post_author' => $filtered_url_query_params['player_id'],
             'post_date' => $post_date->format('Y-m-d H:i:s'),
-            //'post_date_gmt' => $post_date_gmt,
             'post_content' => serialize($form_data),
             'post_title' => $filtered_url_query_params['match_id'] . '-' . $filtered_url_query_params['player_id'],
             'post_type' => 'scm-prediction',
@@ -131,19 +121,22 @@ class FixtureSetup
         }
 
         //check if player can play for Double Points
-
         if (is_array($existing_player_prediction)) {
-            $existing_player_prediction = $existing_player_prediction[0];
             error_log(static::class . ' - too many posts with type: "scm-prediction", should be only one');
+            throw new Exception(static::class . ' many existing_player_prediction');
+        }
+
+        if(is_null($existing_player_prediction)){
+            $is_new_prediction = true;
         }
 
         $double_points = $form_data['Double Points'];
 
         //if player has selected "double points"
         if ($double_points) {
-            //if (false) {
-            //if this is not an existing prediction
-            if (!$existing_player_prediction || unserialize($existing_player_prediction->post_content)['Double Points'] == '' ) {
+
+            //if this is new prediction
+            if ( $is_new_prediction ) {
 
                 $player_id = $filtered_url_query_params['player_id'];
                 $player = new Player(get_user_by('id', $player_id));
@@ -156,12 +149,27 @@ class FixtureSetup
                     $ajax_handler->is_success = false;
                     return;
                 }
-
-                //send ajax msg to user
             }
+
+            //if this is old prediction but with no double
+            if(!$is_new_prediction  && unserialize($existing_player_prediction->post_content)['Double Points'] == ''){
+
+                $player_id = $filtered_url_query_params['player_id'];
+                $player = new Player(get_user_by('id', $player_id));
+
+                //if player can't make predictions then
+                if (!$player->can_play_double()) { 
+
+                    $msg = 'Η επιλογή δηπλασιασμού επιτρέπεται μέχρι δύο φορές.';
+                    $ajax_handler->add_error_message($msg);
+                    $ajax_handler->is_success = false;
+                    return;
+                }
+            }
+
+         exit;
         }
 
-        
         $current_dateTime = new \DateTime();
         $current_dateTime->setTimezone(new \DateTimeZone('Europe/Athens'));
 
@@ -170,10 +178,10 @@ class FixtureSetup
             $msg = 'Δεν επιτρέπεται η αλλάγη της πρόβλεψης μετά την έναρξη του αγώνα';
             $ajax_handler->add_error_message($msg);
             $ajax_handler->is_success = false;
-
             return;
         }
 
+        // save user prediction
         $player_prediction = wp_insert_post($player_prediction_post);
         $ajax_handler->is_success = true;
 
