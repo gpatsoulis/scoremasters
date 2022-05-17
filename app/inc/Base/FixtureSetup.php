@@ -126,8 +126,11 @@ class FixtureSetup
             throw new Exception(static::class . ' many existing_player_prediction');
         }
 
+        
         if(is_null($existing_player_prediction)){
             $is_new_prediction = true;
+        }else{
+            $is_new_prediction = false;
         }
 
         $double_points = $form_data['Double Points'];
