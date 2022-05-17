@@ -33,7 +33,7 @@ final class FixtureTemplate implements TemplateInterface
                            <div class="team-image">
                                {$data["home-team-image"]}
                            </div>
-                           <h4 class="scm-home-team" data-team_id="{$data["home-team-id"]}">
+                           <h4 class="scm-home-team" data-team_id="{$data["home-team-id"]}" data-home_team_capability="{$data['home-team-capability']}">
                                {$data["home-team-name"]}
                            </h4>
                </div>
@@ -57,7 +57,7 @@ final class FixtureTemplate implements TemplateInterface
                            </div>
                </div>
                <div class="away-container">
-                   <h4 class="scm-away-team" data-team_id="{$data["away-team-id"]}">
+                   <h4 class="scm-away-team" data-team_id="{$data["away-team-id"]}" data-away_team_capability="{$data['away-team-capability']}">
                        {$data["away-team-name"]}
                    </h4>
                    <div class="team-image">

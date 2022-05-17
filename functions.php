@@ -286,7 +286,7 @@ wp_reset_postdata();
 
 add_shortcode('scm-select-week', 'fill_select_week_fixture');
 
-function my_awesome_func($request)
+function get_prediction($request)
 {
 
     //$product_id = $request->get_param( 'prediction_title' );
@@ -340,10 +340,23 @@ add_action('rest_api_init', function () {
     //register_rest_route('scm/v1', 'scm_prediction_title/?pre_title=(?P<pre_title>[0-9\-]+)&amp;pre_author=(?P<pre_author>[0-9]+)', array(
     register_rest_route('scm/v1', 'scm_prediction_title/?pre_title=(?P<pre_title>[0-9\-]+)&?pre_author=(?P<pre_author>[0-9]+)', array(
         'methods' => 'GET',
-        'callback' => 'my_awesome_func',
+        'callback' => 'get_prediction',
         'permission_callback' => '__return_true',
     ));
 });
+
+/*
+register_rest_field( 'scm-pro-player', 'position', array(
+    'get_callback' => function ( $data ) {
+        return get_post_meta( $data['id'], 'scm-player-position', true );
+    }, ));
+*/
+
+register_rest_field( 'scm-pro-player', 'position',array('get_callback' => 'get_player_position'));
+
+function get_player_position($data){
+    return get_post_meta( $data['id'], 'scm-player-position', true );
+}
 
 // Scoremasters App
 if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {

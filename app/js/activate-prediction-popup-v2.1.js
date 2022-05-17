@@ -298,7 +298,7 @@ async function getPlayersList(team_id) {
 
     //let url = 'http://scoremasters.test/wp-json/wp/v2/scm-pro-player?';
     let url = currentDomain + '/wp-json/wp/v2/scm-pro-player?';
-    let params = 'meta_key=scm-player-team&meta_value=' + team_id + '&per_page=30&_fields=id,status,type,featured_media,acf,title';
+    let params = 'meta_key=scm-player-team&meta_value=' + team_id + '&per_page=30&_fields=id,status,type,featured_media,acf,title,position';
 
     let responce = await fetch(url + params, {
         method: 'GET',
@@ -340,6 +340,7 @@ function setUpPlayersList(data, popup) {
                 let playerName = x.title.rendered;
 
                 let option = new Option(awayTeam_name + ' - ' + playerName, playerID);
+                option.dataset.position = x.position;
 
                 return option;
             }
@@ -361,6 +362,7 @@ function setUpPlayersList(data, popup) {
                 let playerName = x.title.rendered;
 
                 let option = new Option(homeTeam_name + ' - ' + playerName, playerID);
+                option.dataset.position = x.position;
 
                 return option;
             }
@@ -411,28 +413,58 @@ function possible_player_points(event, id, instance) {
 
     let form = popup.querySelector('form');
 
-    let selectParents = form.querySelectorAll('div.elementor-field-type-select');
+    let shmeioSelect = popup.querySelector('#form-field-field_b324dff');
+    shmeioSelect.addEventListener('change',calc_possible_points);
+    let underOverSelect = popup.querySelector('#form-field-field_eba581d');
+    underOverSelect.addEventListener('change',calc_possible_points);
+    let scoreSelect = popup.querySelector('#form-field-field_4879a1e');
+    scoreSelect.addEventListener('change',calc_possible_points);
+    let scorerSelect = popup.querySelector('#form-field-scm_scorer');
+    scorerSelect.addEventListener('change',calc_possible_points);
 
-    [...selectParents].map(
-
-        parentEl => {
-            let points_text = document.createElement('span');
-            points_text.classList.add('scm-possible-points');
-            //points_text.textContent = 'Πιθανοί Πόντοι: ';
-
-            parentEl.appendChild(points_text);
-        }
-    );
 }
 
-function calc_possible_points(){
-    //get points_table
-    //get dynamikotita
-    //calc dynamikotita
-    //get points array
-    //find points
+function calc_possible_points(event){
 
-    let scoreTable = scm_points_table;
+    let params = new URLSearchParams(document.location.search);
+    let match_id = params.get('match_id');
 
+    let match_el = document.querySelector('[data-match_id="'+ match_id +'"]');
+
+    //selectedItem,match element
+    //let scoreTable = scm_points_table;
+    let player_points_table = {
+        "Επιθετικός": 4,
+        "Μέσος": 8,
+        "Αμυντικός": 9,
+    };
+
+    let home_team_capability = match_el.querySelector('h4.scm-home-team').dataset.home_team_capability;
+    let away_team_capability = match_el.querySelector('h4.scm-away-team').dataset.away_team_capability;
+
+    
+    let capabilityDiff = parseInt(home_team_capability) - parseInt(away_team_capability);
+
+    let possible_points = scm_points_table[capabilityDiff.toString()][event.target.value];
+
+    console.log(event);
+
+    let parent = event.target.closest('div.elementor-field-type-select');
+    let points_text = parent.querySelector('.scm-possible-points');
+
+    if(event.target.id == 'form-field-scm_scorer'){
+        let playerPosition = event.target.querySelector('[value="'+event.target.value+'"]');
+        possible_points = player_points_table[playerPosition.dataset.position]
+    }
+
+    if(!points_text){
+        points_text = document.createElement('span');
+        points_text.classList.add('scm-possible-points');
+    }
+
+    
+    points_text.textContent = 'Πιθανοί Πόντοι: ' + possible_points;
+
+    parent.appendChild(points_text);
 
 }
