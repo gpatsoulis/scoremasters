@@ -31,9 +31,9 @@ class CalculateScore
         $prediction_points_shmeio = $prediction_points_under_over = $prediction_points_score = 0;
         $double_shmeio = $double_uo = $double_score = $double_scorer = false;
 
-        
-        $prediction_points_shmeio = $points_table[$column][$prediction_content["SHMEIO"]];
-
+        if($prediction_content["SHMEIO"]){
+            $prediction_points_shmeio = $points_table[$column][$prediction_content["SHMEIO"]]; 
+        }
         
         if($prediction_content["Under / Over"] != '-'){
             $prediction_points_under_over = $points_table[$column][$prediction_content["Under / Over"]];

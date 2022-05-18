@@ -117,7 +117,7 @@ class MatchSetup
         foreach ($predictions as $prediction) {
 
             //$points = self::calculate_points_after_prediction_submit($prediction, $match);
-            CalculateScore::calculate_points_after_prediction_submit($prediction, $match);
+            $points = CalculateScore::calculate_points_after_prediction_submit($prediction, $match);
 
             //file_put_contents(__DIR__ . '/calc_pred_match.txt', 'total points: '.$points . "\n",FILE_APPEND);
 
@@ -182,6 +182,7 @@ class MatchSetup
     public static function calculate_points_after_prediction_submit(\WP_Post $prediction_post, FootballMatch $match): int
     {
 
+        
         $prediction = $prediction_post;
 
         $prediction_content = unserialize($prediction->post_content);
@@ -214,6 +215,10 @@ class MatchSetup
         $final_score = $match->final_score;
 
         $total_points = 0;
+
+
+        //debug
+        error_log(static::class . ' calculating points playerID: ' . $player_id);
 
         //check if prediction matches shmeio result
 
@@ -284,6 +289,9 @@ class MatchSetup
             $total_points = $total_points + intval($prediction_points_shmeio);
             $double_shmeio = true;
         }
+
+        //debug
+        error_log(static::class . ' calculating points playerID: ' . $player_id . ' total points: ' . $total_points);
 
         //check if prediction matches u/o result
 
@@ -422,6 +430,9 @@ class MatchSetup
         }
 
         //return ("Total Points: " . $total_points);
+
+        //debug
+        error_log(static::class . ' calculating points playerID: ' . $player_id . ' total points: ' . $total_points);
 
         return $total_points;
     }
