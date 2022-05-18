@@ -12,6 +12,7 @@ let btns = document.querySelectorAll('.activate-prediction-popup');
 
 let testDomain = 'http://scoremasters.test';
 let productionDomain = 'https://scoremasters.gr';
+let stagingDomain = 'https://scoremasters.gr/staging/';
 
 //let currentDomain = testDomain;
 let currentDomain = window.location.origin;
