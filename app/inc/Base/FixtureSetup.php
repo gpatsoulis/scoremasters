@@ -169,8 +169,6 @@ class FixtureSetup
                     return;
                 }
             }
-
-         exit;
         }
 
         $current_dateTime = new \DateTime();
