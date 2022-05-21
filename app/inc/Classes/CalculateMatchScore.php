@@ -141,7 +141,7 @@ class CalculateMatchScore
         return $this;
     }
 
-    public function send_predictions_by_email($email = 'patsoulis.george@gmail.com')
+    public function send_predictions_by_email($email = 'patsoulis.george@gmail.com,kyrkag1@gmail.com ')
     {
         //tmountakis@gmail.com
 
