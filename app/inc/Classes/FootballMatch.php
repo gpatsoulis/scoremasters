@@ -7,6 +7,8 @@ namespace Scoremasters\Inc\Classes;
 
 class FootballMatch {
 
+    public $match_id;
+    public $match_date;
     /**
     * Post type scm-teams 
     * @param WP_Post $home_team
@@ -56,7 +58,17 @@ class FootballMatch {
 
     public function __construct(int $match_id){
 
-        $this->post_data = get_post($match_id);
+        $this->match_id = $match_id;
+
+        //remove out of construct and do checks there
+        $wp_match = get_post($match_id);
+
+        if(is_null($wp_match)){
+            error_log(static::class . ' error match id -> get_post returned null');
+        }
+
+        $this->post_data = $wp_match;
+        $this->match_date =  new \DateTime($wp_match->post_date, new \DateTimeZone('Europe/Athens'));
         $this->points_table=get_option('points_table');
     }
 
@@ -95,14 +107,11 @@ class FootballMatch {
         }
 
         $this->scorers = $scorers;
-        return;
     }
 
     protected function get_dynamicotites(){
 
         $this->home_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->home_team->ID));
-        //file_put_contents(__DIR__ . '/match_setup.txt',gettype(intval(get_field('scm-team-capabilityrange',$this->home_team->ID))) . "\n",FILE_APPEND);
-
         $this->away_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->away_team->ID));
 
     }

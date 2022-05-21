@@ -175,7 +175,6 @@ class FixtureSetup
         $current_dateTime->setTimezone(new \DateTimeZone('Europe/Athens'));
 
         if ($current_dateTime > $post_date) {
-
             $msg = 'Δεν επιτρέπεται η αλλάγη της πρόβλεψης μετά την έναρξη του αγώνα';
             $ajax_handler->add_error_message($msg);
             $ajax_handler->is_success = false;

@@ -8,6 +8,33 @@ namespace Scoremasters\Inc\Base;
 final class ScmData
 {
 
+    public static function get_current_season($season_id = null): \WP_Post
+    {
+        $args = array(
+            'post_type' => 'scm-season',
+            'post_status' => 'publish',
+            'p' => $season_id,
+            'posts_per_page' => 1,
+        );
+
+        //get active week
+        $posts = get_posts($args);
+
+        if (empty($posts)) {
+            error_log(static::class . ' exporter---- no active season');
+            throw new Exception(static::class . ' no active season');
+        }
+
+        $curent_season = $posts[0];
+
+        //$this->season = $curent_season;
+
+        //return $this;
+
+        return $curent_season;
+
+    }
+
     public static function get_current_fixture(): \WP_Post
     {
 
@@ -99,7 +126,7 @@ final class ScmData
         return $all_predictions;
     }
 
-    public static function get_players_predictions_for_match(\WP_Post $match, $player_id = ''): array
+    public static function get_players_predictions_for_match(\WP_Post $match, $player_id = null): array
     {
 
         $args = array(

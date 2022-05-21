@@ -10,6 +10,7 @@ use Scoremasters\Inc\Base\CompetitionSetup;
 use Scoremasters\Inc\Base\ShortcodeController;
 
 
+define('EXPORT_PATH', __DIR__ . '/export_predictions');
 
 FixtureSetup::init();
 PlayerSetup::init();

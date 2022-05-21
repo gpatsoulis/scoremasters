@@ -367,6 +367,6 @@ require_once dirname(__FILE__) . '/app/scoremasters.php';
 
 //exporter
 //require_once dirname(__FILE__) . '/app/tools/export_predictions.php';
-//require_once dirname(__FILE__) . '/app/tools/test_calc_points.php';calculate_score.php
+//require_once dirname(__FILE__) . '/app/tools/test_calc_points.php';
 //require_once dirname(__FILE__) . '/app/tools/calculate_score.php';
 //require_once dirname(__FILE__) . '/app/tools/export_predictions_by_match.php';
