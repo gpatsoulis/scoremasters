@@ -149,11 +149,14 @@ class CalculateMatchScore
 
         $subject = 'predictions';
         $message = 'match predictions ' . $this->match->post_data->post_title;
-        //$headers = 'From: ' . $other_email;
-        $headers = '';
+        $headers = 'From: info@scoremasters.gr';
 
         $attachment = $this->full_path;
 
         $sent = wp_mail($to, $subject, $message, $headers, $attachment);
+
+        if(!$sent){
+            error_log(__METHOD__ . ' error mail not sent!!!');
+        }
     }
 }
