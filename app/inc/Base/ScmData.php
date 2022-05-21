@@ -59,7 +59,7 @@ final class ScmData
             ),
         );
 
-        $matches = get_posts($args);
+        $matches = get_posts($args); 
 
         return $matches;
     }
@@ -99,7 +99,7 @@ final class ScmData
         return $all_predictions;
     }
 
-    public static function get_players_predictions_for_match($match, $player_id = ''): array
+    public static function get_players_predictions_for_match(\WP_Post $match, $player_id = ''): array
     {
 
         $args = array(
@@ -119,6 +119,20 @@ final class ScmData
     public static function get_all_matches_for_current_fixture(){
 
         $current_fixture = self::get_current_fixture();
+
+        // wrong use of repeater field 'week-matches' !!!!
+        $matches = get_field('week-matches',$current_fixture->ID)[0]['week-match'];
+
+        if(!$matches){
+            throw new Exception(static::class . ' get_field("week-matches") error');
+        }
+
+        return $matches;
+    }
+
+    public static function get_all_matches_for_fixture($fixture){
+
+        $current_fixture = $fixture;
 
         // wrong use of repeater field 'week-matches' !!!!
         $matches = get_field('week-matches',$current_fixture->ID)[0]['week-match'];
