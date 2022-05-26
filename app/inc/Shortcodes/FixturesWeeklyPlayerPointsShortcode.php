@@ -5,6 +5,8 @@
 
 namespace Scoremasters\Inc\Shortcodes;
 
+use Scoremasters\Inc\Base\ScmData;
+
 //[Scoremasters\Inc\Shortcodes\FixturesWeeklyPlayerPointsShortcode]
 class FixturesWeeklyPlayerPointsShortcode
 {
@@ -23,65 +25,56 @@ class FixturesWeeklyPlayerPointsShortcode
         add_shortcode($this->name, array($this, 'output'));
     }
 
-    public function output(){
+    public function output()
+    {
         //get current user
-
-        
         $current_user = wp_get_current_user();
 
         //get active seasonID
-        $args = array(
-            'post_type' => 'scm-season',
-            'posts_per_page' => 1,
-            'post_status' => 'publish',
-        );
-        //check for success
-        $current_seasons = get_posts($args);
+        $current_seasons = ScmData::get_current_season();
 
-        if(empty($current_seasons)){
-            error_log('error no published season ');
-            return "<!-- No valid scm-season -->"; 
+        if (is_null($current_seasons)) {
+            error_log('error no published seasons ');
+            return "<!-- No valid scm-season -->";
         }
 
-        $current_seasonID = $current_seasons[0]->ID;
-
         //get user points
-        $user_points_meta_array = get_user_meta($current_user->ID,'score_points_seasonID_' . strval($current_seasonID) );
-
+        $user_points_meta_array = get_user_meta($current_user->ID, 'score_points_seasonID_' . strval($current_seasons->ID));
+       
+        ///////////////////debug/////////////////////////
+        var_dump($user_points_meta_array);
 
         //get current ficture week
-        $args = array(
-            'post_type' => 'scm-fixture',
-            'post_status' => 'publish',
-            'posts_per_page' => 1,
-        );
 
-        //get active week
-        $fixtures = get_posts($args);
+        $post_value = null;
 
-        if (empty($fixtures)) {
+        if (isset($_POST['fixture_id'])
+            && isset($_POST['scm_points_setup'])
+            && wp_verify_nonce($_POST['scm_fixture_setup'], 'submit_form')) {
+
+            $post_value = filter_var($_POST['fixture_id'], FILTER_VALIDATE_INT);
+        }
+
+        $fixture_id = ($post_value) ? $post_value : null;
+
+        $current_fixture = ScmData::get_current_fixture( $fixture_id );
+
+        if (is_null($current_fixture)) {
             error_log('error no published fixture ');
             return "<!-- No valid scm-fixture -->";
         }
 
-        ///////////////////debug/////////////////////////
-        //var_dump($user_points_meta_array);
-
-        $current_fixture = $fixtures[0];
-
-        if(!isset($user_points_meta_array[0]['fixture_id_' . strval($current_fixture->ID)])){
+        if (!isset($user_points_meta_array[0]['fixture_id_' . strval($current_fixture->ID)])) {
             return "<!-- No points yet this week -->";
         }
 
         $array_matches = $user_points_meta_array[0]['fixture_id_' . strval($current_fixture->ID)];
-    
-
 
         //$find_key = preg_replace("/[^0-9.]/", "", 'fixture_id_850');
 
         $output = $this->template->container_start;
-       
-        foreach($array_matches as $match_id => $points){
+
+        foreach ($array_matches as $match_id => $points) {
 
             $match_int_id = intval(preg_replace("/[^0-9.]/", "", $match_id));
             $match = get_post($match_int_id);
@@ -90,21 +83,19 @@ class FixturesWeeklyPlayerPointsShortcode
 
             $user_points_for_match = $points;
 
-            $data = array('match_title' => $match_title,'user_points_for_match' => $user_points_for_match);
+            $data = array('match_title' => $match_title, 'user_points_for_match' => $user_points_for_match);
 
             $output .= $this->template->get_html($data);
         }
 
-
         $output .= $this->template->get_css();
-
 
         return $output;
     }
 
     public function get_template()
     {
-        $this->template = new \Scoremasters\Inc\Templates\FixturesWeeklyScoreTemplate('div','scm-fixture-points-list','',array('name' => 'player_id','value' => get_current_user_id( ) ));
+        $this->template = new \Scoremasters\Inc\Templates\FixturesWeeklyScoreTemplate('div', 'scm-fixture-points-list', '', array('name' => 'player_id', 'value' => get_current_user_id()));
     }
 
 }

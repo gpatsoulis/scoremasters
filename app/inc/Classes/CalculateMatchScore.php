@@ -25,7 +25,6 @@ class CalculateMatchScore
     {
 
         $this->match = (new FootballMatch($match_id))->setup_data();
-
         $this->current_season = ScmData::get_current_season();
         $this->current_fixture = ScmData::get_current_fixture();
     }

@@ -25,22 +25,23 @@ final class ScmData
             throw new Exception(static::class . ' no active season');
         }
 
+        if (!isset($posts[0])) {
+            return null;
+        }
+
         $curent_season = $posts[0];
-
-        //$this->season = $curent_season;
-
-        //return $this;
 
         return $curent_season;
 
     }
 
-    public static function get_current_fixture(): \WP_Post
+    public static function get_current_fixture($fixture_id = null): \WP_Post
     {
 
         $args = array(
             'post_type' => 'scm-fixture',
             'post_status' => 'publish',
+            'p' => $fixture_id,
             'posts_per_page' => 1,
         );
 
@@ -50,6 +51,10 @@ final class ScmData
         if (empty($posts)) {
             error_log('exporter---- no active fixture');
             throw new Exception(static::class . ' no active fixture');
+        }
+
+        if (!isset($posts[0])) {
+            return null;
         }
 
         $current_fixture = $posts[0];
@@ -86,7 +91,7 @@ final class ScmData
             ),
         );
 
-        $matches = get_posts($args); 
+        $matches = get_posts($args);
 
         return $matches;
     }
@@ -143,28 +148,31 @@ final class ScmData
 
     }
 
-    public static function get_all_matches_for_current_fixture(){
+    public static function get_all_matches_for_current_fixture($fixture_id = null)
+    {
 
-        $current_fixture = self::get_current_fixture();
+        $current_fixture = self::get_current_fixture($fixture_id);
 
         // wrong use of repeater field 'week-matches' !!!!
-        $matches = get_field('week-matches',$current_fixture->ID)[0]['week-match'];
+        $matches = get_field('week-matches', $current_fixture->ID)[0]['week-match'];
 
-        if(!$matches){
-            throw new Exception(static::class . ' get_field("week-matches") error');
+        if (!$matches) {
+            error_log(__METHOD__ . ' get_field("week-matches") error ' . $fixture_id);
+            //throw new Exception(static::class . ' get_field("week-matches") error');
         }
 
         return $matches;
     }
 
-    public static function get_all_matches_for_fixture($fixture){
+    public static function get_all_matches_for_fixture($fixture)
+    {
 
         $current_fixture = $fixture;
 
         // wrong use of repeater field 'week-matches' !!!!
-        $matches = get_field('week-matches',$current_fixture->ID)[0]['week-match'];
+        $matches = get_field('week-matches', $current_fixture->ID)[0]['week-match'];
 
-        if(!$matches){
+        if (!$matches) {
             throw new Exception(static::class . ' get_field("week-matches") error');
         }
 
@@ -228,6 +236,51 @@ final class ScmData
         $predictions = get_posts($args);
 
         return $predictions;
+    }
+
+    /**
+     * @return WP_Post[]
+     */
+
+    public static function get_all_fixtures_for_season($season_id = null): array
+    {
+
+        $current_season = self::get_current_season($season_id);
+
+        $season_start_date_str = get_field('scm-season-start-date', $current_season->ID);
+        if( !$season_start_date_str ){
+            error_log(static::class . ' scm-season-start-date error');
+        }
+        $season_start_date = new \DateTime($season_start_date_str, new \DateTimeZone('Europe/Athens'));
+
+        $season_end_date_str = get_field('scm-season-end-date', $current_season->ID);
+        if( !$season_end_date_str ){
+            error_log(static::class . ' scm-season-start-date error');
+        }
+        $season_end_date = new \DateTime($season_end_date_str, new \DateTimeZone('Europe/Athens'));
+
+        $args = array(
+            'post_type' => 'scm-fixture',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'date_query' => array(
+                'after' => array(
+                    'year' => (int) $season_start_date->format('Y'),
+                    'month' => (int) $season_start_date->format('n'),
+                    'day' => (int) $season_start_date->format('j'),
+                ),
+                'before' => array(
+                    'year' => (int) $season_end_date->format('Y'),
+                    'month' => (int) $season_end_date->format('n'),
+                    'day' => (int) $season_end_date->format('j'),
+                ),
+            ),
+            'inclusive' => true,
+        );
+
+        $fixtures = get_posts($args);
+
+        return $fixtures;
     }
 
 }

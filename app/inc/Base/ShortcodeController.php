@@ -7,6 +7,7 @@ namespace Scoremasters\Inc\Base;
 
 use \Scoremasters\Inc\Shortcodes\FixturesShortcode;
 use \Scoremasters\Inc\Shortcodes\FixturesWeeklyPlayerPointsShortcode;
+use \Scoremasters\Inc\Shortcodes\FixturesSelectWeekShortcode;
 
 class ShortcodeController {
 
@@ -18,6 +19,7 @@ class ShortcodeController {
         return array(
             \Scoremasters\Inc\Shortcodes\FixturesShortcode::class,
 			\Scoremasters\Inc\Shortcodes\FixturesWeeklyPlayerPointsShortcode::class,
+			\Scoremasters\Inc\Shortcodes\FixturesSelectWeekShortcode::class,
         );
     }
 
