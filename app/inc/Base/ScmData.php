@@ -283,6 +283,29 @@ final class ScmData
         return $fixtures;
     }
 
+    public static function get_all_scm_users():array 
+    {
+        $args = array( 'role' => 'scm-user','fields' => 'all'  );
+        $all_scm_users = get_users($args);
+
+        return $all_scm_users;
+    }
+
+    public static function get_all_participants($all_scm_users){
+
+        if(empty($all_scm_users)){
+            return $all_scm_users;
+        }
+
+        $players = [];
+        foreach( $all_scm_users as $user){
+            $players[] = new Player($user);
+        }
+
+        return $players;
+
+    }
+
 }
 
 /*

@@ -8,9 +8,11 @@ use Scoremasters\Inc\Abstracts\Competition;
 
 class SeasonLeagueCompetition extends Competition {
     public \WP_post $post_object;
+
     public string $description;
     public string $type;
     public array $participants;
+
     public $standings;
     public string $status;
 
@@ -28,9 +30,12 @@ class SeasonLeagueCompetition extends Competition {
     //get all users of role = 'player'
     public function set_participants(){
         
-        $args = array( 'role' => 'Player' );
-        $participants = get_users($args);
+        $args = array( 'role' => 'Player','fields' => 'all'  );
+        $all_players = get_users($args);
 
+        foreach($all_players as $player){
+            $this->participants[] = new Player($player);
+        }
         $this->participants = $participants;
     }
 
@@ -67,6 +72,11 @@ class SeasonLeagueCompetition extends Competition {
 
     public function calculate_score(){
         //όταν ένα παιχνίδι ολοκληρώνεται θα γίνεται ο υπολογισμός του σκορ
+        //get all players for competition
+        //get player points
+        //add points to existing points
+        //save new points to db
+        $players_array = $this->get_participatns();
 
     }
 
