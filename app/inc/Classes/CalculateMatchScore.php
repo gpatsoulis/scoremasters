@@ -73,6 +73,10 @@ class CalculateMatchScore
             //todo: use array1+array2 or array_merge
             $old_meta_value = get_user_meta((int) $player_id, 'score_points_seasonID_' . $season_id);
 
+            if(!is_array($old_meta_value)){
+                error_log(__METHOD__ . ' error not found score_points_seasonID_' . $season_id);
+            }
+
             if (!empty($old_meta_value)) {
                 $old_meta_value = $old_meta_value[0];
             } else {
@@ -86,11 +90,19 @@ class CalculateMatchScore
                 $old_meta_value['fixture_id_' . $fixture_id] = array('match_id_' . $match_id => $score);
             }
 
+            if(!isset($old_meta_value['total_points'])){
+                $old_meta_value['total_points'] = 0;
+            }
+
+            $old_meta_value['total_points'] = intval($score) + intval($old_meta_value['total_points']);
+
             $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $old_meta_value);
 
             if (!$success) {
                 error_log(__METHOD__ . ' error updating score metadata for user: ' . $player_id);
             }
+
+            update_user_meta($player_id, 'total_points', $old_meta_value['total_points']);
 
             //$find_key = preg_replace("/[^0-9.]/", "", 'fixture_id_850');
 
@@ -140,7 +152,7 @@ class CalculateMatchScore
         return $this;
     }
 
-    public function send_predictions_by_email($email = 'patsoulis.george@gmail.com,kyrkag1@gmail.com ')
+    public function send_predictions_by_email($email = 'patsoulis.george@gmail.com,kyrkag1@gmail.com,tmountakis@gmail.com')
     {
         //tmountakis@gmail.com
 

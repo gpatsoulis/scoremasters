@@ -9,8 +9,8 @@ use Scoremasters\Inc\Interfaces\TemplateInterface;
 
 final class FixturesSelectWeekTemplate implements TemplateInterface
 {
-	public string $container_start;
-	public string $container_end;
+	public  $container_start;
+	public  $container_end;
 
 	public function __construct(string $container = 'div',string $class_name = '', string $id_name = '',array $data_items = array()){
 		$this->container_start = "<{$container} class='{$class_name}' id='{$id_name}' data-{$data_items['name']}='{$data_items['value']}'>";

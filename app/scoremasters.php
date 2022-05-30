@@ -11,7 +11,9 @@ use Scoremasters\Inc\Base\ShortcodeController;
 
 
 define('EXPORT_PATH', __DIR__ . '/export_predictions');
+
 define('SCM_DEBUG', true);
+define('SCM_DEBUG_PATH', __DIR__ . '/debug');
 
 FixtureSetup::init();
 PlayerSetup::init();

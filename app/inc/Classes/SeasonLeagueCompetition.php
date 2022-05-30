@@ -4,17 +4,21 @@
  */
 
 namespace Scoremasters\Inc\Classes;
+
 use Scoremasters\Inc\Abstracts\Competition;
+use Scoremasters\Inc\Base\ScmData;
 
 class SeasonLeagueCompetition extends Competition {
     public \WP_post $post_object;
 
     public string $description;
-    public string $type;
     public array $participants;
 
+    public string $type;
+
     public $standings;
-    public string $status;
+    
+    public bool $is_active;
 
     public function __construct(\WP_Post $post){
 
@@ -23,21 +27,14 @@ class SeasonLeagueCompetition extends Competition {
         }
 
         $this->post_object = $post;
-        $this->set_participants();
-        $this->set_status();
+
+        $all_scm_users = ScmData::get_all_scm_users();
+
+        $this->participants = ScmData::get_all_participants($all_scm_users);
+
+        $this->is_active = ScmData::league_is_active($post);
     }
 
-    //get all users of role = 'player'
-    public function set_participants(){
-        
-        $args = array( 'role' => 'Player','fields' => 'all'  );
-        $all_players = get_users($args);
-
-        foreach($all_players as $player){
-            $this->participants[] = new Player($player);
-        }
-        $this->participants = $participants;
-    }
 
     //set competion status - 'active'/'inactive'
     protected function set_status(){

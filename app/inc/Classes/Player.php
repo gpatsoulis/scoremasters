@@ -16,6 +16,7 @@ class Player
 
     public $user_email;
     public $player_id;
+    public $player_points;
 
     public function __construct(\WP_User $user)
     {
@@ -24,16 +25,19 @@ class Player
         $this->user_email = $user->user_email;
         $this->player_id = intval($user->ID);
 
+        $season = ScmData::get_current_season();
         //add to factory class for player or to db class 
         $scm_league_array_data = get_user_meta((int) $this->player_id, 'scm_league_status');
         if (!empty($scm_league_array_data)) {
-            $season = ScmData::get_current_season();
+            
             $scm_league_array = $scm_league_array_data[0];
             if(isset($scm_league_array['season_id:' . $season->ID])){
                 $scm_league = $scm_league_array['season_id:' . $season->ID];
                 $this->scm_league;
             }
         }
+
+        $this->player_points = get_user_meta( intval($user->ID), 'score_points_seasonID_' . $season->ID);
 
     }
 
@@ -55,7 +59,7 @@ class Player
         $data = array( 'season_id:' . $season->ID => array('league_id' =>  $league_id) );
         $success = update_user_meta((int) $this->player_id, 'scm_league_status', $data);
 
-        //scm_league_status[ season_id => [league_id] ]
+        //scm_league_status[ season_id:id => [league_id => id] ]
 
         if (!$success) {
             error_log(__METHOD__ . ' error setting player scm-league: ' . $this->player_id);

@@ -291,7 +291,8 @@ final class ScmData
         return $all_scm_users;
     }
 
-    public static function get_all_participants($all_scm_users){
+    public static function get_all_participants($all_scm_users): array 
+    {
 
         if(empty($all_scm_users)){
             return $all_scm_users;
@@ -304,6 +305,32 @@ final class ScmData
 
         return $players;
 
+    }
+
+    public static function league_is_active(\WP_Post $post): bool 
+    {
+
+        $current_season = self::get_current_season();
+
+        $league_season = get_field('scm-season-competition', $post->ID);
+
+        if( $current_season->ID === $league_season->ID){
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public static function get_player_points(int $player_id, int $season_id = null ): array 
+    {
+        if(is_null($season_id)){
+            $season = self::get_current_season();
+        }
+
+        $points = get_user_meta(intval($player_id), 'score_points_seasonID_' . $season->ID);
+
+        return $points[0];
     }
 
 }

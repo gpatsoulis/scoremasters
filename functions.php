@@ -370,3 +370,4 @@ require_once dirname(__FILE__) . '/app/scoremasters.php';
 //require_once dirname(__FILE__) . '/app/tools/test_calc_points.php';
 //require_once dirname(__FILE__) . '/app/tools/calculate_score.php';
 //require_once dirname(__FILE__) . '/app/tools/export_predictions_by_match.php';
+//require_once dirname(__FILE__) . '/app/tools/calculate_points_all_players.php';
