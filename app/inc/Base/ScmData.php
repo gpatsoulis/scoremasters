@@ -333,6 +333,22 @@ final class ScmData
         return $points[0];
     }
 
+    public static function get_public_leagues():array
+    {
+        $args = array(
+            'post_type' => 'scm_league',
+            'post_status' => 'publish',
+            'meta_key'   => 'scm-league-status',
+            'meta_value' => 'public',
+            'order' => 'ASC',
+            'numberposts' => -1,
+        );
+    
+        $posts = get_posts($args);
+
+        return $posts;
+    }
+
 }
 
 /*

@@ -102,6 +102,8 @@ class FixturesShortcode
             }
         }
 
+        $output .= $this->template->container_end;
+        
         $output .= $this->template->get_css();
 
         return $output;

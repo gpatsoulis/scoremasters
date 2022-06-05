@@ -33,7 +33,7 @@ class Player
             $scm_league_array = $scm_league_array_data[0];
             if(isset($scm_league_array['season_id:' . $season->ID])){
                 $scm_league = $scm_league_array['season_id:' . $season->ID];
-                $this->scm_league;
+                $this->scm_league = $scm_league;
             }
         }
 
@@ -56,7 +56,14 @@ class Player
 
         $season = ScmData::get_current_season();
 
-        $data = array( 'season_id:' . $season->ID => array('league_id' =>  $league_id) );
+        $data = get_user_meta($this->player_id,'scm_league_status',true);
+
+        if(!$data){
+            $data = array();
+        }
+
+        $data['season_id:' . $season->ID] = array('league_id' =>  $league_id);
+        
         $success = update_user_meta((int) $this->player_id, 'scm_league_status', $data);
 
         //scm_league_status[ season_id:id => [league_id => id] ]
@@ -65,6 +72,7 @@ class Player
             error_log(__METHOD__ . ' error setting player scm-league: ' . $this->player_id);
         }
 
+        $this->scm_league = $league_id;
         return $success;
     }
 
@@ -79,13 +87,13 @@ class Player
         $this->scm_league = null;
         
         $season = ScmData::get_current_season();
-        $old_data = get_user_meta((int) $this->player_id, 'scm_league_status');
+        $old_data = get_user_meta((int) $this->player_id, 'scm_league_status',true);
 
-        if (empty($old_data)){
+        if (empty($old_data) || $old_data === ''){
             return false;
         }
 
-        $old_data_array = $old_data[0];
+        $old_data_array = $old_data;
 
         if(!isset($old_data_array['season_id:' . $season->ID])){
             return false;
@@ -99,6 +107,8 @@ class Player
             error_log(__METHOD__ . ' error unsetting player scm-league: ' . $this->player_id);
         }
 
+        unset($this->scm_league);
+        
         return $success;
     }
 

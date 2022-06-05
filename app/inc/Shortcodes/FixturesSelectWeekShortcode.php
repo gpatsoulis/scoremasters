@@ -59,6 +59,7 @@ HTML;
         </form>
 HTML;
 
+        $output .= $this->template->container_end;
         return $output;
     }
 

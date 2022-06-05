@@ -88,6 +88,7 @@ class FixturesWeeklyPlayerPointsShortcode
             $output .= $this->template->get_html($data);
         }
 
+        $output .= $this->template->container_end;
         $output .= $this->template->get_css();
 
         return $output;
