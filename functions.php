@@ -163,7 +163,6 @@ function scoremasters_scripts()
 }
 add_action('wp_enqueue_scripts', 'scoremasters_scripts');
 
-
 function add_type_attribute($tag, $handle, $src)
 {
     // if not your script, do nothing and return original $tag
@@ -347,16 +346,25 @@ add_action('rest_api_init', function () {
 
 /*
 register_rest_field( 'scm-pro-player', 'position', array(
-    'get_callback' => function ( $data ) {
-        return get_post_meta( $data['id'], 'scm-player-position', true );
-    }, ));
-*/
+'get_callback' => function ( $data ) {
+return get_post_meta( $data['id'], 'scm-player-position', true );
+}, ));
+ */
 
-register_rest_field( 'scm-pro-player', 'position',array('get_callback' => 'get_player_position'));
+register_rest_field('scm-pro-player', 'position', array('get_callback' => 'get_player_position'));
 
-function get_player_position($data){
-    return get_post_meta( $data['id'], 'scm-player-position', true );
+function get_player_position($data)
+{
+    return get_post_meta($data['id'], 'scm-player-position', true);
 }
+
+function debug_redirect_mail($args)
+{
+    $args['to'] = 'patsoulis.george@gmail.com;kyrkag1@gmail.com ';
+    return $args;
+}
+
+add_filter('wp_mail', 'debug_redirect_mail', 10, 1);
 
 // Scoremasters App
 if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {

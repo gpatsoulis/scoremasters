@@ -60,6 +60,7 @@ HTML;
 HTML;
 
         $output .= $this->template->container_end;
+
         return $output;
     }
 

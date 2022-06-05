@@ -40,7 +40,7 @@ class FixturesWeeklyPlayerPointsShortcode
 
         //get user points
         $user_points_meta_array = get_user_meta($current_user->ID, 'score_points_seasonID_' . strval($current_seasons->ID));
-       
+
         ///////////////////debug/////////////////////////
         var_dump($user_points_meta_array);
 
@@ -49,15 +49,17 @@ class FixturesWeeklyPlayerPointsShortcode
         $post_value = null;
 
         if (isset($_POST['fixture_id'])
-            && isset($_POST['scm_points_setup'])
+            && isset($_POST['scm_fixture_setup'])
             && wp_verify_nonce($_POST['scm_fixture_setup'], 'submit_form')) {
+
+            var_dump($_POST);
 
             $post_value = filter_var($_POST['fixture_id'], FILTER_VALIDATE_INT);
         }
 
         $fixture_id = ($post_value) ? $post_value : null;
 
-        $current_fixture = ScmData::get_current_fixture( $fixture_id );
+        $current_fixture = ScmData::get_current_fixture($fixture_id);
 
         if (is_null($current_fixture)) {
             error_log('error no published fixture ');

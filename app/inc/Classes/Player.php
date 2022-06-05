@@ -27,13 +27,11 @@ class Player
 
         $season = ScmData::get_current_season();
         //add to factory class for player or to db class 
-        $scm_league_array_data = get_user_meta((int) $this->player_id, 'scm_league_status');
-        if (!empty($scm_league_array_data)) {
-            
-            $scm_league_array = $scm_league_array_data[0];
+        $scm_league_array = get_user_meta((int) $this->player_id, 'scm_league_status',true);
+        if (!empty($scm_league_array)) {
             if(isset($scm_league_array['season_id:' . $season->ID])){
                 $scm_league = $scm_league_array['season_id:' . $season->ID];
-                $this->scm_league = $scm_league;
+                $this->scm_league = $scm_league['league_id'];
             }
         }
 
@@ -51,7 +49,8 @@ class Player
 
 
         if(!is_null($this->scm_league)){
-            error_log(__METHOD__ . ' player ' . $this->player_id . ' is already in league: ' . $this->scm_league );
+            //error_log( __METHOD__ . ' player ' . $this->player_id . ' is already in league: ' . $this->get_league() );
+            error_log( __METHOD__ . ' player ' . $this->player_id . ' is already in league: ' . $this->get_league());
         }
 
         $season = ScmData::get_current_season();
@@ -73,6 +72,14 @@ class Player
         }
 
         $this->scm_league = $league_id;
+
+        //$data = get_field('scm-user-players-list',$league_id);
+        //var_dump($data);
+
+        $args = array('scm-user-player' => $this->wp_player->ID); 
+
+        add_row('scm-user-players-list', $args, $league_id);
+
         return $success;
     }
 
@@ -120,7 +127,7 @@ class Player
     public function can_make_predictions(): bool
     {
 
-        if ($scm_league) {
+        if ($this->scm_league) {
             return true;
         }
 
@@ -179,6 +186,11 @@ class Player
         if(!$success){
             error_log(__METHOD__ . ' error sending mail to ' . $to . ' title: ' . $title);
         }
+    }
+
+    public function get_league():int
+    {
+        return $this->scm_league;
     }
 
 }

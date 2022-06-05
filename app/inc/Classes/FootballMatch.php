@@ -111,8 +111,11 @@ class FootballMatch {
 
     protected function get_dynamicotites(){
 
-        $this->home_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->home_team->ID));
-        $this->away_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->away_team->ID));
+        //$this->home_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->home_team->ID));
+        $this->home_team_dynamikotita = intval(get_post_meta( intval($this->home_team->ID), 'scm-team-capabilityrange', true ));
+        //$this->away_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->away_team->ID));
+        $this->away_team_dynamikotita = intval(get_post_meta( intval($this->home_team->ID), 'scm-team-capabilityrange', true ));
+
 
     }
 

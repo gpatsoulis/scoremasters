@@ -31,11 +31,13 @@ class SelectLeagueShortcode
         $user = wp_get_current_user();
         $scm_user = new Player($user);
 
-        if (isset($_POST['league_id'])
+        //var_dump($_POST);
+
+        if (isset($_POST['scm_league_id'])
             && isset($_POST['scm_league_setup'])
             && wp_verify_nonce($_POST['scm_league_setup'], 'submit_form')) {
 
-            $selected_league_id = filter_var($_POST['league_id'], FILTER_VALIDATE_INT);
+            $selected_league_id = filter_var($_POST['scm_league_id'], FILTER_VALIDATE_INT);
 
             $scm_user->set_scm_league($selected_league_id);
         }
@@ -56,7 +58,7 @@ class SelectLeagueShortcode
 
         $output .= <<<HTML
         <form action="{$action}" method="post">
-            <select name="scm-league-selection"" id="scm-league-selection">
+            <select name="scm_league_id" id="scm_league_id">
 HTML;
 
         foreach ($public_leagues as $league) {

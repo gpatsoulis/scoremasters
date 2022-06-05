@@ -255,7 +255,7 @@ final class ScmData
 
         $season_end_date_str = get_field('scm-season-end-date', $current_season->ID);
         if( !$season_end_date_str ){
-            error_log(static::class . ' scm-season-start-date error');
+            error_log(static::class . ' scm-season-end-date error');
         }
         $season_end_date = new \DateTime($season_end_date_str, new \DateTimeZone('Europe/Athens'));
 
@@ -341,7 +341,7 @@ final class ScmData
             'meta_key'   => 'scm-league-status',
             'meta_value' => 'public',
             'order' => 'ASC',
-            'numberposts' => -1,
+            'posts_per_page' => -1,
         );
     
         $posts = get_posts($args);
