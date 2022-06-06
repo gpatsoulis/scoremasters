@@ -15,7 +15,7 @@ class PlayerSelectLeague
     }
 
    
-    public static function filter_public_scm_league()
+    public static function filter_public_scm_league($query)
     {
         // Get current meta Query
         $meta_query = $query->get('meta_query');
@@ -34,8 +34,9 @@ class PlayerSelectLeague
         $query->set('meta_query', $meta_query);
     }
 
-    public static function filter_private_scm_league()
+    public static function filter_private_scm_league($query)
     {
+
         // Get current meta Query
         $meta_query = $query->get('meta_query');
 
