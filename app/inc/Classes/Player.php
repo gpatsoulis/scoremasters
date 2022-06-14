@@ -18,6 +18,8 @@ class Player
     public $player_id;
     public $player_points;
 
+    public $current_season_points;
+
     public function __construct(\WP_User $user)
     {
 
@@ -36,6 +38,15 @@ class Player
         }
 
         $this->player_points = get_user_meta( intval($user->ID), 'score_points_seasonID_' . $season->ID);
+        
+        $total_points = get_user_meta( intval($user->ID), 'total_points');
+
+        if(!empty($total_points)){
+            $this->current_season_points = intval(get_user_meta( intval($user->ID), 'total_points')[0]);
+        }else{
+            $this->current_season_points = 0;
+        }
+        
 
     }
 
@@ -188,11 +199,12 @@ class Player
         }
     }
 
-    public function get_league():int
+    public function get_league()
     {
         return $this->scm_league;
     }
 
+   
 }
 
 /*

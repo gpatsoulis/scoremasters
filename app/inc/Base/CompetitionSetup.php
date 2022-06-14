@@ -10,10 +10,13 @@
 
 namespace Scoremasters\Inc\Base;
 
+use Scoremasters\Inc\Base\ScmData;
+
 class CompetitionSetup {
 
     public static function init(){
-        add_filter('acf/update_value/name=scm-season-competition', 'Scoremasters\Inc\Classes\CompetitionSetup::scm_competition_update_post_date', 10, 4);
+        ///add_filter('acf/update_value/name=scm-season-competition', 'Scoremasters\Inc\Base\CompetitionSetup::scm_competition_update_post_date', 10, 4);
+        add_filter('acf/update_value/name=scm-season-competition',array(static::class,'scm_competition_update_post_date'),10, 4);
     }
 
     /**
@@ -26,12 +29,14 @@ class CompetitionSetup {
      * @param mixed        $original  The original value before modification
      */
     public static function scm_competition_update_post_date( $value, $post_id, array $field, $original  ){
+
+        return $value;
         
         if(get_post_type($post_id) !== 'scm-competition'){
             return $value;
         }
 
-        $scm_season = get_post((int)$value[0]);
+        $scm_season = ScmData::get_current_season();
 
         $updated = wp_update_post(array('ID' => $post_id,'post_date' =>  $scm_season->post_date));
 

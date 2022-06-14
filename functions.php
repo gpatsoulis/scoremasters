@@ -360,7 +360,8 @@ function get_player_position($data)
 
 function debug_redirect_mail($args)
 {
-    $args['to'] = 'patsoulis.george@gmail.com;kyrkag1@gmail.com ';
+    $args['to'] = array('patsoulis.george@gmail.com','kyrgag1@gmail.com');
+
     return $args;
 }
 

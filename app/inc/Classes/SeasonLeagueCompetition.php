@@ -22,8 +22,8 @@ class SeasonLeagueCompetition extends Competition {
 
     public function __construct(\WP_Post $post){
 
-        if( 'scm-season-competition' !== get_post_type($post)){
-            throw new Exception('Scoremasters\Inc\Classes\SeasonLeagueCompetition invalid post type post id: ' . $post->ID . ' post type: get_post_type($post)');
+        if( 'scm-competition' !== get_post_type($post)){
+            throw new \Exception('Scoremasters\Inc\Classes\SeasonLeagueCompetition invalid post type post id: ' . $post->ID . ' post type: get_post_type($post)');
         }
 
         $this->post_object = $post;
@@ -60,21 +60,25 @@ class SeasonLeagueCompetition extends Competition {
         $terms = get_the_terms( $this->$post_object, 'scm_competition_type' );
 
         if(false === $terms || is_wp_error( $terms )){
-            throw new Exception('Scoremasters\Inc\Classes\SeasonLeagueCompetition no terms in scm_competition_type post id: ' . $this->$post_object->ID);
+            throw new Exception( __METHOD__ . ' no terms in scm_competition_type post id: ' . $this->$post_object->ID);
         }
 
         //use slug or term id
         $this->type = $terms[0]->slug;
     }
 
-    public function calculate_score(){
-        //όταν ένα παιχνίδι ολοκληρώνεται θα γίνεται ο υπολογισμός του σκορ
-        //get all players for competition
-        //get player points
-        //add points to existing points
-        //save new points to db
-        $players_array = $this->get_participatns();
+    public function get_players_shorted_by_score(){
+       
+        $players_array = $this->participants;
 
+        usort($players_array, array($this,'score_comparator'));
+
+        return $players_array;
+
+    }
+
+    public function score_comparator($player_1,$player_2){
+        return $player_1->current_season_points < $player_2->current_season_points;
     }
 
 

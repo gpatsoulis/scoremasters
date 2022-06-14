@@ -5,6 +5,8 @@
 
 namespace Scoremasters\Inc\Base;
 
+use Scoremasters\Inc\Classes\Player;
+
 final class ScmData
 {
 
@@ -314,7 +316,7 @@ final class ScmData
 
         $league_season = get_field('scm-season-competition', $post->ID);
 
-        if( $current_season->ID === $league_season->ID){
+        if( $current_season->ID === $league_season[0]->ID){
             return true;
         }
 
@@ -347,6 +349,29 @@ final class ScmData
         $posts = get_posts($args);
 
         return $posts;
+    }
+
+    public static function get_current_scm_league_of_type(string $scm_competition_taxonomy): \WP_Post
+    {
+
+        $args = array(
+            'post_type' => 'scm-competition',
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'scm_competition_type',
+                    'field'    => 'slug',
+                    'terms'     => 'season-league'
+                )
+            ),
+        );
+
+        $posts = get_posts($args);
+
+        var_dump($posts[0]->post_title);
+
+        return $posts[0];
     }
 
 }

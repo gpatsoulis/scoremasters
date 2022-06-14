@@ -21,9 +21,9 @@ abstract class Competition {
         }
 
         $this->post_object = $post;
-        $this->set_participants();
+        //$this->set_participants();
     }
 
-    abstract public function set_participants();
+    //abstract public function set_participants();
     //abstract public function get_standings();
 }

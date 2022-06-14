@@ -9,6 +9,7 @@ use \Scoremasters\Inc\Shortcodes\FixturesShortcode;
 use \Scoremasters\Inc\Shortcodes\FixturesWeeklyPlayerPointsShortcode;
 use \Scoremasters\Inc\Shortcodes\FixturesSelectWeekShortcode;
 use \Scoremasters\Inc\Shortcodes\SelectLeagueShortcode;
+use \Scoremasters\Inc\Shortcodes\SeasonLeagueShortcode;
 
 class ShortcodeController {
 
@@ -22,6 +23,7 @@ class ShortcodeController {
 			\Scoremasters\Inc\Shortcodes\FixturesWeeklyPlayerPointsShortcode::class,
 			\Scoremasters\Inc\Shortcodes\FixturesSelectWeekShortcode::class,
 			\Scoremasters\Inc\Shortcodes\SelectLeagueShortcode::class,
+			\Scoremasters\Inc\Shortcodes\SeasonLeagueShortcode::class,
         );
     }
 
