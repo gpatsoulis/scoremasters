@@ -29,14 +29,17 @@ class WeekleChampionshipShortcode
 
     public function output(){
 
-        $user = wp_get_current_user();
-        $current_player = new Player($user);
-        $current_players_league = get_post($current_player->get_league());
+        //$user = wp_get_current_user();
+        //$current_player = new Player($user);
+        //$current_players_league = get_post($current_player->get_league());
+        
+        $current_league = get_post();
+
         $curent_competition = ScmData::get_current_scm_league_of_type('championship-category');
 
         var_dump($curent_competition->post_title,$curent_competition->post_date,$curent_competition->ID);
 
-        $weekly_championship = new WeeklyChampionshipCompetition( $curent_competition, $current_players_league );
+        $weekly_championship = new WeeklyChampionshipCompetition( $curent_competition, $current_league );
 
         $players = $weekly_championship->get_players_shorted_by_score();
 
