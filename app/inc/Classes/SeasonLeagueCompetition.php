@@ -12,8 +12,10 @@ class SeasonLeagueCompetition extends Competition {
     public \WP_post $post_object;
 
     public string $description;
+
     public array $participants;
 
+    // taxonomy slug
     public string $type;
 
     public $standings;
@@ -22,9 +24,17 @@ class SeasonLeagueCompetition extends Competition {
 
     public function __construct(\WP_Post $post){
 
+        //check if is scm-competiton post type
         if( 'scm-competition' !== get_post_type($post)){
-            throw new \Exception('Scoremasters\Inc\Classes\SeasonLeagueCompetition invalid post type post id: ' . $post->ID . ' post type: get_post_type($post)');
+            throw new \Exception( __METHOD__ . ' invalid post type post id: ' . $post->ID );
         }
+
+        // set competition type by taxonomy term 
+        $terms_array = get_the_terms($post, 'scm_competition_type');
+        if(count($terms_array) !== 1){
+            throw new \Exception(__METHOD__ .'  invalid post term post id: ' . $post->ID );
+        }
+        $this->type = $terms_array[0]->slug;
 
         $this->post_object = $post;
 

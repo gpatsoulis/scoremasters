@@ -321,6 +321,14 @@ final class ScmData
         }
 
         return false;
+        //todo: set acf fields
+        //$fields = get_fields($scp_season->ID);
+        // check if current season
+        //todo: set dates
+        /*if($start_date <= $today && $today <= $end_date){
+            $this->$is_active = True;
+            return;
+        }  */ 
 
     }
 
@@ -355,24 +363,42 @@ final class ScmData
     {
 
         $args = array(
-            'post_type' => 'scm-competition',
+            'post_type' => 'scm_competition',
             'post_status' => 'publish',
-            'posts_per_page' => -1,
+            'posts_per_page' => 1,
             'tax_query' => array(
                 array(
                     'taxonomy' => 'scm_competition_type',
                     'field'    => 'slug',
-                    'terms'     => 'season-league'
+                    'terms'     => $scm_competition_taxonomy
                 )
             ),
         );
 
         $posts = get_posts($args);
 
-        var_dump($posts[0]->post_title);
+        var_dump($posts);
 
         return $posts[0];
     }
+
+    public static function get_league_participants (\WP_Post $scm_league ): array 
+    {
+        //repeater field scm-user-players-list -> scm-user-player
+        $repeater_array = get_field('scm-user-players-list',$scm_league->ID);
+
+        //$participants = array_map(function ($field){return $field['scm-user-player'];} , $repeater_array);
+        $participants = array_map(fn ($field) => $field['scm-user-player'] , $repeater_array);
+        $wp_users = get_users(array( 'include' => $participants));
+
+        $players = [];
+        foreach( $wp_users as $user){
+            $players[] = new Player($user);
+        }
+
+        return $players;
+    }
+
 
 }
 
