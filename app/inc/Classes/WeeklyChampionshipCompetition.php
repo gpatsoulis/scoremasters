@@ -23,7 +23,7 @@ class WeeklyChampionshipCompetition extends Competition {
 
     public function __construct(\WP_Post $scm_competition,\WP_Post $scm_league){
 
-        if( 'scm_competition' !== get_post_type($scm_competition)){
+        if( 'scm-competition' !== get_post_type($scm_competition)){
             throw new \Exception(__METHOD__ . ' invalid post type post id: ' . $post->ID );
         }
 

@@ -363,7 +363,7 @@ final class ScmData
     {
 
         $args = array(
-            'post_type' => 'scm_competition',
+            'post_type' => 'scm-competition',
             'post_status' => 'publish',
             'posts_per_page' => 1,
             'tax_query' => array(
