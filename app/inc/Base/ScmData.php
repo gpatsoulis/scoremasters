@@ -377,8 +377,6 @@ final class ScmData
 
         $posts = get_posts($args);
 
-        var_dump($posts);
-
         return $posts[0];
     }
 

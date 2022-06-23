@@ -360,19 +360,23 @@ function get_player_position($data)
 
 function debug_redirect_mail($args)
 {
-    $args['to'] = array('patsoulis.george@gmail.com','kyrgag1@gmail.com');
+    $args['to'] = array('patsoulis.george@gmail.com', 'kyrgag1@gmail.com', 'tmountakis@gmail.com');
 
     return $args;
 }
 
 add_filter('wp_mail', 'debug_redirect_mail', 10, 1);
 
+function start_scoremasters()
+{
 // Scoremasters App
-if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
-    require_once dirname(__FILE__) . '/vendor/autoload.php';
-}
+    if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
+        require_once dirname(__FILE__) . '/vendor/autoload.php';
+    }
 
-require_once dirname(__FILE__) . '/app/scoremasters.php';
+    require_once dirname(__FILE__) . '/app/scoremasters.php';
+}
+add_action('init', 'start_scoremasters');
 
 //exporter
 //require_once dirname(__FILE__) . '/app/tools/export_predictions.php';
