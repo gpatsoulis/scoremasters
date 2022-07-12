@@ -6,11 +6,11 @@
 namespace Scoremasters\Inc\Shortcodes;
 
 use Scoremasters\Inc\Base\ScmData;
-use Scoremasters\Inc\Classes\WeeklyChampionshipCompetition;
+use Scoremasters\Inc\Classes\CategoryChampionshipCompetition;
 use Scoremasters\Inc\Classes\Player;
 
 //[Scoremasters\Inc\Shortcodes\WeekleChampionshipShortcode]
-class WeekleChampionshipShortcode
+class CategoryChampionshipShortcode
 {
     public $template;
     public $name;
@@ -37,7 +37,7 @@ class WeekleChampionshipShortcode
 
         $curent_competition = ScmData::get_current_scm_league_of_type('championship-category');
 
-        var_dump($curent_competition->post_title,$curent_competition->post_date,$curent_competition->ID);
+        //var_dump($curent_competition->post_title,$curent_competition->post_date,$curent_competition->ID);
 
         $weekly_championship = new WeeklyChampionshipCompetition( $curent_competition, $current_league );
 
@@ -69,7 +69,7 @@ class WeekleChampionshipShortcode
 
     public function get_template()
     {
-        $this->template = new \Scoremasters\Inc\Templates\WeekleChampionshipTemplate('div', 'scm-season-league-score', '', array('name' => 'player_id', 'value' => get_current_user_id()));
+        $this->template = new \Scoremasters\Inc\Templates\CategoryChampionshipTemplate('div', 'scm-season-league-score', '', array('name' => 'player_id', 'value' => get_current_user_id()));
     }
 
 }

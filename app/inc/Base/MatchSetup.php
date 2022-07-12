@@ -1,6 +1,10 @@
 <?php
 /**
  * @package scoremasters
+ * 
+ * Set match post date same as match-date
+ * When a match is finished trigger player point calculation 
+ * 
  */
 
 namespace Scoremasters\Inc\Base;
@@ -83,6 +87,15 @@ class MatchSetup
             ->save_points()
             ->export_csv_predictions()
             ->send_predictions_by_email();
+
+        /**
+         * 'player_id' => id
+         * 'season_id' => id
+         * 'fixture_id' => id
+         * 'match_id' => id
+         * 'score' => (int) player points
+         */
+        do_action( 'scm_calculate_match_points_finished', $calc_score->data_to_insert_in_db );
 
         return $value;
     }

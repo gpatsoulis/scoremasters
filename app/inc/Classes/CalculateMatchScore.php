@@ -94,6 +94,7 @@ class CalculateMatchScore
                 $old_meta_value['total_points'] = 0;
             }
 
+            // wtf?
             $old_meta_value['total_points'] = intval($score) + intval($old_meta_value['total_points']);
 
             $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $old_meta_value);

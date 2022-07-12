@@ -10,18 +10,19 @@ use Scoremasters\Inc\Base\ScmData;
 
 class WeeklyChampionshipCompetition extends Competition {
 
-    public int $competition_id;
-    public int $league_id;
+    public \WP_post $competition_object;
+    public \WP_post $league_object;
  
-    // array of players
     public array $participants;
 
     // taxonomy slug
     public string $type;
+
+    public $standings;
+    
     public bool $is_active;
 
     public $matchups;
-    public $score_tables;
 
     public function __construct(\WP_Post $scm_competition,\WP_Post $scm_league){
 
@@ -29,7 +30,7 @@ class WeeklyChampionshipCompetition extends Competition {
             throw new \Exception(__METHOD__ . ' invalid post type post id: ' . $scm_competition->ID );
         }
 
-        //check taxonomy "weekly-championship"
+        //check taxonomy
         $terms_array = get_the_terms($scm_competition->ID, 'scm_competition_type');
         //var_dump($terms_array);
 
@@ -39,10 +40,8 @@ class WeeklyChampionshipCompetition extends Competition {
 
         $this->type = $terms_array[0]->slug;
 
-        $this->competition_id = $scm_competition->ID;
-        $this->league_id = $scm_league->ID;
-
-        //array of Players
+        $this->competition_object = $scm_competition;
+        $this->league_object = $scm_league;
         $this->participants = ScmData::get_league_participants($scm_league);
         $this->is_active = ScmData::competition_is_active($scm_competition);
 
@@ -50,6 +49,21 @@ class WeeklyChampionshipCompetition extends Competition {
         // meta key = 'weekly_matchups
         $this->matchups = new WeeklyMatchUps( $scm_competition->ID, $scm_league->ID  );
 
+    }
+
+
+    public function calculate_players_score( $match_id ){
+
+        $array_of_user_ids = $this->matchups->get_current_matchups();
+
+        if(empty($array_of_user_ids) || $array_of_user_ids === ''){
+            return array();
+        }
+
+        //get players scores 
+        // compare scores for each matchup
+        // calculate new score
+        // save new score
     }
 
     public function get_players_shorted_by_score(){

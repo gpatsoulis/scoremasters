@@ -7,7 +7,7 @@ namespace Scoremasters\Inc\Templates;
 
 use Scoremasters\Inc\Interfaces\TemplateInterface;
 
-final class WeekleChampionshipTemplate implements TemplateInterface
+final class CategoryChampionshipTemplate implements TemplateInterface
 {
 	public  $container_start;
 	public  $container_end;

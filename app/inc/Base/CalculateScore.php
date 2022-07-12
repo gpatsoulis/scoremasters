@@ -1,6 +1,8 @@
 <?php
 /**
  * @package scoremasters
+ * 
+ *  todo: this is a service, move to Service directory
  */
 
 namespace Scoremasters\Inc\Base;

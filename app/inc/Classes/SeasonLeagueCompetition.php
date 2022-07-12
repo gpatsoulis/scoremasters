@@ -42,7 +42,7 @@ class SeasonLeagueCompetition extends Competition {
 
         $this->participants = ScmData::get_all_participants($all_scm_users);
 
-        $this->is_active = ScmData::league_is_active($post);
+        $this->is_active = ScmData::competition_is_active($post);
     }
 
 

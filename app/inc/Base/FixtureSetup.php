@@ -6,6 +6,7 @@
 namespace Scoremasters\Inc\Base;
 
 use Scoremasters\Inc\Classes\Player;
+use Scoremasters\Inc\Base\ScmData;
 
 class FixtureSetup
 {
@@ -14,14 +15,16 @@ class FixtureSetup
     {
         add_filter('acf/update_value/name=week-start-date', array(static::class, 'scm_fixture_update_post_date'), 10, 4);
         add_action('elementor_pro/forms/new_record', array(static::class, 'scm_player_prediction'), 10, 2);
+        add_action('publish_scm-fixture', array(static::class, 'add_weekly_championship_players_matchups'), 10, 2);
+        add_action('transition_post_status',array(static::class, 'add_weekly_championship_players_matchups'), 10, 3);
         //add_filter('acf/update_value/name=week-start-date', 'Scoremasters\Inc\Base\FixtureSetup::scm_fixture_update_post_date', 10, 4);
         //add_action('elementor_pro/forms/new_record', 'Scoremasters\Inc\Base\FixtureSetup::scm_player_prediction', 10, 2);
     }
 
-    public static function scm_fixture_update_post_date($value, $post_id, array $field, $original)
+    public static function scm_fixture_update_post_date($value, $fixture_id, array $field, $original)
     {
 
-        if (get_post_type($post_id) !== 'scm-fixture') {
+        if (get_post_type($fixture_id) !== 'scm-fixture') {
             return $value;
         }
 
@@ -30,13 +33,50 @@ class FixtureSetup
         //wp post_date format: 0000-00-00 00:00:00
         $wp_formated_date = $start_date->format('Y-m-d H:i:s');
 
-        $updated = wp_update_post(array('ID' => $post_id, 'post_date' => $wp_formated_date));
+        $updated = wp_update_post(array('ID' => $fixture_id, 'post_date' => $wp_formated_date));
 
         if (is_wp_error($updated)) {
             error_log($updated->get_error_messages());
         }
 
         return $value;
+    }
+
+    public static function add_weekly_championship_players_matchups( string $new_status, string $old_status, \WP_Post $fixture_post )
+    {
+        // use transition_post_status hook
+        if ( $old_status === $new_status ){
+            return;
+        }
+
+        if ( $new_status !== 'publish' && $old_status === 'publish'  ){
+            return;
+        }
+       
+        //weekly-championship
+
+        // get competition WP_Post
+        $weekly_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
+        $matchups = new WeeklyMatchUps($weekly_competition->ID);
+
+        // get all active leagues WP_Post[]
+        $leagues_array = ScmData::get_all_leagues();
+
+        foreach($leagues_array as $league){
+
+            
+            $calculate_matchups = (new CalculateWeeklyMatchups( $matchups ))
+            ->for_league_id($league->ID)
+            ->for_fixture_id( $fixture_post->ID )
+            ->save();
+        }
+
+
+        // setup matchups for each championship
+        // save matchups in custom meta for each championship
+
+        // seasonid_XXX [ 'fid_XXX' => ['leagueid_XXX' => ['pairs'],'leagueid_XXX' => ['pairs']]];
+
     }
 
     public static function scm_player_prediction($record, $ajax_handler)
@@ -95,7 +135,6 @@ class FixtureSetup
         $post_date = new \DateTime();
         $post_date->setTimezone(new \DateTimeZone('Europe/Athens'));
         $post_date->setTimestamp($filtered_url_query_params['match_date']);
-       
 
         //$match_date = new \DateTime($match->post_date, new \DateTimeZone('Europe/Athens'));
 
@@ -126,10 +165,9 @@ class FixtureSetup
             throw new Exception(static::class . ' many existing_player_prediction');
         }
 
-        
-        if(is_null($existing_player_prediction)){
+        if (is_null($existing_player_prediction)) {
             $is_new_prediction = true;
-        }else{
+        } else {
             $is_new_prediction = false;
         }
 
@@ -139,13 +177,13 @@ class FixtureSetup
         if ($double_points) {
 
             //if this is new prediction
-            if ( $is_new_prediction ) {
+            if ($is_new_prediction) {
 
                 $player_id = $filtered_url_query_params['player_id'];
                 $player = new Player(get_user_by('id', $player_id));
 
                 //if player can't make predictions then
-                if (!$player->can_play_double()) { 
+                if (!$player->can_play_double()) {
 
                     $msg = 'Η επιλογή δηπλασιασμού επιτρέπεται μέχρι δύο φορές.';
                     $ajax_handler->add_error_message($msg);
@@ -155,13 +193,13 @@ class FixtureSetup
             }
 
             //if this is old prediction but with no double
-            if(!$is_new_prediction  && unserialize($existing_player_prediction->post_content)['Double Points'] == ''){
+            if (!$is_new_prediction && unserialize($existing_player_prediction->post_content)['Double Points'] == '') {
 
                 $player_id = $filtered_url_query_params['player_id'];
                 $player = new Player(get_user_by('id', $player_id));
 
                 //if player can't make predictions then
-                if (!$player->can_play_double()) { 
+                if (!$player->can_play_double()) {
 
                     $msg = 'Η επιλογή δηπλασιασμού επιτρέπεται μέχρι δύο φορές.';
                     $ajax_handler->add_error_message($msg);
