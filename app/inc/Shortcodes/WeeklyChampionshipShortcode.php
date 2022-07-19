@@ -10,7 +10,7 @@ use Scoremasters\Inc\Classes\CategoryChampionshipCompetition;
 use Scoremasters\Inc\Classes\Player;
 
 //[Scoremasters\Inc\Shortcodes\WeekleChampionshipShortcode]
-class CategoryChampionshipShortcode
+class WeeklyChampionshipShortcode
 {
     public $template;
     public $name;
@@ -29,24 +29,18 @@ class CategoryChampionshipShortcode
 
     public function output(){
 
-        //$user = wp_get_current_user();
-        //$current_player = new Player($user);
-        //$current_players_league = get_post($current_player->get_league());
-        
         $current_league = get_post();
+        $curent_competition = ScmData::get_current_scm_league_of_type('weekly-championship');
 
-        $curent_competition = ScmData::get_current_scm_league_of_type('championship-category');
+        $weekly_matchups = new WeeklyMatchUps( $curent_competition->ID );
+        $weeklyCompetition = new WeeklyChampionshipCompetition($curent_competition,$weekly_matchups);
 
-        //var_dump($curent_competition->post_title,$curent_competition->post_date,$curent_competition->ID);
-
-        $weekly_championship = new CategoryChampionshipCompetition( $curent_competition, $current_league );
-
-        $players = $weekly_championship->get_players_shorted_by_score();
+        $participants = $weeklyCompetition->get_participants_by_league_id()->short();
 
         $output = $this->template->container_start;
 
         $aa = 1;
-        foreach($players as $player){
+        foreach($participants as $player){
 
             unset($data);
             $data = [];
@@ -54,23 +48,19 @@ class CategoryChampionshipShortcode
             $aa +=1;
             $data['player_nick_name'] = $player->wp_player->user_login;
             $data['player_name']      = $player->wp_player->display_name;
-            $data['player_points']    = $player->current_season_points;
-            $data['player_league']    = $player->get_league();
+            $data['player_points']    = $player->weekly_competition_points;
+            //$data['player_league']    = $player->get_league();
 
             $output .= $this->template->get_html($data);
         }
 
         $output .= $this->template->container_end;
         $output .= $this->template->get_css();
-
-        return $output;
-
     }
 
     public function get_template()
     {
-        $this->template = new \Scoremasters\Inc\Templates\CategoryChampionshipTemplate('div', 'scm-season-league-score', '', array('name' => 'player_id', 'value' => get_current_user_id()));
+        $this->template = new \Scoremasters\Inc\Templates\WeeklyChampionshipTemplate('div', 'scm-weekly-championship-score', '', array('name' => 'player_id', 'value' => get_current_user_id()));
     }
 
 }
-

@@ -61,22 +61,38 @@ foreach ($all_fixtures as $fixture){
             $score = $player_score_data['score'];
 
             //todo: use array1+array2 or array_merge
-            $old_meta_value = get_user_meta((int) $player_id, 'score_points_seasonID_' . $season_id);
+            $players_score = get_user_meta((int) $player_id, 'score_points_seasonID_' . $season_id);
 
-            if (!empty($old_meta_value)) {
-                $old_meta_value = $old_meta_value[0];
+            //initialize
+            if (!empty($players_score)) {
+                $players_score = $players_score[0];
             } else {
-                $old_meta_value = array();
+                $players_score = array();
             }
 
-            if (isset($old_meta_value['fixture_id_' . $fixture_id])) {
-                $merged_matches = array_merge($old_meta_value['fixture_id_' . $fixture_id], array('match_id_' . $match_id => $score));
-                $old_meta_value['fixture_id_' . $fixture_id] = $merged_matches;
-            } else {
-                $old_meta_value['fixture_id_' . $fixture_id] = array('match_id_' . $match_id => $score);
+            if(is_int($players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id])){
+                $players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id] = array();
             }
 
-            $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $old_meta_value);
+            //points already in db
+            if(isset($players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'])){
+                continue;
+            }
+
+            //SELECT * FROM `wp_usermeta` where user_id = 3
+            $players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'] = $score;
+
+            if(is_int($players_score['total_points'])){
+                $players_score['total_points'] = array();
+            }
+
+            if(!isset($players_score['total_points']['season-league'])){
+                $players_score['total_points']['season-league'] = 0;
+            }
+
+            $players_score['total_points']['season-league'] = intval($score) + intval($players_score['total_points']['season-league']);
+
+            $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $players_score);
 
             if (!$success) {
                 error_log('error updating score metadata for user: ' . $player_id);

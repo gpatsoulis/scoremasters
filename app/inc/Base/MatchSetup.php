@@ -17,6 +17,7 @@ class MatchSetup
     {
         add_filter('acf/update_value/name=match-date', array(static::class, 'scm_match_update_post_date'), 10, 4);
         add_filter('acf/update_value/name=scm-match-end-time', array(static::class, 'scm_match_trigger_players_point_calculation'), 99, 4);
+        add_action('scm_calculate_match_points_finished', array(static::class, 'scm_match_update_post_date'), 10, 4);
     }
 
     /**
@@ -95,10 +96,39 @@ class MatchSetup
          * 'match_id' => id
          * 'score' => (int) player points
          */
-        do_action( 'scm_calculate_match_points_finished', $calc_score->data_to_insert_in_db );
+
+        $match_data = array(
+            'fixture_id' => $calc_score->current_fixture->ID,
+            'match_id' => $post_id,
+            'season_id' => $calc_score->current_season->ID,
+        );
+
+        if( !array_key_exists( 'scm_calculate_match_points_finished' , $GLOBALS['wp_filter']) ) {
+            do_action( 'scm_calculate_match_points_finished',$match_data, $calc_score->data_to_insert_in_db );
+        }
+        
 
         return $value;
     }
+
+    // todo: use match object instead of match_data array 
+    public static function scm_match_trigger_players_weekly_point_calculation( $match_data , $players_data){
+
+        $all_leagues = ScmData::get_all_leagues();
+        $weekly_competition_post = ScmData::get_current_scm_competition_of_type('weekly-championship');
+        $weekly_matchups = (new WeeklyMatchUps( $weekly_competition_post->ID ))->get_matchups();
+        //$weekly_competition = new WeeklyChampionshipCompetition( $weekly_competition_post, $weekly_matchups );
+
+        foreach($all_leagues as $league) {
+
+            $matchups = $weekly_matchups->by_fixture_id($match_data['fixture_id'])->by_league_id($league->ID);
+            $calculate_weekly_points = new CalculateWeeklyPoints( $match_data, $matchups);
+            $calculate_weekly_points->calculate()->save();
+
+        }
+
+    }
+
 
     //When user sets scm-match-end-time, restrict user from editing acf fields, filter by post id
     //default options -> current season, curent fixture ,

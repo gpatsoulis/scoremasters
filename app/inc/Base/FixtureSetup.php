@@ -7,6 +7,8 @@ namespace Scoremasters\Inc\Base;
 
 use Scoremasters\Inc\Classes\Player;
 use Scoremasters\Inc\Base\ScmData;
+use Scoremasters\Inc\Classes\WeeklyMatchUps;
+use Scoremasters\Inc\Services\CalculateWeeklyMatchups;
 
 class FixtureSetup
 {
@@ -65,7 +67,7 @@ class FixtureSetup
         foreach($leagues_array as $league){
 
             
-            $calculate_matchups = (new CalculateWeeklyMatchups( $matchups ))
+            $calculate_matchups = (new CalculateWeeklyMatchups( $matchups, $league->ID ))
             ->for_league_id($league->ID)
             ->for_fixture_id( $fixture_post->ID )
             ->save();

@@ -344,9 +344,9 @@ final class ScmData
         
         $current_season = self::get_current_season();
 
-        $league_season = get_field('scm-season-competition', $post->ID);
+        $competition_in_season = get_field('scm-season-competition', $competition->ID);
 
-        if( $current_season->ID === $league_season[0]->ID){
+        if( $current_season->ID === $competition_in_season[0]->ID){
             return true;
         }
 

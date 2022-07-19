@@ -39,12 +39,19 @@ class Player
 
         $this->player_points = get_user_meta( intval($user->ID), 'score_points_seasonID_' . $season->ID);
         
-        $total_points = get_user_meta( intval($user->ID), 'total_points');
-
-        if(!empty($total_points)){
-            $this->current_season_points = intval(get_user_meta( intval($user->ID), 'total_points')[0]);
+        if(!isset($this->player_points['total_points']['season-league'])){
+            $total_points = 0;
         }else{
-            $this->current_season_points = 0;
+            $total_points = intval($this->player_points['total_points']['season-league']);
+        }
+        
+        $this->current_season_points = $total_points;
+
+
+        if(!isset($this->player_points['total_points']['weekly-championship'])){
+            $this->weekly_competition_points =  0;
+        }else{
+            $this->weekly_competition_points =  intval($this->player_points['total_points']['weekly-championship']);
         }
         
 

@@ -48,8 +48,8 @@ class WeeklyMatchUps
             return $current_fixture_matchups;
         }
 
-        if(isset($this->current_matchups['fixture_id_' . $fixture])){
-            return $this->current_matchups['fixture_id_' . $fixture];
+        if(isset($this->matchups['fixture_id_' . $fixture_id])){
+            return $this->matchups['fixture_id_' . $fixture_id];
         }
 
         return array(); 
@@ -69,6 +69,42 @@ class WeeklyMatchUps
         $matchups = $current_fixture_matchups['league_id_' . $league_id];
 
         return $matchups;
+    }
+
+    //new functions for calculatescore
+    public function get_matchups(){
+        $current_matchups = get_post_meta($this->competition_id, $this->meta_key, false);
+        
+
+        if ($current_matchups === false) {
+            throw new \Exception(__METHOD__ . ' invalid post->ID for meta "competition_matchups", id: ' . $competition_id);
+        }
+
+        if ( $current_matchups === '' || empty($current_matchups)){
+            $this->matchups = array();
+        }else{
+            $this->matchups = $current_matchups[0];
+        }
+
+        return $this;
+    }
+
+    //return a closure with fixture_id in context 
+    public function by_fixture_id( $fixture_id ){
+
+        $this->closure = function ( $league_id ) use ($fixture_id) {
+            $result = $this->matchups['fixture_id_' . $fixture_id]['league_id_' . $league_id];
+            return $result;
+        };
+
+        return $this;
+    }
+
+    public function by_league_id($league_id){
+
+        $func = $this->closure;
+
+        return $func( $league_id );
     }
 
 

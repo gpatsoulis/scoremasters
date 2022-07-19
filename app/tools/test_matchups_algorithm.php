@@ -1,3 +1,4 @@
+
 <?php
 
 use Scoremasters\Inc\Base\ScmData;
@@ -15,19 +16,13 @@ $matchups = new WeeklyMatchUps($weekly_competition->ID);
 
 $all_fixtures = ScmData::get_all_fixtures_for_season();
 //var_dump($all_fixtures);
+$league_id = 843;
 
 foreach ($all_fixtures as $fixture) {
 
-    $leagues_array = ScmData::get_all_leagues();
-
-    foreach ($leagues_array as $league) {
-
-        $calculate_matchups = (new CalculateWeeklyMatchups($matchups, $league->ID))
-            ->for_league_id($league->ID)
+        $calculate_matchups = (new CalculateWeeklyMatchups($matchups, $league_id))
+            ->for_league_id($league_id)
             ->for_fixture_id($fixture->ID)
-            ->save(); 
-
-    }
+            ->save();
 
 }
-

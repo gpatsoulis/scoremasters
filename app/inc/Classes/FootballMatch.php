@@ -94,7 +94,7 @@ class FootballMatch {
     protected function get_scorers(){
 
         $acf_scorers = get_field('scm-scorers',$this->post_data->ID);
-
+        var_dump($acf_scorers);
         if(!$acf_scorers){
             $this->scorers = array();
             return; 
@@ -102,6 +102,7 @@ class FootballMatch {
 
         $scorers = [];
         foreach($acf_scorers as $acf_score){
+            
             //$match_scorer[] = array('scm-scorers' => $acf_score['scm-scorers'],'scm-goal-minute'=>$acf_score['scm-goal-minute']);
             $scorers[] = $acf_score['scm-scorers'][0]->ID;
         }

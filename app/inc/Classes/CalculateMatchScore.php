@@ -23,7 +23,6 @@ class CalculateMatchScore
     public function __construct(int $match_id)
 
     {
-
         $this->match = (new FootballMatch($match_id))->setup_data();
         $this->current_season = ScmData::get_current_season();
         $this->current_fixture = ScmData::get_current_fixture();
@@ -70,41 +69,36 @@ class CalculateMatchScore
             $season_id = strval($player_score_data['season_id']);
             $score = $player_score_data['score'];
 
-            //todo: use array1+array2 or array_merge
-            $old_meta_value = get_user_meta((int) $player_id, 'score_points_seasonID_' . $season_id);
+            $players_score = get_user_meta((int) $player_id, 'score_points_seasonID_' . $season_id);
 
-            if(!is_array($old_meta_value)){
-                error_log(__METHOD__ . ' error not found score_points_seasonID_' . $season_id);
-            }
-
-            if (!empty($old_meta_value)) {
-                $old_meta_value = $old_meta_value[0];
+            //initialize
+            if (!empty($players_score)) {
+                $players_score = $players_score[0];
             } else {
-                $old_meta_value = array();
+                $players_score = array();
             }
 
-            if (isset($old_meta_value['fixture_id_' . $fixture_id])) {
-                $merged_matches = array_merge($old_meta_value['fixture_id_' . $fixture_id], array('match_id_' . $match_id => $score));
-                $old_meta_value['fixture_id_' . $fixture_id] = $merged_matches;
-            } else {
-                $old_meta_value['fixture_id_' . $fixture_id] = array('match_id_' . $match_id => $score);
+            //points already in db
+            if(isset($players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'])){
+                continue;
+            }
+            
+            $players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'] = $score;
+
+
+            if(!isset($players_score['total_points'])){
+                $players_score['total_points'] = 0;
             }
 
-            if(!isset($old_meta_value['total_points'])){
-                $old_meta_value['total_points'] = 0;
-            }
+            $players_score['total_points'] = intval($score) + intval($players_score['total_points']);
 
-            // wtf?
-            $old_meta_value['total_points'] = intval($score) + intval($old_meta_value['total_points']);
-
-            $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $old_meta_value);
+            $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $players_score);
 
             if (!$success) {
                 error_log(__METHOD__ . ' error updating score metadata for user: ' . $player_id);
             }
 
-            update_user_meta($player_id, 'total_points', $old_meta_value['total_points']);
-
+            //update_user_meta($player_id, 'total_points', $old_meta_value['total_points']);
             //$find_key = preg_replace("/[^0-9.]/", "", 'fixture_id_850');
 
         }

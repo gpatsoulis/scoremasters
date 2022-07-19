@@ -26,6 +26,8 @@ class CalculateWeeklyMatchups
 
     private $meta_key = 'weekly_matchups';
 
+    public $fixture_no;
+
     public function __construct(WeeklyMatchUps $matchups, $league_id)
     {
 
@@ -35,6 +37,7 @@ class CalculateWeeklyMatchups
         $this->matchups = $matchups;
 
         $this->previous_matchups = $matchups->get_all_matchups();
+        $this->fixture_no = count($this->previous_matchups);
 
     }
 
@@ -102,7 +105,7 @@ class CalculateWeeklyMatchups
         $previous_matchups = $previous_all_leagues['league_id_' . $this->league_id];
 
         //count how many fixtures
-        $fixture_no = count($previous_all_leagues);
+        $fixture_no = $this->fixture_no;
 
         $no_of_participants = count($previous_matchups);
 
@@ -147,7 +150,6 @@ class CalculateWeeklyMatchups
 
         $this->next_matchups = $next_matchups;
 
-
         return $this;
 
     }
@@ -170,6 +172,7 @@ class CalculateWeeklyMatchups
 
     public function save()
     {
+        
         //todo: use a service object for writing to the database
 
         //var_dump($this->matchups->get_all_matchups());
