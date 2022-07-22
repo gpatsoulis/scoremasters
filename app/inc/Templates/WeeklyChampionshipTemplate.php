@@ -24,7 +24,7 @@ final class WeeklyChampionshipTemplate implements TemplateInterface
   <p class='player_nick_name'>{$data['player_nick_name']}</p>
   <p class='player_name'>{$data['player_name']}</p>
   <p class='player_points'>{$data['player_points']}</p>
-  <!--<p class='player_league'>{$data['player_league']}</p>-->
+  <!--<p class='player_league'></p>-->
 </div>
 HTML;
 

@@ -410,6 +410,28 @@ final class ScmData
         return $posts[0];
     }
 
+    // todo: replace old name with new "get_current_scm_competition_of_type"
+    public static function get_current_scm_league_of_type (string $scm_competition_taxonomy): \WP_Post
+    {
+
+        $args = array(
+            'post_type' => 'scm-competition',
+            'post_status' => 'publish',
+            'posts_per_page' => 1,
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'scm_competition_type',
+                    'field'    => 'slug',
+                    'terms'     => $scm_competition_taxonomy
+                )
+            ),
+        );
+
+        $posts = get_posts($args);
+
+        return $posts[0];
+    }
+
     public static function get_all_leagues(string $post_type = 'scm_league' ){
         $args = array(
             'post_type' => $post_type,

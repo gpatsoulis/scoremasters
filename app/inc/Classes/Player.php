@@ -37,7 +37,8 @@ class Player
             }
         }
 
-        $this->player_points = get_user_meta( intval($user->ID), 'score_points_seasonID_' . $season->ID);
+        $this->player_points = get_user_meta( intval($user->ID), 'score_points_seasonID_' . $season->ID, true);
+
         
         if(!isset($this->player_points['total_points']['season-league'])){
             $total_points = 0;

@@ -6,10 +6,11 @@
 namespace Scoremasters\Inc\Shortcodes;
 
 use Scoremasters\Inc\Base\ScmData;
-use Scoremasters\Inc\Classes\CategoryChampionshipCompetition;
+use Scoremasters\Inc\Classes\WeeklyChampionshipCompetition;
 use Scoremasters\Inc\Classes\Player;
+use Scoremasters\Inc\Classes\WeeklyMatchUps;
 
-//[Scoremasters\Inc\Shortcodes\WeekleChampionshipShortcode]
+//[Scoremasters\Inc\Shortcodes\WeeklyChampionshipShortcode]
 class WeeklyChampionshipShortcode
 {
     public $template;
@@ -27,7 +28,8 @@ class WeeklyChampionshipShortcode
         add_shortcode($this->name, array($this, 'output'));
     }
 
-    public function output(){
+    public function output():string 
+    {
 
         $current_league = get_post();
         $curent_competition = ScmData::get_current_scm_league_of_type('weekly-championship');
@@ -35,7 +37,7 @@ class WeeklyChampionshipShortcode
         $weekly_matchups = new WeeklyMatchUps( $curent_competition->ID );
         $weeklyCompetition = new WeeklyChampionshipCompetition($curent_competition,$weekly_matchups);
 
-        $participants = $weeklyCompetition->get_participants_by_league_id()->short();
+        $participants = $weeklyCompetition->get_participants_by_league_id($current_league->ID)->short();
 
         $output = $this->template->container_start;
 
@@ -49,6 +51,7 @@ class WeeklyChampionshipShortcode
             $data['player_nick_name'] = $player->wp_player->user_login;
             $data['player_name']      = $player->wp_player->display_name;
             $data['player_points']    = $player->weekly_competition_points;
+
             //$data['player_league']    = $player->get_league();
 
             $output .= $this->template->get_html($data);
@@ -56,6 +59,8 @@ class WeeklyChampionshipShortcode
 
         $output .= $this->template->container_end;
         $output .= $this->template->get_css();
+
+        return $output;
     }
 
     public function get_template()

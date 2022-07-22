@@ -42,7 +42,8 @@ class CategoryChampionshipCompetition extends Competition {
 
         $this->post_object = $scm_league;
         $this->participants = ScmData::get_league_participants($scm_league);
-        $this->is_active = ScmData::league_is_active($scm_competition);
+        // todo : fix check for active league
+        //$this->is_active = ScmData::league_is_active($scm_competition);
     }
 
     public function get_players_shorted_by_score(){
@@ -64,5 +65,5 @@ class CategoryChampionshipCompetition extends Competition {
     όταν δημιουργίται νέα διοργάνωση και συνδέεται με μια αγωνιστική σεζόν θα παίρνει ημερομηνία δημοσίευσης την 
     ημερομηνία που ξεκινά η σεζόν.
     */
-    
+
 }

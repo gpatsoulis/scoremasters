@@ -26,7 +26,6 @@ foreach ($all_fixtures as $fixture) {
             ->for_league_id($league->ID)
             ->for_fixture_id($fixture->ID)
             ->save(); 
-
     }
 
 }

@@ -93,3 +93,10 @@ get_new_array_dif [56,27,43,24]
 old_values_array []
 new_values_array [56,27,43,24]
 
+old_values_array [2,59,21,27,56]
+new_values_array [2,59,21,27,56,30]
+get_old_array_dif []
+get_new_array_dif {"5":30}
+old_values_array [2,59,21,27,56]
+new_values_array [2,59,21,27,56,30]
+

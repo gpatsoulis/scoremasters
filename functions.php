@@ -376,10 +376,11 @@ function start_scoremasters()
 
     require_once dirname(__FILE__) . '/app/scoremasters.php';
 
-    //require_once dirname(__FILE__) . '/app/tools/test_calc_points.php';
-    //require_once dirname(__FILE__) . '/app/tools/test_calculate_matchups.php';
-    //require_once dirname(__FILE__) . '/app/tools/test_calc_weekly_points.php';
     //require_once dirname(__FILE__) . '/app/tools/calculate_score.php';
+    //require_once dirname(__FILE__) . '/app/tools/test_calculate_matchups.php';
+    //todo: calc weekly points for all matches
+    //require_once dirname(__FILE__) . '/app/tools/test_calc_weekly_points.php';
+    
     //require_once dirname(__FILE__) . '/app/tools/test_matchups_algorithm.php';
 
 

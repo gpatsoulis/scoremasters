@@ -11,13 +11,18 @@ use Scoremasters\Inc\Services\CalculateWeeklyPoints;
 
 
 
+//get all past fixtures for this season;
 
+$args = array(
+    
+);
 
 $match_data = array(
     'fixture_id' => 1121,
     'match_id' => 1116,
     'season_id' => 99,
 );
+
 
 $all_leagues = ScmData::get_all_leagues();
 $weekly_competition_post = ScmData::get_current_scm_competition_of_type('weekly-championship');

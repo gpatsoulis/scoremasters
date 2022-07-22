@@ -9,7 +9,7 @@ use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\CategoryChampionshipCompetition;
 use Scoremasters\Inc\Classes\Player;
 
-//[Scoremasters\Inc\Shortcodes\WeekleChampionshipShortcode]
+//[Scoremasters\Inc\Shortcodes\CategoryChampionshipShortcode]
 class CategoryChampionshipShortcode
 {
     public $template;
