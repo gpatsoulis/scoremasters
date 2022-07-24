@@ -35,7 +35,7 @@ class CategoryChampionshipShortcode
         
         $current_league = get_post();
 
-        $curent_competition = ScmData::get_current_scm_league_of_type('championship-category');
+        $curent_competition = ScmData::get_current_scm_competition_of_type('championship-category');
 
         //var_dump($curent_competition->post_title,$curent_competition->post_date,$curent_competition->ID);
 

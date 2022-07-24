@@ -93,6 +93,11 @@ class WeeklyMatchUps
     public function by_fixture_id( $fixture_id ){
 
         $this->closure = function ( $league_id ) use ($fixture_id) {
+
+            if(!isset($this->matchups['fixture_id_' . $fixture_id]['league_id_' . $league_id])){
+                return array();
+            }
+
             $result = $this->matchups['fixture_id_' . $fixture_id]['league_id_' . $league_id];
             return $result;
         };
@@ -100,7 +105,7 @@ class WeeklyMatchUps
         return $this;
     }
 
-    public function by_league_id($league_id){
+    public function by_league_id($league_id):array{
 
         $func = $this->closure;
 

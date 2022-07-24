@@ -17,7 +17,7 @@ class FixtureSetup
     {
         add_filter('acf/update_value/name=week-start-date', array(static::class, 'scm_fixture_update_post_date'), 10, 4);
         add_action('elementor_pro/forms/new_record', array(static::class, 'scm_player_prediction'), 10, 2);
-        add_action('publish_scm-fixture', array(static::class, 'add_weekly_championship_players_matchups'), 10, 2);
+        //add_action('publish_scm-fixture', array(static::class, 'add_weekly_championship_players_matchups'), 10, 2);
         add_action('transition_post_status',array(static::class, 'add_weekly_championship_players_matchups'), 10, 3);
         //add_filter('acf/update_value/name=week-start-date', 'Scoremasters\Inc\Base\FixtureSetup::scm_fixture_update_post_date', 10, 4);
         //add_action('elementor_pro/forms/new_record', 'Scoremasters\Inc\Base\FixtureSetup::scm_player_prediction', 10, 2);
@@ -25,17 +25,26 @@ class FixtureSetup
 
     public static function scm_fixture_update_post_date($value, $fixture_id, array $field, $original)
     {
-
+        //todo: set post status to future
         if (get_post_type($fixture_id) !== 'scm-fixture') {
             return $value;
         }
 
         //(string)$value format: 20220406
-        $start_date = \DateTime::createFromFormat('Ymd', $value)->setTime(0, 0);
+        $start_date = \DateTime::createFromFormat('Ymd', $value, new \DateTimeZone('Europe/Athens'))->setTime(0, 0);
         //wp post_date format: 0000-00-00 00:00:00
         $wp_formated_date = $start_date->format('Y-m-d H:i:s');
 
-        $updated = wp_update_post(array('ID' => $fixture_id, 'post_date' => $wp_formated_date));
+        $now = new \DateTimeImmutable('',new \DateTimeZone('Europe/Athens'));
+
+        $post_status = 'publish';
+
+        
+        if($start_date > $now){
+            $post_status = 'future';
+        }
+
+        $updated = wp_update_post(array('ID' => $fixture_id, 'post_date' => $wp_formated_date,'post_status' => $post_status));
 
         if (is_wp_error($updated)) {
             error_log($updated->get_error_messages());

@@ -150,6 +150,9 @@ class CalculateWeeklyMatchups
 
         $this->next_matchups = $next_matchups;
 
+        var_dump($next_matchups);
+
+
         return $this;
 
     }
@@ -161,9 +164,12 @@ class CalculateWeeklyMatchups
         //todo: remove ScmData from function
         $participants_ids = ScmData::get_league_participants_ids($this->league_id);
 
-        if( $participants_ids < 4){
+        var_dump('initialize');
+        var_dump( $participants_ids );
+
+        if( count($participants_ids) < 4 ){
             $next_matchups = 'not enough players';
-            $this->$next_matchups = null;
+            $this->$next_matchups = $next_matchups;
             return;
         }
 
@@ -183,7 +189,7 @@ class CalculateWeeklyMatchups
 
         //var_dump($this->matchups->get_all_matchups());
         //var_dump($this->next_matchups);
-        if(is_null($this->next_matchups)){
+        if(is_null($this->next_matchups) || $this->next_matchups === 'not enough players'){
             return;
         }
 

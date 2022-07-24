@@ -12,6 +12,7 @@ use \Scoremasters\Inc\Shortcodes\SelectLeagueShortcode;
 use \Scoremasters\Inc\Shortcodes\SeasonLeagueShortcode;
 use \Scoremasters\Inc\Shortcodes\CategoryChampionshipShortcode;
 use \Scoremasters\Inc\Shortcodes\WeeklyChampionshipShortcode;
+use \Scoremasters\Inc\Shortcodes\CurrentPlayerMatchupShortcode;
 
 class ShortcodeController {
 
@@ -28,6 +29,7 @@ class ShortcodeController {
 			\Scoremasters\Inc\Shortcodes\SeasonLeagueShortcode::class,
 			\Scoremasters\Inc\Shortcodes\CategoryChampionshipShortcode::class,
 			\Scoremasters\Inc\Shortcodes\WeeklyChampionshipShortcode::class,
+			\Scoremasters\Inc\Shortcodes\CurrentPlayerMatchupShortcode::class
         );
     }
 

@@ -19,6 +19,7 @@ class Player
     public $player_points;
 
     public $current_season_points;
+    public $weekly_competition_points;
 
     public function __construct(\WP_User $user)
     {

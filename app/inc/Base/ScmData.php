@@ -23,7 +23,7 @@ final class ScmData
         $posts = get_posts($args);
 
         if (empty($posts)) {
-            error_log(static::class . ' exporter---- no active season');
+            error_log(static::class . ' exporter ---- no active season');
             throw new Exception(static::class . ' no active season');
         }
 
@@ -52,7 +52,7 @@ final class ScmData
 
         if (empty($posts)) {
             error_log('exporter---- no active fixture');
-            throw new Exception( __METHOD__ . ' no active fixture');
+            throw new Exception(__METHOD__ . ' no active fixture');
         }
 
         if (!isset($posts[0])) {
@@ -64,10 +64,11 @@ final class ScmData
         return $current_fixture;
     }
 
-    public static function get_previous_fixture(){
+    public static function get_previous_fixture()
+    {
 
         $current_season = self::get_current_season();
-        $curent_season_date = new \DateTime( $current_season->post_date, new \DateTimeZone('Europe/Athens'));
+        $curent_season_date = new \DateTime($current_season->post_date, new \DateTimeZone('Europe/Athens'));
 
         $args = array(
             'post_type' => 'scm-fixture',
@@ -79,10 +80,10 @@ final class ScmData
         $posts = get_posts($args);
 
         $prev_fixture = end($posts);
-        $prev_fixture_date = new \DateTime( $prev_fixture->post_date, new \DateTimeZone('Europe/Athens'));
+        $prev_fixture_date = new \DateTime($prev_fixture->post_date, new \DateTimeZone('Europe/Athens'));
 
         //todo: fix return argument, return default WP_Post object
-        if( $prev_fixture_date < $curent_season_date ){
+        if ($prev_fixture_date < $curent_season_date) {
             return '';
         }
 
@@ -276,13 +277,13 @@ final class ScmData
         $current_season = self::get_current_season($season_id);
 
         $season_start_date_str = get_field('scm-season-start-date', $current_season->ID);
-        if( !$season_start_date_str ){
+        if (!$season_start_date_str) {
             error_log(static::class . ' scm-season-start-date error');
         }
         $season_start_date = new \DateTime($season_start_date_str, new \DateTimeZone('Europe/Athens'));
 
         $season_end_date_str = get_field('scm-season-end-date', $current_season->ID);
-        if( !$season_end_date_str ){
+        if (!$season_end_date_str) {
             error_log(static::class . ' scm-season-end-date error');
         }
         $season_end_date = new \DateTime($season_end_date_str, new \DateTimeZone('Europe/Athens'));
@@ -311,23 +312,23 @@ final class ScmData
         return $fixtures;
     }
 
-    public static function get_all_scm_users():array 
+    public static function get_all_scm_users(): array
     {
-        $args = array( 'role' => 'scm-user','fields' => 'all'  );
+        $args = array('role' => 'scm-user', 'fields' => 'all');
         $all_scm_users = get_users($args);
 
         return $all_scm_users;
     }
 
-    public static function get_all_participants($all_scm_users): array 
+    public static function get_all_participants($all_scm_users): array
     {
 
-        if(empty($all_scm_users)){
+        if (empty($all_scm_users)) {
             return $all_scm_users;
         }
 
         $players = [];
-        foreach( $all_scm_users as $user){
+        foreach ($all_scm_users as $user) {
             $players[] = new Player($user);
         }
 
@@ -335,18 +336,18 @@ final class ScmData
 
     }
 
-    public static function competition_is_active(\WP_Post $competition): bool 
+    public static function competition_is_active(\WP_Post $competition): bool
     {
 
         // get competiton season acf-field
         // compare with current season
         // find if current season is active ( compare dates )
-        
+
         $current_season = self::get_current_season();
 
         $competition_in_season = get_field('scm-season-competition', $competition->ID);
 
-        if( $current_season->ID === $competition_in_season[0]->ID){
+        if ($current_season->ID === $competition_in_season[0]->ID) {
             return true;
         }
 
@@ -356,15 +357,15 @@ final class ScmData
         // check if current season
         //todo: set dates
         /*if($start_date <= $today && $today <= $end_date){
-            $this->$is_active = True;
-            return;
-        }  */ 
+    $this->$is_active = True;
+    return;
+    }  */
 
     }
 
-    public static function get_player_points(int $player_id, int $season_id = null ): array 
+    public static function get_player_points(int $player_id, int $season_id = null): array
     {
-        if(is_null($season_id)){
+        if (is_null($season_id)) {
             $season = self::get_current_season();
         }
 
@@ -373,45 +374,24 @@ final class ScmData
         return $points[0];
     }
 
-    public static function get_public_leagues():array
+    public static function get_public_leagues(): array
     {
         $args = array(
             'post_type' => 'scm_league',
             'post_status' => 'publish',
-            'meta_key'   => 'scm-league-status',
+            'meta_key' => 'scm-league-status',
             'meta_value' => 'public',
             'order' => 'ASC',
             'posts_per_page' => -1,
         );
-    
+
         $posts = get_posts($args);
 
         return $posts;
     }
 
-    public static function get_current_scm_competition_of_type (string $scm_competition_taxonomy): \WP_Post
-    {
-
-        $args = array(
-            'post_type' => 'scm-competition',
-            'post_status' => 'publish',
-            'posts_per_page' => 1,
-            'tax_query' => array(
-                array(
-                    'taxonomy' => 'scm_competition_type',
-                    'field'    => 'slug',
-                    'terms'     => $scm_competition_taxonomy
-                )
-            ),
-        );
-
-        $posts = get_posts($args);
-
-        return $posts[0];
-    }
-
     // todo: replace old name with new "get_current_scm_competition_of_type"
-    public static function get_current_scm_league_of_type (string $scm_competition_taxonomy): \WP_Post
+    public static function get_current_scm_competition_of_type(string $scm_competition_taxonomy): \WP_Post
     {
 
         $args = array(
@@ -421,9 +401,9 @@ final class ScmData
             'tax_query' => array(
                 array(
                     'taxonomy' => 'scm_competition_type',
-                    'field'    => 'slug',
-                    'terms'     => $scm_competition_taxonomy
-                )
+                    'field' => 'slug',
+                    'terms' => $scm_competition_taxonomy,
+                ),
             ),
         );
 
@@ -432,25 +412,26 @@ final class ScmData
         return $posts[0];
     }
 
-    public static function get_all_leagues(string $post_type = 'scm_league' ){
+    public static function get_all_leagues(string $post_type = 'scm_league')
+    {
         $args = array(
             'post_type' => $post_type,
             'post_status' => 'publish',
             'posts_per_page' => -1,
             /*'tax_query' => array(
-                array(
-                    'taxonomy' => $taxonomy,
-                    'field'    => 'slug',
-                    'terms'     => $taxonomy_term
-                )
-            ),
-            'meta_query' => array(
-                array(
-                    'key'     => $meta_key,
-                    'value'   => $meta_value,
-                    'compare' => 'LIKE',
-                ),
-            ),*/
+        array(
+        'taxonomy' => $taxonomy,
+        'field'    => 'slug',
+        'terms'     => $taxonomy_term
+        )
+        ),
+        'meta_query' => array(
+        array(
+        'key'     => $meta_key,
+        'value'   => $meta_value,
+        'compare' => 'LIKE',
+        ),
+        ),*/
         );
 
         $posts = get_posts($args);
@@ -462,41 +443,100 @@ final class ScmData
      * args WP_Post
      * return array of Players
      */
-    public static function get_league_participants (\WP_Post $scm_league ): array 
+    public static function get_league_participants(\WP_Post $scm_league): array
     {
         //repeater field scm-user-players-list -> scm-user-player
-        $repeater_array = get_field('scm-user-players-list',$scm_league->ID);
+        $repeater_array = get_field('scm-user-players-list', $scm_league->ID);
 
         //$participants = array_map(function ($field){return $field['scm-user-player'];} , $repeater_array);
-        $participants = array_map(fn ($field) => $field['scm-user-player'] , $repeater_array);
-        $wp_users = get_users(array( 'include' => $participants));
+        $participants = array_map(fn($field) => $field['scm-user-player'], $repeater_array);
+        $wp_users = get_users(array('include' => $participants));
 
         $players = [];
-        foreach( $wp_users as $user){
+        foreach ($wp_users as $user) {
             $players[] = new Player($user);
         }
 
         return $players;
     }
 
-    public static function get_league_participants_ids ($scm_league_id ): array 
+    public static function get_league_participants_ids($scm_league_id): array
     {
         //repeater field scm-user-players-list -> scm-user-player
-        $repeater_array = get_field('scm-user-players-list',$scm_league_id);
+        $repeater_array = get_field('scm-user-players-list', $scm_league_id);
 
         //$participants = array_map(function ($field){return $field['scm-user-player'];} , $repeater_array);
-        $participants = array_map(fn ($field) => $field['scm-user-player'] , $repeater_array);
-        
+        $participants = array_map(fn($field) => $field['scm-user-player'], $repeater_array);
 
         return $participants;
     }
 
-    public static function get_players_by_ids(){
+    public static function get_players_by_ids()
+    {
 
-    } 
+    }
 
-    public static function get_fixture_id_for_match_id ($match_id){
+    public static function get_fixture_id_for_match_id($match_id)
+    {
 
+    }
+
+    public static function get_next_matchup()
+    {
+
+    }
+
+    public static function get_current_matchup()
+    {
+        // player id
+        // get current league
+        // get current fixture
+        // get matchup
+    }
+
+    public static function get_next_future_fixture(): \WP_Post
+    {
+        $args = array(
+            'post_status' => 'future',
+            'post_type' => 'scm-fixture',
+            'posts_per_page' => 1,
+            'orderby' => 'date',
+            'order' => 'ASC',
+        );
+
+        $next_future = get_posts($args);
+
+        if( empty($next_future) ){
+            return self::get_default_WP_Post();
+        }
+
+        return $next_future[0];
+    }
+
+    // return default wp_post of type 'default' instead of null
+    public static function get_default_WP_Post(): \WP_Post
+    {
+        $post_id = -99; // negative ID, to avoid clash with a valid post
+        $post = new \stdClass();
+        $post->ID = $post_id;
+        $post->post_author = 1;
+        $post->post_date = current_time('mysql');
+        $post->post_date_gmt = current_time('mysql', 1);
+        $post->post_title = 'default';
+        $post->post_content = 'default';
+        $post->post_status = 'publish';
+        $post->comment_status = 'closed';
+        $post->ping_status = 'closed';
+        $post->post_name = 'fake-page-' . rand(1, 99999); // append random number to avoid clash
+        $post->post_type = 'default';
+        $post->filter = 'raw'; // important!
+
+        // Convert to WP_Post object
+        $wp_post = new \WP_Post( $post );
+        // Add the fake post to the cache
+        wp_cache_add( $post_id, $wp_post, 'posts' );
+
+        return $wp_post;
     }
 
 }

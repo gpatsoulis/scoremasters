@@ -32,7 +32,7 @@ class WeeklyChampionshipShortcode
     {
 
         $current_league = get_post();
-        $curent_competition = ScmData::get_current_scm_league_of_type('weekly-championship');
+        $curent_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
 
         $weekly_matchups = new WeeklyMatchUps( $curent_competition->ID );
         $weeklyCompetition = new WeeklyChampionshipCompetition($curent_competition,$weekly_matchups);

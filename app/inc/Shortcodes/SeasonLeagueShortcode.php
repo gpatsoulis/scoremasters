@@ -28,7 +28,7 @@ class SeasonLeagueShortcode
 
     public function output(){
 
-        $curent_seasonleague = ScmData::get_current_scm_league_of_type('season-league');
+        $curent_seasonleague = ScmData::get_current_scm_competition_of_type('season-league');
         $season_league = new SeasonLeagueCompetition( $curent_seasonleague );
 
         $players = $season_league->get_players_shorted_by_score();
