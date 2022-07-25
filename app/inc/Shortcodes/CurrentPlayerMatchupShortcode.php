@@ -96,7 +96,7 @@ class CurrentPlayerMatchupShortcode
 
     public function get_template()
     {
-        $this->template = new \Scoremasters\Inc\Templates\CurrentPlayerMatchupTemplate('div', 'scm-season-league-score', '', array('name' => 'player_id', 'value' => get_current_user_id()));
+        $this->template = new \Scoremasters\Inc\Templates\CurrentPlayerMatchupTemplate('div', 'scm-player-matchups', '', array('name' => 'player_id', 'value' => get_current_user_id()));
     }
 
 }
