@@ -57,19 +57,25 @@ class CurrentPlayerMatchupShortcode
 
         //get next weeks pairs
         $next_feature = ScmData::get_next_future_fixture();
-        $future_pairs = $weekly_matchups->get_matchups()->by_fixture_id($next_feature->ID)->by_league_id($palyer_league);
-        $new_future_pairs = [];
-        for ($i = 0; $i < (count($future_pairs) / 2); $i++) {
 
-            $z = 2 * $i;
-            $new_future_pairs[] = array($future_pairs[$z], $future_pairs[$z + 1]);
+        var_dump($next_feature->post_type = 'default');
 
+        $future_data = array();
+        if ($next_feature->post_type !== 'default') {
+            $future_pairs = $weekly_matchups->get_matchups()->by_fixture_id($next_feature->ID)->by_league_id($palyer_league);
+            $new_future_pairs = [];
+            for ($i = 0; $i < (count($future_pairs) / 2); $i++) {
+
+                $z = 2 * $i;
+                $new_future_pairs[] = array($future_pairs[$z], $future_pairs[$z + 1]);
+
+            }
+            $my_future_pair = current(array_filter($new_future_pairs, fn($pair_array) => in_array($player->player_id, $pair_array)));
+
+            $future_data['home'] = (get_user_by('id', $my_future_pair[0]))->display_name;
+            $future_data['away'] = (get_user_by('id', $my_future_pair[1]))->display_name;
+            $future_data['fixture'] = urldecode($next_feature->post_name);
         }
-        $my_future_pair = current(array_filter($new_future_pairs, fn($pair_array) => in_array($player->player_id, $pair_array)));
-
-        $future_data['home'] = (get_user_by('id', $my_future_pair[0]))->display_name;
-        $future_data['away'] = (get_user_by('id', $my_future_pair[1]))->display_name;
-        $future_data['fixture'] = urldecode($next_feature->post_name);
 
         if (SCM_DEBUG) {
             echo '<pre>';
