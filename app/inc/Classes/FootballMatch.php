@@ -101,7 +101,7 @@ class FootballMatch {
     protected function get_scorers(){
 
         $acf_scorers = get_field('scm-scorers',$this->post_data->ID);
-        var_dump($acf_scorers);
+        
         if(!$acf_scorers){
             $this->scorers = array();
             return; 

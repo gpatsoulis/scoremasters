@@ -12,6 +12,7 @@ class WeeklyMatchUps
 
     public $competition_id;
     private $meta_key = 'weekly_matchups';
+    //public $matchups = array();
 
     public function __construct(  $competition_id )
     {
