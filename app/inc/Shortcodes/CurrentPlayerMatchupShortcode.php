@@ -58,7 +58,6 @@ class CurrentPlayerMatchupShortcode
         //get next weeks pairs
         $next_feature = ScmData::get_next_future_fixture();
 
-        var_dump($next_feature->post_type = 'default');
 
         $future_data = array();
         if ($next_feature->post_type !== 'default') {
@@ -78,16 +77,17 @@ class CurrentPlayerMatchupShortcode
         }
 
         if (SCM_DEBUG) {
-            echo '<pre>';
-            var_dump($pairs);
+            //echo '<pre>';
+            //var_dump($pairs);
             //var_dump($new_pairs);
-            var_dump($future_pairs);
+            //var_dump($future_pairs);
+            //var_dump($future_data);
             //var_dump($current_fixture);
             //var_dump($weekly_matchups->get_all_matchups());
             //var_dump($data);
             //var_dump($my_pair);
             //var_dump($player->player_id);
-            echo '</pre>';
+            //echo '</pre>';
         }
 
         $output = $this->template->container_start;
