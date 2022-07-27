@@ -25,9 +25,6 @@ final class ShowPlayerScoreTemplate implements TemplateInterface
         }
 
         $template_html = <<<HTML
-        <!-- No Content -->
-        <p>{$data['name']} : {$data['points']}</p>
-
         <div class="scm-competition-points-container">
     <div class="scm-competition-points-single-container">
         <div>
