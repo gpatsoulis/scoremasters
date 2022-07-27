@@ -24,12 +24,25 @@ final class CurrentPlayerMatchupTemplate implements TemplateInterface
         }
 
         $template_html = <<<HTML
-        <!-- No Content -->
+        <div class="headsup-container">
+    <div class="headsup-title">
+        <h2><span class="colored-text">Επόμενος</span> Αντίπαλος</h2>
         <h4> Ζευγάρια Αγωνιστικής - {$data['fixture']}</h4>
-        <div>
-        <p class="home">{$data['home']}</p>
-        <p class="away">{$data['away']}</p>
-        <div>
+    </div>
+    <div class="versus-container">
+        <div class="scm-player-vs">
+            <img src="https://scoremasters.gr/wp-content/uploads/2022/07/Manchester_United_FC_crest.svg.png">
+            <h5>{$data['home']}</h5>
+        </div>
+        <div style="align-self: center">
+            <h3 class="versus-vs">V.S</h3>
+        </div>
+        <div class="scm-player-vs">
+            <img src="https://scoremasters.gr/wp-content/uploads/2022/07/Manchester_United_FC_crest.svg.png">
+            <h5>{$data['away']}</h5>
+        </div>
+    </div>
+</div>
 HTML;
 
         return $template_html;
@@ -37,6 +50,77 @@ HTML;
 
     public function get_css( array $data = array()):string
     {
+        $css = <<<HTML
+        <style>
+    .headsup-title {
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+        font-family: var( --e-global-typography-secondary-font-family ), Sans-serif;
+        font-size: var( --e-global-typography-secondary-font-size );
+        font-weight: var( --e-global-typography-secondary-font-weight );
+        text-transform: var( --e-global-typography-secondary-text-transform );
+        color: var( --e-global-color-primary );
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        display: block;
+        margin-bottom: 20px;
+    }
+    
+    .colored-text {
+        color: var( --e-global-color-accent );
+    }
+    
+    .versus-container {
+        display: flex;
+        justify-content: space-around;
+    }
+    
+    .scm-player-vs {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .scm-player-vs img {
+        max-width: 150px;
+    }
+    
+    .scm-player-vs h5 {
+        color: var( --e-global-color-primary );
+        font-family: var( --e-global-typography-fee40cf-font-family ), Sans-serif;
+        font-size: var( --e-global-typography-fee40cf-font-size );
+        font-weight: var( --e-global-typography-fee40cf-font-weight );
+        text-transform: var( --e-global-typography-fee40cf-text-transform );
+        line-height: var( --e-global-typography-fee40cf-line-height );
+        letter-spacing: var( --e-global-typography-fee40cf-letter-spacing );
+        word-spacing: var( --e-global-typography-fee40cf-word-spacing );
+        margin: 10px 0px 0px 0px;
+    }
+    
+    .versus-vs {
+        color: var( --e-global-color-primary );
+        font-family: var( --e-global-typography-9dd0905-font-family ), Sans-serif;
+        font-size: var( --e-global-typography-9dd0905-font-size );
+        font-weight: var( --e-global-typography-9dd0905-font-weight );
+        line-height: var( --e-global-typography-9dd0905-line-height );
+        letter-spacing: var( --e-global-typography-9dd0905-letter-spacing );
+        word-spacing: var( --e-global-typography-9dd0905-word-spacing );
+        text-align: center;
+    }
+    
+    @media screen and (max-width:360px){
+        .versus-container {
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
+        }
+    }
+    
+</style>
+HTML;
+
+        return $css;
 
     }
 }

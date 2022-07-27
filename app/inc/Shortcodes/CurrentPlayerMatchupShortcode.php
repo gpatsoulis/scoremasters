@@ -96,6 +96,8 @@ class CurrentPlayerMatchupShortcode
         $output .= $this->template->get_html($future_data);
         $output .= $this->template->container_end;
 
+        $output .= $this->template->get_css();
+
         return $output;
 
     }
