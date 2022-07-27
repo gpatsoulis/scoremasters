@@ -83,9 +83,9 @@ class ShowPlayerScoreShortcode
         );
 
         if (SCM_DEBUG) {
-            echo '<pre>';
-            var_dump($data_arr);
-            echo '</pre>';
+            //echo '<pre>';
+            //var_dump($data_arr);
+            //echo '</pre>';
         }
 
         $output = $this->template->container_start;
