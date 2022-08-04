@@ -964,3 +964,8 @@ textarea {
 	margin-right: auto;
 	margin-bottom: 1.5em;
 }
+
+.xdebug-error th{
+	font-size: 30px;
+	color: black;
+}

@@ -34,6 +34,14 @@ class SeasonLeagueShortcode
         $players = $season_league->get_players_shorted_by_score();
 
         $output = $this->template->container_start;
+        $output .= <<<HTML
+        <!--<div class='season-league-player-points'>-->
+            <p class='player_nick_name'>A/A</p>
+            <p class='player_nick_name'>Ψευδώνυμο</p>
+            <p class='player_points'>Βαθμοί</p>
+            <p class='player_league'>Πρωτάθλημα</p>
+        <!--</div>-->
+HTML;
 
         $aa = 1;
         foreach($players as $player){
@@ -45,7 +53,13 @@ class SeasonLeagueShortcode
             $data['player_nick_name'] = $player->wp_player->user_login;
             $data['player_name']      = $player->wp_player->display_name;
             $data['player_points']    = $player->current_season_points;
-            $data['player_league']    = $player->get_league();
+
+            $league = '';
+            if( $player->get_league() ){
+                $league = (get_post($player->get_league()))->post_title;
+            }
+
+            $data['player_league']    = $league;
 
             $output .= $this->template->get_html($data);
         }

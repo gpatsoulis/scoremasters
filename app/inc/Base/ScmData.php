@@ -467,7 +467,10 @@ final class ScmData
     {
         //repeater field scm-user-players-list -> scm-user-player
         $repeater_array = get_field('scm-user-players-list', $scm_league->ID);
-
+        if(is_null($repeater_array)){
+            return array();
+        }
+        
         //$participants = array_map(function ($field){return $field['scm-user-player'];} , $repeater_array);
         $participants = array_map(fn($field) => $field['scm-user-player'], $repeater_array);
         $wp_users = get_users(array('include' => $participants));

@@ -9,61 +9,60 @@ use Scoremasters\Inc\Interfaces\TemplateInterface;
 
 final class SeasonLeagueTemplate implements TemplateInterface
 {
-	public  $container_start;
-	public  $container_end;
+    public $container_start;
+    public $container_end;
 
-	public function __construct(string $container = 'div',string $class_name = '', string $id_name = '',array $data_items = array()){
-		$this->container_start = "<{$container} class='{$class_name}' id='{$id_name}' data-{$data_items['name']}='{$data_items['value']}'>";
-		$this->container_end = "</{$container}>";
-	}
+    public function __construct(string $container = 'div', string $class_name = '', string $id_name = '', array $data_items = array())
+    {
+        $this->container_start = "<{$container} class='{$class_name}' id='{$id_name}' data-{$data_items['name']}='{$data_items['value']}'>";
+        $this->container_end = "</{$container}>";
+    }
 
-    public function get_html(array $data):string{
+    public function get_html(array $data): string
+    {
         $template_html = <<<HTML
-<div class='season-league-player-points'>
+<!--<div class='season-league-player-points'>-->
     <p class='player_nick_name'>{$data['aa']}</p>
-  <p class='player_nick_name'>{$data['player_nick_name']}</p>
-  <p class='player_name'>{$data['player_name']}</p>
-  <p class='player_points'>{$data['player_points']}</p>
-  <!--<p class='player_league'>{$data['player_league']}</p>-->
-</div>
+    <p class='player_nick_name'>{$data['player_nick_name']}</p>
+    <!--<p class='player_name'>{$data['player_name']}</p>-->
+    <p class='player_points'>{$data['player_points']}</p>
+    <p class='player_league'>{$data['player_league']}</p>
+<!--</div>-->
 HTML;
 
         return $template_html;
     }
 
-    public function get_css( array $data = array()):string
+    public function get_css(array $data = array()): string
     {
         $template_css = <<<HTML
         <style>
-            .season-league-player-points {
-                display:flex;
-                justify-content: space-evenly;
-                width:50%;
-                
+            .scm-season-league-score {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                grid-template-columns: auto;
+                max-width: 800px;
+                margin:0 auto;
+
+                border: 1px solid var( --e-global-color-accent );
+                overflow: scroll;
             }
 
-            .season-league-player-points p{
-                padding: 15px 10px;
-                border: solid white 1px;
+            .scm-season-league-score p:nth-child(-n+4) {
+                background-color: var( --e-global-color-accent );
+                color: black;
+               
+            }
+            
+            .scm-season-league-score p {
+                padding: 10px 20px;
                 margin: 0;
+                border-bottom: 1px solid var( --e-global-color-accent );
+                color: white;
             }
-            .season-league-player-points  p:nth-child(1)  {
-                width: 100px; 
-            }
-            .season-league-player-points  p:nth-child(2)  {
-                width: 200px; 
-            }
+            
 
-            .season-league-player-points  p:nth-child(3)  {
-                width: 300px; 
-            }
 
-            .season-league-player-points  p:nth-child(4)  {
-                flex-grow: 2;
-                width: 100px;
-            }
-
-         
         </style>
 HTML;
         return $template_css;
