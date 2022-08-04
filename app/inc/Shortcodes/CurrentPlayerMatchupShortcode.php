@@ -31,6 +31,8 @@ class CurrentPlayerMatchupShortcode
     {
 
         $player = new Player(wp_get_current_user());
+        var_dump($player->player_points);
+        
         $palyer_league = $player->get_league();
         $current_fixture = ScmData::get_current_fixture();
 

@@ -83,15 +83,24 @@ class CalculateMatchScore
                 continue;
             }
             
+            //match points for season-league competition
             $players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'] = $score;
 
 
+             // total points
             if(!isset($players_score['total_points'])){
                 $players_score['total_points'] = 0;
             }
-
             $players_score['total_points'] = intval($score) + intval($players_score['total_points']);
 
+            //weekly score for weekly championship competition
+            if(!isset( $players_score['fixture_id_' . $fixture_id]['weekly-championship']['points'])){
+                $players_score['fixture_id_' . $fixture_id]['weekly-championship']['points'] = 0;
+            }
+            $players_score['fixture_id_' . $fixture_id]['weekly-championship']['points'] += intval($score);
+
+
+            // save player score
             $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $players_score);
 
             if (!$success) {

@@ -19,7 +19,7 @@ final class ScmData
             'posts_per_page' => 1,
         );
 
-        //get active week
+        //get active season
         $posts = get_posts($args);
 
         if (empty($posts)) {
@@ -78,6 +78,9 @@ final class ScmData
 
         //get active week
         $posts = get_posts($args);
+        if(empty($posts)){
+            return '';
+        }
 
         $prev_fixture = end($posts);
         $prev_fixture_date = new \DateTime($prev_fixture->post_date, new \DateTimeZone('Europe/Athens'));
@@ -318,6 +321,23 @@ final class ScmData
         $all_scm_users = get_users($args);
 
         return $all_scm_users;
+    }
+
+    public static function get_all_players(): array
+    {
+        $args = array('role' => 'scm-user', 'fields' => 'all');
+        $all_scm_users = get_users($args);
+
+        if (empty($all_scm_users)) {
+            return $all_scm_users;
+        }
+        
+        $players = [];
+        foreach ($all_scm_users as $user) {
+            $players[] = new Player($user);
+        }
+
+        return $players;
     }
 
     public static function get_all_participants($all_scm_users): array

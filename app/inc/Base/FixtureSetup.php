@@ -5,8 +5,8 @@
 
 namespace Scoremasters\Inc\Base;
 
-use Scoremasters\Inc\Classes\Player;
 use Scoremasters\Inc\Base\ScmData;
+use Scoremasters\Inc\Classes\Player;
 use Scoremasters\Inc\Classes\WeeklyMatchUps;
 use Scoremasters\Inc\Services\CalculateWeeklyMatchups;
 
@@ -18,7 +18,9 @@ class FixtureSetup
         add_filter('acf/update_value/name=week-start-date', array(static::class, 'scm_fixture_update_post_date'), 10, 4);
         add_action('elementor_pro/forms/new_record', array(static::class, 'scm_player_prediction'), 10, 2);
         //add_action('publish_scm-fixture', array(static::class, 'add_weekly_championship_players_matchups'), 10, 2);
-        add_action('transition_post_status',array(static::class, 'add_weekly_championship_players_matchups'), 10, 3);
+        add_action('transition_post_status', array(static::class, 'add_weekly_championship_players_matchups'), 10, 3);
+        add_action('transition_post_status', array(static::class, 'scm_match_trigger_players_weekly_point_calculation'), 15, 3);
+
         //add_filter('acf/update_value/name=week-start-date', 'Scoremasters\Inc\Base\FixtureSetup::scm_fixture_update_post_date', 10, 4);
         //add_action('elementor_pro/forms/new_record', 'Scoremasters\Inc\Base\FixtureSetup::scm_player_prediction', 10, 2);
     }
@@ -35,16 +37,15 @@ class FixtureSetup
         //wp post_date format: 0000-00-00 00:00:00
         $wp_formated_date = $start_date->format('Y-m-d H:i:s');
 
-        $now = new \DateTimeImmutable('',new \DateTimeZone('Europe/Athens'));
+        $now = new \DateTimeImmutable('', new \DateTimeZone('Europe/Athens'));
 
         $post_status = 'publish';
 
-        
-        if($start_date > $now){
+        if ($start_date > $now) {
             $post_status = 'future';
         }
 
-        $updated = wp_update_post(array('ID' => $fixture_id, 'post_date' => $wp_formated_date,'post_status' => $post_status));
+        $updated = wp_update_post(array('ID' => $fixture_id, 'post_date' => $wp_formated_date, 'post_status' => $post_status));
 
         if (is_wp_error($updated)) {
             error_log($updated->get_error_messages());
@@ -53,17 +54,62 @@ class FixtureSetup
         return $value;
     }
 
-    public static function add_weekly_championship_players_matchups( string $new_status, string $old_status, \WP_Post $fixture_post )
+    // todo: use match object instead of match_data array
+    public static function scm_match_trigger_players_weekly_point_calculation(string $new_status, string $old_status, \WP_Post $fixture_post)
     {
+
         // use transition_post_status hook
-        if ( $old_status === $new_status ){
+        if ($old_status === $new_status) {
             return;
         }
 
-        if ( $new_status !== 'publish' && $old_status === 'publish'  ){
+        if ($new_status !== 'publish') {
             return;
         }
-       
+
+        if ( $old_status !== 'future') {
+            return;
+        }
+
+        $prev_fixture = ScmData::get_previous_fixture();
+        if ($prev_fixture === '') {
+            return;
+        }
+
+        $match_data = array(
+            'fixture_id' => $prev_fixture->ID,
+            'season_id' => (ScmData::get_current_season())->ID,
+        );
+
+        $matches = get_field('week-matches', $prev_fixture->ID)[0]['week-match'];
+        //usort($matches, self::date_compare);
+
+        $all_leagues = ScmData::get_all_leagues();
+        $weekly_competition_post = ScmData::get_current_scm_competition_of_type('weekly-championship');
+        $weekly_matchups = (new WeeklyMatchUps($weekly_competition_post->ID))->get_matchups();
+        //$weekly_competition = new WeeklyChampionshipCompetition( $weekly_competition_post, $weekly_matchups );
+
+        foreach ($all_leagues as $league) {
+
+            $matchups = $weekly_matchups->by_fixture_id($prev_fixture->ID)->by_league_id($league->ID);
+            $calculate_weekly_points = new CalculateWeeklyPoints($match_data, $matchups);
+            $calculate_weekly_points->calculate()->save();
+
+        }
+
+    }
+
+    public static function add_weekly_championship_players_matchups(string $new_status, string $old_status, \WP_Post $fixture_post)
+    {
+        // use transition_post_status hook
+        if ($old_status === $new_status) {
+            return;
+        }
+
+        if ($new_status !== 'publish' && $old_status === 'publish') {
+            return;
+        }
+
         //weekly-championship
 
         // get competition WP_Post
@@ -73,15 +119,13 @@ class FixtureSetup
         // get all active leagues WP_Post[]
         $leagues_array = ScmData::get_all_leagues();
 
-        foreach($leagues_array as $league){
+        foreach ($leagues_array as $league) {
 
-            
-            $calculate_matchups = (new CalculateWeeklyMatchups( $matchups, $league->ID ))
-            ->for_league_id($league->ID)
-            ->for_fixture_id( $fixture_post->ID )
-            ->save();
+            $calculate_matchups = (new CalculateWeeklyMatchups($matchups, $league->ID))
+                ->for_league_id($league->ID)
+                ->for_fixture_id($fixture_post->ID)
+                ->save();
         }
-
 
         // setup matchups for each championship
         // save matchups in custom meta for each championship

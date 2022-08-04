@@ -25,7 +25,6 @@ $fixtures = get_posts($args);
 
 $match_data = array(
     'fixture_id' => 1121,
-    'match_id' => 1116,
     'season_id' => 99,
 );
 
