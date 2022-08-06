@@ -12,7 +12,7 @@ use Scoremasters\Inc\Services\CalculateWeeklyPoints;
 
 
 //get all past fixtures for this season;
-$current_season = self::get_current_season();
+$current_season = ScmData::get_current_season();
 $curent_season_date = new \DateTime( $current_season->post_date, new \DateTimeZone('Europe/Athens'));
 
 $args = array(
@@ -43,7 +43,8 @@ foreach($all_leagues as $league) {
         $matchups = $weekly_matchups->by_fixture_id($fixture->ID)->by_league_id($league->ID);
 
         
-            var_dump($fixture->ID);
+            var_dump($fixture->post_title);
+
             $match_data = array(
                 'fixture_id' => $fixture->ID,
                 'season_id' => 99,

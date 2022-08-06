@@ -5,6 +5,8 @@ use Scoremasters\Inc\Base\CalculateScore;
 use Scoremasters\Inc\Classes\FootballMatch;
 //calculate score for all players for all matches
 //get all fixtures
+$starttime = microtime(true);
+
 $points_table = get_option('points_table');
 $season = get_posts(array('post_type' => 'scm-season', 'post_status' => 'publish', 'posts_per_page' => 1));
 
@@ -60,7 +62,6 @@ foreach ($all_fixtures as $fixture){
             $season_id = strval($player_score_data['season_id']);
             $score = $player_score_data['score'];
 
-            //todo: use array1+array2 or array_merge
             $players_score = get_user_meta((int) $player_id, 'score_points_seasonID_' . $season_id);
 
             //initialize
@@ -70,38 +71,48 @@ foreach ($all_fixtures as $fixture){
                 $players_score = array();
             }
 
-            if(is_int($players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id])){
-                $players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id] = array();
-            }
-
             //points already in db
             if(isset($players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'])){
                 continue;
             }
-
-            //SELECT * FROM `wp_usermeta` where user_id = 3
+            
+            //match points for season-league competition
             $players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'] = $score;
 
-            if(is_int($players_score['total_points'])){
-                $players_score['total_points'] = array();
-            }
 
+             // total points
             if(!isset($players_score['total_points']['season-league'])){
                 $players_score['total_points']['season-league'] = 0;
             }
 
             $players_score['total_points']['season-league'] = intval($score) + intval($players_score['total_points']['season-league']);
 
+            //weekly score for weekly championship competition
+            if(!isset( $players_score['fixture_id_' . $fixture_id]['weekly-championship']['points'])){
+                $players_score['fixture_id_' . $fixture_id]['weekly-championship']['points'] = 0;
+            }
+            $players_score['fixture_id_' . $fixture_id]['weekly-championship']['points'] += intval($score);
+
+
+            // save player score
             $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $players_score);
 
             if (!$success) {
-                error_log('error updating score metadata for user: ' . $player_id);
-                //throw new \Exception('error updating score metadata for user: ' . $player_id);
+                error_log(__METHOD__ . ' error updating score metadata for user: ' . $player_id);
             }
 
+            //update_user_meta($player_id, 'total_points', $old_meta_value['total_points']);
             //$find_key = preg_replace("/[^0-9.]/", "", 'fixture_id_850');
 
         }
     }
 
 }
+
+
+$endtime = microtime(true);
+$timediff = $endtime - $starttime;
+
+var_dump('timediff');
+var_dump($timediff);
+exit;

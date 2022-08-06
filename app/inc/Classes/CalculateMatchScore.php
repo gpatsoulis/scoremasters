@@ -86,12 +86,11 @@ class CalculateMatchScore
             //match points for season-league competition
             $players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'] = $score;
 
-
-             // total points
-            if(!isset($players_score['total_points'])){
-                $players_score['total_points'] = 0;
+            // total points
+             if(!isset($players_score['total_points']['season-league'])){
+                $players_score['total_points']['season-league'] = 0;
             }
-            $players_score['total_points'] = intval($score) + intval($players_score['total_points']);
+            $players_score['total_points']['season-league'] = intval($score) + intval($players_score['total_points']['season-league']);
 
             //weekly score for weekly championship competition
             if(!isset( $players_score['fixture_id_' . $fixture_id]['weekly-championship']['points'])){
