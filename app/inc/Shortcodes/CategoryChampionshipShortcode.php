@@ -45,8 +45,16 @@ class CategoryChampionshipShortcode
 
         $output = $this->template->container_start;
 
+        $output .= <<<HTML
+        <!--<div class='season-league-player-points'>-->
+            <p class='player_nick_name'>A/A</p>
+            <p class='player_nick_name'>Ψευδώνυμο</p>
+            <p class='player_points'>Βαθμοί</p>
+        <!--</div>-->
+HTML;
+
         $aa = 1;
-        foreach($players as $player){
+        foreach($players as $player){ 
 
             unset($data);
             $data = [];

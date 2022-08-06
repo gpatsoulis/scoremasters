@@ -40,7 +40,13 @@ class WeeklyChampionshipShortcode
         $participants = $weeklyCompetition->get_participants_by_league_id($current_league->ID)->short();
 
         $output = $this->template->container_start;
-
+        $output .= <<<HTML
+        <!--<div class='season-league-player-points'>-->
+            <p class='player_nick_name'>A/A</p>
+            <p class='player_nick_name'>Ψευδώνυμο</p>
+            <p class='player_points'>Βαθμοί</p>
+        <!--</div>-->
+HTML;
         $aa = 1;
         foreach($participants as $player){
 

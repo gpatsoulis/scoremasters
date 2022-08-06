@@ -381,7 +381,7 @@ function start_scoremasters()
     //todo: calc weekly points for all matches
     //require_once dirname(__FILE__) . '/app/tools/test_calc_weekly_points.php';
     //require_once dirname(__FILE__) . '/app/tools/test_cup.php';
-    
+    //require_once dirname(__FILE__) . '/app/tools/players-list.php';
     //require_once dirname(__FILE__) . '/app/tools/test_matchups_algorithm.php';
 
 

@@ -19,13 +19,13 @@ final class CategoryChampionshipTemplate implements TemplateInterface
 
     public function get_html(array $data):string{
         $template_html = <<<HTML
-<div class='season-league-player-points'>
-    <p class='player_nick_name'>{$data['aa']}</p>
+<!--<div class='season-league-player-points'>-->
+<p class='player_nick_name'>{$data['aa']}</p>
   <p class='player_nick_name'>{$data['player_nick_name']}</p>
-  <p class='player_name'>{$data['player_name']}</p>
+  <!--<p class='player_name'>{$data['player_name']}</p>-->
   <p class='player_points'>{$data['player_points']}</p>
   <!--<p class='player_league'>{$data['player_league']}</p>-->
-</div>
+<!--</div>-->
 HTML;
 
         return $template_html;
@@ -35,32 +35,28 @@ HTML;
     {
         $template_css = <<<HTML
         <style>
-            .season-league-player-points {
-                display:flex;
-                justify-content: space-evenly;
-                width:50%;
-                
+            .scm-season-league-score {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-rows: auto;
+                max-width: 800px;
+                margin:0 auto;
+
+                border: 1px solid var( --e-global-color-accent );
+                overflow: scroll;
             }
 
-            .season-league-player-points p{
-                padding: 15px 10px;
-                border: solid white 1px;
+            .scm-season-league-score p:nth-child(-n+3) {
+                background-color: var( --e-global-color-accent );
+                color: black;
+               
+            }
+            
+            .scm-season-league-score p {
+                padding: 10px 20px;
                 margin: 0;
-            }
-            .season-league-player-points  p:nth-child(1)  {
-                width: 100px; 
-            }
-            .season-league-player-points  p:nth-child(2)  {
-                width: 200px; 
-            }
-
-            .season-league-player-points  p:nth-child(3)  {
-                width: 300px; 
-            }
-
-            .season-league-player-points  p:nth-child(4)  {
-                flex-grow: 2;
-                width: 100px;
+                border-bottom: 1px solid var( --e-global-color-accent );
+                color: white;
             }
 
          
