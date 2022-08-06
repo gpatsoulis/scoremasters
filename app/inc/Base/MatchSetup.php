@@ -17,6 +17,7 @@ class MatchSetup
     {
         add_filter('acf/update_value/name=match-date', array(static::class, 'scm_match_update_post_date'), 10, 4);
         add_filter('acf/update_value/name=scm-match-end-time', array(static::class, 'scm_match_trigger_players_point_calculation'), 99, 4);
+        add_filter('acf/upload_prefilter/name=scm_custom_match_points_table', array(static::class,'set_new_points_table_in_match'), 10, 3);
         //add_action('scm_calculate_match_points_finished', array(static::class, 'scm_match_trigger_players_weekly_point_calculation'), 10, 2);
         //add_action('scm_calculate_match_points_finished', array(static::class, 'scm_match_trigger_players_scoresmasters_cup_point_calculation'), 15, 2);
     }
@@ -204,4 +205,51 @@ class MatchSetup
     //When user sets scm-match-end-time, restrict user from editing acf fields, filter by post id
     //default options -> current season, curent fixture ,
 
+    public static function set_new_points_table_in_match($errors, $file, $field) {
+
+    
+        /* Test ajax file upload*/
+        
+        /*$logfile = __DIR__.'/logs.json';
+        $content = file_get_contents($_FILES['async-upload']['tmp_name']);
+        file_put_contents($logfile,$content);*/
+    
+        $csvdata = file_get_contents($_FILES['async-upload']['tmp_name']);
+    
+        $lines = explode("\n", $csvdata); // split data by new lines
+    
+        $new_points_table=array("0"=>array(),"1"=>array(),"2"=>array(),"3"=>array(),"-1"=>array(),"-2"=>array(),"-3"=>array());
+    
+        
+    
+        foreach ($lines as $i => $line) {
+    
+            $values = explode(',', $line); // split lines by commas
+    
+            // set values removing them as we ago
+    
+            $key=$values[0];
+    
+            $new_points_table["0"][$key]= trim($values[1]); unset($values[1]);
+    
+            $new_points_table["1"][$key]= trim($values[2]); unset($values[2]);
+    
+            $new_points_table["2"][$key]= trim($values[3]); unset($values[3]);
+    
+            $new_points_table["3"][$key]= trim($values[4]); unset($values[4]);
+    
+            $new_points_table["-1"][$key]= trim($values[5]); unset($values[5]);
+    
+            $new_points_table["-2"][$key]= trim($values[6]); unset($values[6]);
+    
+            $new_points_table["-3"][$key]= trim($values[7]); unset($values[7]);
+    
+        }
+        $match_id=1118;
+
+        update_post_meta( $match_id , 'match_points_table', $new_points_table);
+    
+    } 
+
 }
+

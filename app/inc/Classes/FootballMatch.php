@@ -70,11 +70,9 @@ class FootballMatch {
         $this->post_data = $wp_match;
         $this->match_date =  new \DateTime($wp_match->post_date, new \DateTimeZone('Europe/Athens'));
         
-        //$points_table = get_field('scm_custom_match_points_table', $match_id);
-        //var_dump($points_table);
-        //$this->points_table=$points_table;
+        $points_table = get_field('match_points_table', $match_id);
+        $this->points_table=$points_table;
 
-        $points_table = '';
         if(!$points_table){
             $this->points_table=get_option('points_table');
         }
