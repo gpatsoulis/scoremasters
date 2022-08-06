@@ -228,11 +228,12 @@ class CalculateScore
         //check if prediction matches scorers result
 
         $p_scorer = (intval($prediction_content["Scorer"]));
+        $p_scorer_points = get_field('scm-player-points',(get_post($p_scorer))->ID);
+        
 
         if (in_array($p_scorer, $actual_scorers)) {
             $prediction_points_scorer = 0;
             if (get_field("scm-player-position", $p_scorer) == "Επιθετικός") {
-
                 $prediction_points_scorer = 4;
 
             } elseif (get_field("scm-player-position", $p_scorer) == "Μέσος") {
@@ -243,6 +244,11 @@ class CalculateScore
 
                 $prediction_points_scorer = 9;
 
+            }
+
+            //add custom point per scm-pro-player
+            if($p_scorer_points){
+                $prediction_points_scorer = $p_scorer_points;
             }
 
             if(!$prediction_points_scorer){
