@@ -53,8 +53,20 @@ class CurrentPlayerMatchupShortcode
 
         //$data['home'] = ($my_pair[0] === $player->player_id) ? $player : ( get_user_by( 'id', $my_pair[0] ) )->display_name;
         //$data['away'] = ($my_pair[1]=== $player->player_id) ? $player : ( get_user_by( 'id', $my_pair[1] ) )->display_name;
-        $data['home'] = (get_user_by('id', $my_pair[0]))->display_name;
-        $data['away'] = (get_user_by('id', $my_pair[1]))->display_name;
+
+        $home_user_name = (get_user_by('id', $my_pair[0]))->display_name;
+        if(!$home_user_name){
+            error(__METHOD__ . ' error user not found id: ' . $my_pair[0]);
+            $home_user_name = '';
+        }
+        $away_user_name = (get_user_by('id', $my_pair[1]))->display_name;
+        if(!$home_user_name){
+            error(__METHOD__ . ' error user not found id: ' . $my_pair[1]);
+            $away_user_name = '';
+        }
+
+        $data['home'] = $home_user_name;
+        $data['away'] = $away_user_name;
         $data['fixture'] = urldecode($current_fixture->post_name);
 
         //get next weeks pairs

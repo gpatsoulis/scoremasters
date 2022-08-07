@@ -150,9 +150,6 @@ class CalculateWeeklyMatchups
 
         $this->next_matchups = $next_matchups;
 
-        var_dump($next_matchups);
-
-
         return $this;
 
     }

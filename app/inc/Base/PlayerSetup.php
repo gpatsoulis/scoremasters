@@ -12,7 +12,7 @@ class PlayerSetup
 
     public static function init()
     {
-        add_filter('user_register', 'Scoremasters\Inc\Classes\PlayerSetup::setup_custom_user_meta', 10, 4);
+        add_filter('user_register', array(static::class,'setup_custom_user_meta'), 10, 4);
         //add_filter('acf/update_value/name=scm-user-players-list',array(static::class,'assign_player_in_scm_league'),5,4);
         add_action('acf/save_post', array(static::class, 'assign_player_in_scm_league'), 5, 1);
     }
@@ -24,7 +24,7 @@ class PlayerSetup
     public static function setup_custom_user_meta(int $user_id)
     {
 
-        
+        /*
         if (metadata_exists('user', $user_id, 'total_points')) {
             error(__METHOD__ . ' \"total_points\" metadata exists for user with id: ' . $user_id);
             throw new Exception('\"total_points\" metadata exists for user with id: ' . $user_id);
@@ -41,6 +41,7 @@ class PlayerSetup
             error(__METHOD__  . ' fail to create \"total_points\" metadata for user with id: ' . $user_id);
             throw new Exception('fail to create \"total_points\" metadata for user with id: ' . $user_id);
         }
+        */
         
     }
 

@@ -8,8 +8,8 @@ namespace Scoremasters\Inc\Shortcodes;
 use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\Player;
 
-//[Scoremasters\Inc\Shortcodes\BestPlayerForWeek]
-class BestPlayerForWeek
+//[Scoremasters\Inc\Shortcodes\BestPlayerForWeekShortcode]
+class BestPlayerForWeekShortcode
 {
     public $template;
     public $name;

@@ -140,7 +140,7 @@ class FixtureSetup
         $form_name = $record->get_form_settings('form_name');
 
         if ($form_name !== 'scm-prediction-form') {
-            error_log(static::class . ' - invalid form name');
+            error_log(static::class . ' - invalid form name - ' . $form_name);
             //send error message to ajax handler
             return;
         }
