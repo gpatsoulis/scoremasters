@@ -32,7 +32,7 @@ if (empty($matches)) {
 }
 
 $all_predictions = ScmData::get_player_predictions_for_finished_matches($matches);
-var_dump(count($all_predictions));
+//var_dump(count($all_predictions));
 
 if (empty($all_predictions)) {
     error_log('exporter ---- no available predictions');
@@ -40,7 +40,7 @@ if (empty($all_predictions)) {
 
 $all_predictions_alter = ScmData::get_all_player_prediction_for_fixture_by_title($matches);
 
-var_dump(count($all_predictions_alter));
+//var_dump(count($all_predictions_alter));
 $all_predictions = $all_predictions_alter;
 //alt solution based on search
 

@@ -42,7 +42,7 @@ class FixturesWeeklyPlayerPointsShortcode
         $user_points_meta_array = get_user_meta($current_user->ID, 'score_points_seasonID_' . strval($current_seasons->ID));
 
         ///////////////////debug/////////////////////////
-        var_dump($user_points_meta_array);
+        //var_dump($user_points_meta_array);
 
         //get current ficture week
 
@@ -52,7 +52,7 @@ class FixturesWeeklyPlayerPointsShortcode
             && isset($_POST['scm_fixture_setup'])
             && wp_verify_nonce($_POST['scm_fixture_setup'], 'submit_form')) {
 
-            var_dump($_POST);
+            //var_dump($_POST);
 
             $post_value = filter_var($_POST['fixture_id'], FILTER_VALIDATE_INT);
         }

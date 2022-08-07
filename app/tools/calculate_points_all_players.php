@@ -27,7 +27,7 @@ $args = array(
 
 $predictions = get_posts($args);
 
-var_dump(count($predictions));
+//var_dump(count($predictions));
 
 $data_to_insert_in_db = [];
 $current_season = ScmData::get_current_season();
@@ -74,7 +74,7 @@ foreach($predictions as $prediction){
 
 }
 
-var_dump( count($data_to_insert_in_db));
+//var_dump( count($data_to_insert_in_db));
 
 foreach ($data_to_insert_in_db as $player_score_data) {
 
