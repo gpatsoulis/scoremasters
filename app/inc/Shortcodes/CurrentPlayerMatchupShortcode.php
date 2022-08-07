@@ -31,7 +31,7 @@ class CurrentPlayerMatchupShortcode
     {
 
         $player = new Player(wp_get_current_user());
-        var_dump($player->player_points);
+        //var_dump($player->player_points);
         
         $palyer_league = $player->get_league();
         $current_fixture = ScmData::get_current_fixture();
@@ -40,6 +40,16 @@ class CurrentPlayerMatchupShortcode
         $weekly_matchups = new WeeklyMatchUps($current_weekly_competition->ID);
 
         $pairs = $weekly_matchups->get_matchups()->by_fixture_id($current_fixture->ID)->by_league_id($palyer_league);
+
+        if(empty( $pairs )){
+            $output = $this->template->container_start;
+            $data = array();
+            $output .= $this->template->get_html($data);
+            $output .= $this->template->container_end;
+            $output .= $this->template->get_css();
+        
+            return $output;
+        }
 
         $new_pairs = [];
         for ($i = 0; $i < (count($pairs) / 2); $i++) {
@@ -51,17 +61,26 @@ class CurrentPlayerMatchupShortcode
 
         $my_pair = current(array_filter($new_pairs, fn($pair_array) => in_array($player->player_id, $pair_array)));
 
+        
         //$data['home'] = ($my_pair[0] === $player->player_id) ? $player : ( get_user_by( 'id', $my_pair[0] ) )->display_name;
         //$data['away'] = ($my_pair[1]=== $player->player_id) ? $player : ( get_user_by( 'id', $my_pair[1] ) )->display_name;
 
-        $home_user_name = (get_user_by('id', $my_pair[0]))->display_name;
-        if(!$home_user_name){
-            error(__METHOD__ . ' error user not found id: ' . $my_pair[0]);
+        $home_user = get_user_by('id', $my_pair[0]);
+        if($home_user){
+            $home_user_name = $home_user->display_name;
+        }
+        if(!$home_user){
+            error_log(__METHOD__ . ' error user not found id: ' . $my_pair[0]);
             $home_user_name = '';
         }
-        $away_user_name = (get_user_by('id', $my_pair[1]))->display_name;
-        if(!$home_user_name){
-            error(__METHOD__ . ' error user not found id: ' . $my_pair[1]);
+
+        $away_user = get_user_by('id', $my_pair[1]);
+        if($away_user){
+            $away_user_name = $away_user->display_name;
+        }
+        
+        if(!$away_user){
+            error_log(__METHOD__ . ' error user not found id: ' . $my_pair[1]);
             $away_user_name = '';
         }
 
