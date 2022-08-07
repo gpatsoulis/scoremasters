@@ -205,6 +205,13 @@ class MatchSetup
     //When user sets scm-match-end-time, restrict user from editing acf fields, filter by post id
     //default options -> current season, curent fixture ,
 
+    /**
+     * Set custom points table for single match
+     *
+     * @param array        $errors     An array of error messages (strings) for the given attachment. 
+     * @param array        $file       An array containing the $_FILE data for the attachment about to be uploaded
+     * @param array        $field      The field array containing all settings.
+     */
     public static function set_new_points_table_in_match($errors, $file, $field) {
 
     
@@ -227,21 +234,14 @@ class MatchSetup
             $values = explode(',', $line); // split lines by commas
     
             // set values removing them as we ago
-    
             $key=$values[0];
     
             $new_points_table["0"][$key]= trim($values[1]); unset($values[1]);
-    
             $new_points_table["1"][$key]= trim($values[2]); unset($values[2]);
-    
             $new_points_table["2"][$key]= trim($values[3]); unset($values[3]);
-    
             $new_points_table["3"][$key]= trim($values[4]); unset($values[4]);
-    
             $new_points_table["-1"][$key]= trim($values[5]); unset($values[5]);
-    
             $new_points_table["-2"][$key]= trim($values[6]); unset($values[6]);
-    
             $new_points_table["-3"][$key]= trim($values[7]); unset($values[7]);
     
         }

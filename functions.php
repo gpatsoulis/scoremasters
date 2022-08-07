@@ -360,7 +360,7 @@ function get_player_position($data)
 
 function debug_redirect_mail($args)
 {
-    $args['to'] = array('patsoulis.george@gmail.com', 'kyrgag1@gmail.com', 'tmountakis@gmail.com');
+    $args['to'] = array('patsoulis.george@gmail.com', 'kyrkag1@gmail.com', 'tmountakis@gmail.com');
 
     return $args;
 }
@@ -377,24 +377,23 @@ function start_scoremasters()
     require_once dirname(__FILE__) . '/app/scoremasters.php';
 
     //(1)
-    //require_once dirname(__FILE__) . '/app/tools/test_calculate_matchups.php'; 
+    //require_once dirname(__FILE__) . '/app/tools/test_calculate_matchups.php';
     //(2)
     //require_once dirname(__FILE__) . '/app/tools/test_calculate_score.php';
     //(3)
     //require_once dirname(__FILE__) . '/app/tools/test_calc_weekly_points.php';
+
     //todo: calc weekly points for all matches
 
     //require_once dirname(__FILE__) . '/app/tools/test_cup.php';
     //require_once dirname(__FILE__) . '/app/tools/players-list.php';
     //require_once dirname(__FILE__) . '/app/tools/test_matchups_algorithm.php';
 
+    //exporter
+    //require_once dirname(__FILE__) . '/app/tools/export_predictions.php';
 
+    //require_once dirname(__FILE__) . '/app/tools/export_predictions_by_match.php';
+    //require_once dirname(__FILE__) . '/app/tools/calculate_points_all_players.php';
 
 }
 add_action('init', 'start_scoremasters');
-
-//exporter
-//require_once dirname(__FILE__) . '/app/tools/export_predictions.php';
-//
-//require_once dirname(__FILE__) . '/app/tools/export_predictions_by_match.php';
-//require_once dirname(__FILE__) . '/app/tools/calculate_points_all_players.php';
