@@ -42,8 +42,8 @@ class WeeklyChampionshipShortcode
         $output = $this->template->container_start;
         $output .= <<<HTML
         <!--<div class='season-league-player-points'>-->
-            <p class='player_nick_name'>A/A</p>
-            <p class='player_nick_name'>Ψευδώνυμο</p>
+            <p class='player_rank'>A/A</p>
+            <p class='player_nick_name'>Όνομα</p>
             <p class='player_points'>Βαθμοί</p>
         <!--</div>-->
 HTML;

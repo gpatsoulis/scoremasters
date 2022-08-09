@@ -20,9 +20,9 @@ final class WeeklyChampionshipTemplate implements TemplateInterface
     public function get_html(array $data):string{
         $template_html = <<<HTML
 <!--<div class='season-league-player-points'>-->
-    <p class='player_nick_name'>{$data['aa']}</p>
-  <p class='player_nick_name'>{$data['player_nick_name']}</p>
-  <!--<p class='player_name'>{$data['player_name']}</p>-->
+    <p class='player_rank'>{$data['aa']}</p>
+  <!--<p class='player_nick_name'>{$data['player_nick_name']}</p>-->
+  <p class='player_name'>{$data['player_name']}</p>
   <p class='player_points'>{$data['player_points']}</p>
   <!--<p class='player_league'></p>-->
 <!--</div>-->
