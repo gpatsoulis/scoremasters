@@ -6,7 +6,7 @@ use Scoremasters\Inc\Classes\Player;
 $match = get_post(1844);
 $predictions = ScmData::get_players_predictions_for_match($match);
 
-var_dump(count($predictions));
+//var_dump(count($predictions));
 $export_string = '';
 $export_string .= $match->post_title . ',,,,,,' . "\n";
 $export_string .= 'player-name,SHMEIO,Under/Over,Score,Scorer,Double points,match name' . "\n";
