@@ -6,6 +6,7 @@
 namespace Scoremasters\Inc\Shortcodes;
 
 use Scoremasters\Inc\Base\ScmData;
+use Scoremasters\Inc\Classes\Player;
 
 //[Scoremasters\Inc\Shortcodes\FixturesShortcode]
 class FixturesShortcode
@@ -27,6 +28,7 @@ class FixturesShortcode
 
     public function output()
     {
+
         //todo: check for valid match date
         // if date has passed disable "play button" from shortcode
 
@@ -44,10 +46,20 @@ class FixturesShortcode
 
         $fixture_id = ($post_value) ? $post_value : null;
 
+        if(!$fixture_id){
+            $post = ScmData::get_current_fixture($fixture_id);
+            $fixture_id = $post->ID;
+        }
+
         $output = '';
         $data = array();
 
-        $post = ScmData::get_current_fixture($fixture_id);
+        
+
+        //player data
+        $player = new Player(wp_get_current_user());
+        // total weekly points
+        //$player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'];
 
         $output .= $this->template->container_start;
         $matches = ScmData::get_all_matches_for_current_fixture($fixture_id);
@@ -75,6 +87,12 @@ class FixturesShortcode
                     $score_away = $score_acf_group['scm-full-time-away-score'];
 
                     $data["match-score"] = $score_home . ' - ' . $score_away;
+
+                    if(isset($player->player_points['fixture_id_' . $fixture_id]['match_id_' . $match->ID]['season-league']['points'])){
+                        $points_gained = $player->player_points['fixture_id_' . $fixture_id]['match_id_' . $match->ID]['season-league']['points'];
+                        $data['match-points'] = $points_gained;
+                    }
+                    
                 }
 
                 $data["player-id"] = get_current_user_id();
@@ -103,7 +121,7 @@ class FixturesShortcode
         }
 
         $output .= $this->template->container_end;
-        
+
         $output .= $this->template->get_css();
 
         return $output;

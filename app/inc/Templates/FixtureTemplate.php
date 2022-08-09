@@ -26,10 +26,16 @@ final class FixtureTemplate implements TemplateInterface
 			$popup_btn = '<div class="scm-match-finished"><h3 class="scm-match-score">'. $data["match-score"] .'</h3></div>';
 		}
 
+		$str = '';
+		if(isset($data['match-points'])){
+			$str = "<div class='match-points' style='text-align:center;' >Κερδισμένοι Πόντοι - {$data['match-points']}</div>";
+		}
+
         $template_html = <<<HTML
         <div class="scm-fixture-list" data-player_id="{$data["player-id"]}">
            <div class="scm-fixture-list-row" data-match_id="{$data["match-id"]}" data-match_date="{$data["match-date"]}">
                <div class="home-container">
+							
                            <div class="team-image">
                                {$data["home-team-image"]}
                            </div>
@@ -48,6 +54,7 @@ final class FixtureTemplate implements TemplateInterface
 	-->
                            </div>
                            <div class="match-sub-details">
+							{$str}
                                <div class="stadium">
                                    <h5>{$data["stadium"]}</h5>
                                </div>
