@@ -7,6 +7,7 @@ namespace Scoremasters\Inc\Shortcodes;
 
 use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\Player;
+use Scoremasters\Inc\Classes\FootballMatch;
 
 //[Scoremasters\Inc\Shortcodes\FixturesShortcode]
 class FixturesShortcode
@@ -58,12 +59,12 @@ class FixturesShortcode
 
         //player data
         $player = new Player(wp_get_current_user());
-        // total weekly points
-        //$player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'];
-
+       
+        //------- output start -------//
         $output .= $this->template->container_start;
         $matches = ScmData::get_all_matches_for_current_fixture($fixture_id);
 
+        // total weekly points
         if(isset($player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'])){
             $week_total_points = $player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'];
             $output .= "<div>Πόντοι Εβδομάδας: {$week_total_points}</div>";
@@ -85,6 +86,7 @@ class FixturesShortcode
                 //scm-full-time-home-score
                 //scm-full-time-away-score
 
+                unset($data['match-points']);
                 if ($current_date > $match_date) {
                     $data['openForPredictions'] = false;
 
@@ -94,7 +96,7 @@ class FixturesShortcode
 
                     $data["match-score"] = $score_home . ' - ' . $score_away;
 
-                    $data['match-points'] = '';
+                    
                     if(isset($player->player_points['fixture_id_' . $fixture_id]['match_id_' . $match->ID]['season-league']['points'])){
                         $points_gained = $player->player_points['fixture_id_' . $fixture_id]['match_id_' . $match->ID]['season-league']['points'];
                         $data['match-points'] = $points_gained;
@@ -105,15 +107,24 @@ class FixturesShortcode
                 $data["player-id"] = get_current_user_id();
                 $data['match-id'] = $match->ID;
 
+                // add match pointables
+                $current_match = new FootballMatch($match->ID);
+                $points_table = json_encode($current_match->points_table,  JSON_UNESCAPED_UNICODE);
+                $output .= "<div id='match_{$match->ID}_pointstable' data-pointstable='{$points_table}'></div>";
+
+               
+
                 //error
                 $data['match-date'] = $match_date->getTimestamp();
 
                 $repeater_teams = get_field("match-teams", $match->ID);
+                //var_dump(get_field('scm-team-capabilityrange', $repeater_teams[0]["away-team"][0]->ID));
 
                 $data["home-team-name"] = $repeater_teams[0]["home-team"][0]->post_title;
                 $data["home-team-id"] = $repeater_teams[0]["home-team"][0]->ID;
                 $data["home-team-image"] = get_the_post_thumbnail($repeater_teams[0]["home-team"][0]->ID);
                 $data['home-team-capability'] = get_field('scm-team-capabilityrange', $repeater_teams[0]["home-team"][0]->ID);
+                //var_dump(get_post_meta($repeater_teams[0]["home-team"][0]->ID,'scm-team-capabilityrange'));
 
                 $data["stadium"] = $repeater_teams[0]["home-team"][0]->post_content;
                 $data["match-date-string"] = $match->post_date;

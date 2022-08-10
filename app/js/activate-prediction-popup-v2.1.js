@@ -122,6 +122,14 @@ function render_submited_prediction_data(popup, data) {
         let option = select.querySelector('option[value="' + value + '"');
         //console.log(option);
         option.selected = true;
+
+
+        if (value == '-') {
+            continue;
+        }
+        let event = {};
+        event.target = select;
+        calc_possible_points(event);
     }
 
 
@@ -409,6 +417,11 @@ function setUpTeamsNames(data, popup) {
     teamsNamesPlaceholder.prepend(documentFragTeams);
 }
 
+
+function render_possible_points( popup, data ){
+
+}
+
 function possible_player_points(event, id, instance) {
     let popup = instance["$element"][0];
 
@@ -430,10 +443,11 @@ function calc_possible_points(event){
     let params = new URLSearchParams(document.location.search);
     let match_id = params.get('match_id');
 
-    let match_el = document.querySelector('[data-match_id="'+ match_id +'"]');
+    let match_el = document.querySelector('[data-match_id="'+ match_id +'"]'); //2417
 
     //selectedItem,match element
-    //let scoreTable = scm_points_table;
+    let scoreTable = JSON.parse(document.getElementById('match_'+ match_id +'_pointstable').dataset.pointstable);
+   
     let player_points_table = {
         "Επιθετικός": 4,
         "Μέσος": 8,
@@ -446,7 +460,7 @@ function calc_possible_points(event){
     
     let capabilityDiff = parseInt(home_team_capability) - parseInt(away_team_capability);
 
-    let possible_points = scm_points_table[capabilityDiff.toString()][event.target.value];
+    let possible_points = scoreTable[capabilityDiff.toString()][event.target.value];
 
     console.log(event);
 
