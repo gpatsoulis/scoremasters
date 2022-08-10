@@ -84,7 +84,7 @@ function get_submited_predictions(popup) {
         })
         .then(data => data.json())
         .then(data => {
-                console.log(data);
+                //console.log(data);
 
 
                 render_submited_prediction_data(popup, data);
@@ -124,9 +124,11 @@ function render_submited_prediction_data(popup, data) {
         option.selected = true;
 
 
+        /*
         if (value == '-') {
             continue;
         }
+        */
         let event = {};
         event.target = select;
         calc_possible_points(event);
@@ -341,7 +343,9 @@ function setUpPlayersList(data, popup) {
 
 
     let awayTeamPlayers = getPlayersList(awayTeam_id);
-    //console.log(awayTeamPlayers);
+    
+    console.log(awayTeamPlayers);
+
     awayTeamPlayers.then(pdata => {
         let optionData = pdata.map(
             x => {
@@ -363,6 +367,8 @@ function setUpPlayersList(data, popup) {
     });
 
     let homeTeamsPlayers = getPlayersList(homeTeam_id);
+
+    console.log(homeTeamsPlayers);
 
     homeTeamsPlayers.then(pdata => {
         let optionData = pdata.map(
@@ -418,10 +424,6 @@ function setUpTeamsNames(data, popup) {
 }
 
 
-function render_possible_points( popup, data ){
-
-}
-
 function possible_player_points(event, id, instance) {
     let popup = instance["$element"][0];
 
@@ -462,7 +464,7 @@ function calc_possible_points(event){
 
     let possible_points = scoreTable[capabilityDiff.toString()][event.target.value];
 
-    console.log(event);
+    //console.log(event);
 
     let parent = event.target.closest('div.elementor-field-type-select');
     let points_text = parent.querySelector('.scm-possible-points');
@@ -478,6 +480,10 @@ function calc_possible_points(event){
     }
 
     
+    if(!possible_points){
+        possible_points = ' - ';
+    }
+
     points_text.textContent = 'Πιθανοί Πόντοι: ' + possible_points;
 
     parent.appendChild(points_text);

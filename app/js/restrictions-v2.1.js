@@ -18,6 +18,8 @@ function restrictions(event, id, instance) {
 
     let scorerSelect = popup.querySelector('#form-field-scm_scorer');
 
+    let doublePoints = popup.querySelector('#form-field-field_c61b597');
+
 
 
     //let doubleSelect = popup.querySelector('#form-field-field_c61b597');
@@ -45,8 +47,8 @@ function restrictions(event, id, instance) {
 
     function shmeioSelect_restrictions(event) {
 
-        let possible_points = get_possible_points(event.target.value)
-        render_possible_points(event.target,possible_points,);
+        //let possible_points = get_possible_points(event.target.value)
+        //render_possible_points(event.target,possible_points,);
 
         if (event.target.value !== '-') {
 
