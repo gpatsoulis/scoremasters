@@ -64,6 +64,12 @@ class FixturesShortcode
         $output .= $this->template->container_start;
         $matches = ScmData::get_all_matches_for_current_fixture($fixture_id);
 
+        if(isset($player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'])){
+            $week_total_points = $player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'];
+            $output .= "<div>Πόντοι Εβδομάδας: {$week_total_points}</div>";
+        }
+        
+
         $current_date = new \DateTime();
         $current_date->setTimezone(new \DateTimeZone('Europe/Athens'));
 
@@ -88,6 +94,7 @@ class FixturesShortcode
 
                     $data["match-score"] = $score_home . ' - ' . $score_away;
 
+                    $data['match-points'] = '';
                     if(isset($player->player_points['fixture_id_' . $fixture_id]['match_id_' . $match->ID]['season-league']['points'])){
                         $points_gained = $player->player_points['fixture_id_' . $fixture_id]['match_id_' . $match->ID]['season-league']['points'];
                         $data['match-points'] = $points_gained;
