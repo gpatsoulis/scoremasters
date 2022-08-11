@@ -43,6 +43,7 @@ class CategoryChampionshipCompetition extends Competition {
         $this->post_object = $scm_league;
         $this->participants = ScmData::get_league_participants($scm_league);
         // todo : fix check for active league
+        $this->is_active = ScmData::competition_is_active($scm_competition);
         //$this->is_active = ScmData::league_is_active($scm_competition);
     }
 
@@ -52,7 +53,7 @@ class CategoryChampionshipCompetition extends Competition {
             //todo short playrs for score in older
             return array();
           }
-          
+
         $players_array = $this->participants;
 
         usort($players_array, array($this,'score_comparator'));
