@@ -137,6 +137,7 @@ class FixturesShortcode
                     }
                 }
 
+                $data['prediction-string'] = 'Δεν υπάρχει πρόβλεψη!';
                 if($prediction_string){
                     $data['prediction-string'] = $prediction_string;
                 }
