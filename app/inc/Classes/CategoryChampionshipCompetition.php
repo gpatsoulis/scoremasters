@@ -48,6 +48,11 @@ class CategoryChampionshipCompetition extends Competition {
 
     public function get_players_shorted_by_score(){
        
+        if(!$this->is_active){
+            //todo short playrs for score in older
+            return array();
+          }
+          
         $players_array = $this->participants;
 
         usort($players_array, array($this,'score_comparator'));

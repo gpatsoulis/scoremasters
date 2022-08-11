@@ -77,8 +77,11 @@ class SeasonLeagueCompetition extends Competition {
         $this->type = $terms[0]->slug;
     }
 
-    public function get_players_shorted_by_score(){
-       
+    public function get_players_shorted_by_score(): array {
+       if(!$this->is_active){
+         //todo short playrs for score in older
+         return array();
+       }
         $players_array = $this->participants;
 
         usort($players_array, array($this,'score_comparator'));

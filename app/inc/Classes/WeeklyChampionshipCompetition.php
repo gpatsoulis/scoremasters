@@ -46,6 +46,12 @@ class WeeklyChampionshipCompetition extends Competition {
         $participants = ScmData::get_league_participants($league);
 
         $this->closure =  function () use ( $participants ){
+
+            if(!$this->is_active){
+                //todo short playrs for score in older
+                return array();
+            }
+            
             usort($participants, array($this,'score_comparator'));
             return $participants;
         };
