@@ -71,7 +71,9 @@ final class FixtureTemplate implements TemplateInterface
                        {$data["away-team-image"]}
                    </div>
                </div>
+			   
            </div>
+		   <p class="player-prediction">{$data["prediction-string"]}</p>
        </div>
 HTML;
 

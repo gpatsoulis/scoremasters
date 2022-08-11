@@ -8,6 +8,7 @@ namespace Scoremasters\Inc\Shortcodes;
 use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\Player;
 use Scoremasters\Inc\Classes\FootballMatch;
+use Scoremasters\Inc\Classes\PlayerPrediction;
 
 //[Scoremasters\Inc\Shortcodes\FixturesShortcode]
 class FixturesShortcode
@@ -59,6 +60,8 @@ class FixturesShortcode
 
         //player data
         $player = new Player(wp_get_current_user());
+
+        
        
         //------- output start -------//
         $output .= $this->template->container_start;
@@ -109,10 +112,37 @@ class FixturesShortcode
 
                 // add match pointables
                 $current_match = new FootballMatch($match->ID);
+
                 $points_table = json_encode($current_match->points_table,  JSON_UNESCAPED_UNICODE);
                 $output .= "<div id='match_{$match->ID}_pointstable' data-pointstable='{$points_table}'></div>";
 
+                $prediction_post = ScmData::get_players_predictions_for_match( $match,$player->player_id);
+                $prediction_string = '';
+                if(!empty($prediction_post)){
+                    $player_prediction = new PlayerPrediction($prediction_post[0]);
+                    
+                    $prediction_string .= 'Προβλέψεις Αγώνα --- ';
+                    foreach($player_prediction->prediction as $key => $prediction){
+                        $value = $prediction;
+
+                        if($key === 'Scorer'){
+                            $value = (get_post($prediction))->post_title;
+                        }
+
+                        if($prediction === '-' || $prediction === '' || $key === 'homeTeam_id' || $key === 'awayTeam_id'){
+                            continue;
+                        }
+
+                        $prediction_string .= $key . ': ' . $value . " | ";
+                    }
+                }
+
+                if($prediction_string){
+                    $data['prediction-string'] = $prediction_string;
+                }
                
+
+                //var_dump( $player_prediction->prediction );
 
                 //error
                 $data['match-date'] = $match_date->getTimestamp();

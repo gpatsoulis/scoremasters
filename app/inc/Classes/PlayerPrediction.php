@@ -7,9 +7,22 @@ namespace Scoremasters\Inc\Classes;
 
 class PlayerPrediction {
 
-    public $predictions; // array['matchID' => ID, 'winner' => 12X, .....]
+    public $player_id;
+    public $match_id;
+    public $prediction; // array['matchID' => ID, 'winner' => 12X, .....]
 
-    public function __construct($post){
+    public function __construct(\WP_Post $prediction){
+
+        //check post type
+        if( 'scm-prediction' !== get_post_type($prediction)){
+            throw new \Exception( __METHOD__ . ' invalid post type post id: ' . $post->ID );
+        }
+
+        $prediction_data = unserialize($prediction->post_content);
+
+        $this->prediction = $prediction_data;
+        $this->player_id = $prediction->post_author;
+        $this->match_id = (explode('-',$prediction->post_title))[0];
         
     }
 
@@ -31,22 +44,3 @@ class PlayerPrediction {
         */
     }
 }
-
-/*
-$date_query = array(
-    'column'  => 'post_date',
-    'compare' => '=',
-    array(
-        'year' => ,
-        'month' =>,
-        'day' => 
-    )
-
-);
-
-$args = array(
-    'author' => PlayerID,
-    'post_type' => 'predictions',
-    'date_query' => $date_query,
-);
-*/ 
