@@ -64,7 +64,7 @@ final class ScmData
         return $current_fixture;
     }
 
-    public static function get_previous_fixture()
+    public static function get_previous_fixture(): \WP_Post
     {
 
         $current_season = self::get_current_season();
@@ -79,7 +79,9 @@ final class ScmData
         //get active week
         $posts = get_posts($args);
         if(empty($posts)){
-            return '';
+            //needs testing
+            return self::get_default_WP_Post();
+            //return '';
         }
 
         $prev_fixture = end($posts);
@@ -281,13 +283,13 @@ final class ScmData
 
         $season_start_date_str = get_field('scm-season-start-date', $current_season->ID);
         if (!$season_start_date_str) {
-            error_log(static::class . ' scm-season-start-date error');
+            error_log( __METHOD__ . ' scm-season-start-date error');
         }
         $season_start_date = new \DateTime($season_start_date_str, new \DateTimeZone('Europe/Athens'));
 
         $season_end_date_str = get_field('scm-season-end-date', $current_season->ID);
         if (!$season_end_date_str) {
-            error_log(static::class . ' scm-season-end-date error');
+            error_log(__METHOD__ . ' scm-season-end-date error');
         }
         $season_end_date = new \DateTime($season_end_date_str, new \DateTimeZone('Europe/Athens'));
 
@@ -487,6 +489,10 @@ final class ScmData
     {
         //repeater field scm-user-players-list -> scm-user-player
         $repeater_array = get_field('scm-user-players-list', $scm_league_id);
+
+        if(!$repeater_array){
+            return array();
+        }
 
         //$participants = array_map(function ($field){return $field['scm-user-player'];} , $repeater_array);
         $participants = array_map(fn($field) => $field['scm-user-player'], $repeater_array);

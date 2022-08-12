@@ -9,6 +9,7 @@ use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\Player;
 use Scoremasters\Inc\Classes\FootballMatch;
 use Scoremasters\Inc\Classes\PlayerPrediction;
+use Scoremasters\Inc\Base\CalculateScore;
 
 //[Scoremasters\Inc\Shortcodes\FixturesShortcode]
 class FixturesShortcode
@@ -79,7 +80,7 @@ class FixturesShortcode
 
         if ($matches) {
             foreach ($matches as $match) {
-
+                
                 $data['openForPredictions'] = true;
 
                 //when creating new datetime always set timezone
@@ -88,14 +89,24 @@ class FixturesShortcode
                 //scm-full-time-score
                 //scm-full-time-home-score
                 //scm-full-time-away-score
+                $prediction_post = ScmData::get_players_predictions_for_match( $match,$player->player_id);
+                $current_match = (new FootballMatch($match->ID))->setup_data();
 
                 unset($data['match-points']);
+                unset($data['live-score']);
+
                 if ($current_date > $match_date) {
                     $data['openForPredictions'] = false;
 
                     $score_acf_group = get_field('scm-full-time-score', $match->ID);
                     $score_home = $score_acf_group['scm-full-time-home-score'];
                     $score_away = $score_acf_group['scm-full-time-away-score'];
+
+                    if(!$score_acf_group['scm-full-time-home-score']){
+                        $half_time_score = get_field('scm-half-time-score', $match->ID);
+                        $score_home = $half_time_score['scm-half-time-home-score'];
+                        $score_away = $half_time_score['scm-half-time-away-score'];
+                    }
 
                     $data["match-score"] = $score_home . ' - ' . $score_away;
 
@@ -104,19 +115,21 @@ class FixturesShortcode
                         $points_gained = $player->player_points['fixture_id_' . $fixture_id]['match_id_' . $match->ID]['season-league']['points'];
                         $data['match-points'] = $points_gained;
                     }
-                    
+
+                    $total_points = CalculateScore::calculate_points_after_prediction_submit($prediction_post[0],$current_match);
+                    $data['live-score'] = $total_points;
                 }
 
                 $data["player-id"] = get_current_user_id();
                 $data['match-id'] = $match->ID;
 
                 // add match pointables
-                $current_match = new FootballMatch($match->ID);
+                //$current_match = new FootballMatch($match->ID);
 
                 $points_table = json_encode($current_match->points_table,  JSON_UNESCAPED_UNICODE);
                 $output .= "<div id='match_{$match->ID}_pointstable' data-pointstable='{$points_table}'></div>";
 
-                $prediction_post = ScmData::get_players_predictions_for_match( $match,$player->player_id);
+                //$prediction_post = ScmData::get_players_predictions_for_match( $match,$player->player_id);
                 $prediction_string = '';
                 if(!empty($prediction_post)){
                     $player_prediction = new PlayerPrediction($prediction_post[0]);
@@ -142,8 +155,6 @@ class FixturesShortcode
                     $data['prediction-string'] = $prediction_string;
                 }
                
-
-                //var_dump( $player_prediction->prediction );
 
                 //error
                 $data['match-date'] = $match_date->getTimestamp();

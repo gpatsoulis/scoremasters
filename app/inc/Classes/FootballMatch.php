@@ -71,10 +71,10 @@ class FootballMatch {
         $this->match_date =  new \DateTime($wp_match->post_date, new \DateTimeZone('Europe/Athens'));
         
         $points_table = get_field('match_points_table', $match_id);
-        $this->points_table=$points_table;
+        $this->points_table = $points_table;
 
         if(!$points_table){
-            $this->points_table=get_option('points_table');
+            $this->points_table = get_option('points_table');
         }
 
         
@@ -130,8 +130,16 @@ class FootballMatch {
 
     protected function get_score(){
 
-        $this->half_time_score = get_field('scm-half-time-score',$this->post_data->ID);
-        $this->final_score = get_field('scm-full-time-score',$this->post_data->ID);
+        $half_time_score = get_field('scm-half-time-score',$this->post_data->ID);
+        $this->half_time_score = $half_time_score;
+        //needs testing
+        $final_score = get_field('scm-full-time-score',$this->post_data->ID);
+
+        if(!$final_score){
+            $final_score = $half_time_score;
+        }
+
+        $this->final_score = $final_score;
 
     }
 

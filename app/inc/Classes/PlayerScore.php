@@ -11,15 +11,18 @@ class PlayerScore
 {
     public $player_id;
 
-    public $season_id;
+    
     public $total_points;
     public $data;
+
+    public $current_season;
 
     protected $query;
 
     public function __construct( $player_id ){
 
         $this->player_id = $player_id;
+        $this->current_season = ScmData::get_current_season();
 
     }
 
@@ -29,11 +32,13 @@ class PlayerScore
         return $this;
     }
 
-    public function for_season_id( $season_id ){
+    public function for_season_id( $season_id = '' ){
 
-        $this->season_id = $season_id;
+        if( $season_id === ''){
+            $season_id = $this->current_season->ID;
+        }
 
-        $data = get_user_meta((int) $this->player_id, 'score_points_seasonID_' . $season_id, false );
+        $data = get_user_meta((int) $this->player_id, 'score_points_seasonID_' . $season_id, true );
 
         if($data === false){
             throw new \Exception(__METHOD__ . ' invalid id for player: ' . $this->player_id );
@@ -49,63 +54,22 @@ class PlayerScore
             return $this;
         }
 
-        $this->data = $data[0];
+        $this->data = $data;
         return $this;
-
     }
 
-    public function for_fixture_id ( $fixture_id ){
-
-        if( !isset( $this->data['fixture_id_' . $fixture_id ] ) ){
-            $this->query['for_fixture'] = false;
-            return $this;
+    public function for_fixture_id( $fixture_id = '' ):array
+    {
+        if( $fixture_id === ''){
+            $data = $this->data;
+            unset($data['total_points']);
+            return current($data);
         }
 
-        $this->query['for_fixture']['data'] = $this->data['fixture_id_' . $fixture_id ];
-        $this->query['for_fixture']['fixture_id'] = $fixture_id;
-
-        return $this;
-
+        return $this->data['fixture_id_' . $fixture_id];
     }
 
-    public function for_match_id( $match_id ){
-
-        if( !isset( $this->query['for_fixture']['data']['match_id_' . $match_id] ) ){
-            $this->query['for_match'] = false;
-            return $this;
-        }
-
-        $this->query['for_match']['data'] = $this->query['for_fixture']['data']['match_id_' . $match_id];
-        $this->query['for_match']['match_id'] = $match_id;
-
-        return $this;
-    }
-
-    public function for_competition_name( $competition_name ){
-
-        if( !isset( $this->query['for_fixture']['data']['for_match']['data'][$competition_name] ) ){
-            $this->query['for_competition'] = false;
-            return $this;
-        }
-
-
-        $this->query['for_competition']['data'] = $this->query['for_fixture']['data']['for_match']['data'][$competition_name];
-        $this->query['for_competition']['competition_name'] = $competition_name;
-
-        return $this;
-    }
-
-    public function parse_query(){
-
-    }
-
-    public function for_last_game ( ) {
-
-    }
-
-    public function save_score( ){
-
-    }
+    
 
     
 }

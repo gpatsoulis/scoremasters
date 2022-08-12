@@ -53,12 +53,14 @@ class PlayerSetup
         }
 
         $field = get_field_object('scm-user-players-list', $post_id);
-        $key = $field['key'];
+        
         // check for field 'scm-user-players-list'
 
         if (!isset($_POST['acf'][$key])) {
             return;
         }
+
+        $key = $field['key'];
 
         $league = get_post($post_id);
 
@@ -94,8 +96,8 @@ class PlayerSetup
         }
 
 
-        file_put_contents(SCM_DEBUG_PATH . '/assign_player_in_scm_league.json', 'old_values_array ' . json_encode($old_values_array) . "\n", FILE_APPEND);
-        file_put_contents(SCM_DEBUG_PATH . '/assign_player_in_scm_league.json', 'new_values_array ' . json_encode($new_values_array) . "\n", FILE_APPEND);
+        //file_put_contents(SCM_DEBUG_PATH . '/assign_player_in_scm_league.json', 'old_values_array ' . json_encode($old_values_array) . "\n", FILE_APPEND);
+        //file_put_contents(SCM_DEBUG_PATH . '/assign_player_in_scm_league.json', 'new_values_array ' . json_encode($new_values_array) . "\n", FILE_APPEND);
 
 
         $get_old_array_dif = array_diff($old_values_array, $new_values_array);

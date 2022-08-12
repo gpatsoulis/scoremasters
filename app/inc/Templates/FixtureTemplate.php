@@ -21,6 +21,11 @@ final class FixtureTemplate implements TemplateInterface
     {
 		$popup_btn = "<button class='activate-prediction-popup'>Παίξε</button>";
 		
+		$live_score = '';
+		if(isset($data['live-score'])){
+			$live_score = "<p class=\"live-score\">Live Score - {$data['live-score']}</p>";
+		}
+
 		if ($data['openForPredictions'] === false){
 			//$popup_btn = '<div class="scm-match-finished"><h3>FINISHED</h3><h3 class="scm-match-score">'. $data["match-score"] .'</h3></div>';
 			$popup_btn = '<div class="scm-match-finished"><h3 class="scm-match-score">'. $data["match-score"] .'</h3></div>';
@@ -74,6 +79,7 @@ final class FixtureTemplate implements TemplateInterface
 			   
            </div>
 		   <p class="player-prediction">{$data["prediction-string"]}</p>
+		   {$live_score}
        </div>
 HTML;
 

@@ -72,9 +72,14 @@ class FixtureSetup
         }
 
         $prev_fixture = ScmData::get_previous_fixture();
+        if($prev_fixture->post_title === 'default'){
+            return;
+        }
+        /*
         if ($prev_fixture === '') {
             return;
         }
+        */
 
         $match_data = array(
             'fixture_id' => $prev_fixture->ID,
