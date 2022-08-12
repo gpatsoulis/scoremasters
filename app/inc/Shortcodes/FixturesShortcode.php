@@ -116,8 +116,10 @@ class FixturesShortcode
                         $data['match-points'] = $points_gained;
                     }
 
-                    $total_points = CalculateScore::calculate_points_after_prediction_submit($prediction_post[0],$current_match);
-                    $data['live-score'] = $total_points;
+                    if(!empty($prediction_post) && isset($prediction_post[0])){
+                        $total_points = CalculateScore::calculate_points_after_prediction_submit($prediction_post[0],$current_match);
+                        $data['live-score'] = $total_points;
+                    }
                 }
 
                 $data["player-id"] = get_current_user_id();
