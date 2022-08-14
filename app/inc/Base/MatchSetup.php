@@ -112,6 +112,14 @@ class MatchSetup
         return $value;
     }
 
+     /**
+     * Trigger function for weekly points calculation
+     * meta field named "match_points_table"
+     *
+     * @param array        $match_data     An array of error messages (strings) for the given attachment. 
+     * @param array        $players_data       An array containing the $_FILE data for the attachment about to be uploaded
+     * @param array        $field      The field array containing all settings.
+     */
     // todo: use match object instead of match_data array
     public static function scm_match_trigger_players_weekly_point_calculation($match_data, $players_data)
     {
@@ -215,16 +223,13 @@ class MatchSetup
      */
     public static function set_new_points_table_in_match($errors, $file, $field) {
 
-    
         /* Test ajax file upload*/
         if( SCM_DEBUG ){
             //$logfile = SCM_DEBUG_PATH .'/upload_points_table.json';
             //$content = file_get_contents($_FILES['async-upload']['tmp_name']);
-            
             //file_put_contents($logfile,json_encode($file));
         }
         
-    
         $csvdata = file_get_contents($_FILES['async-upload']['tmp_name']);
     
         $lines = explode("\n", $csvdata); // split data by new lines
@@ -238,8 +243,6 @@ class MatchSetup
             "-2"=>array(),
             "-3"=>array()
         );
-    
-        
     
         foreach ($lines as $i => $line) {
     
@@ -270,7 +273,6 @@ class MatchSetup
         }
 
         update_post_meta( $match_id , 'match_points_table', $new_points_table);
-    
     } 
 
 }
