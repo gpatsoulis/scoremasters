@@ -206,7 +206,8 @@ class MatchSetup
     //default options -> current season, curent fixture ,
 
     /**
-     * Set custom points table for single match
+     * Set custom points table for single match, the new table is saved in custom post
+     * meta field named "match_points_table"
      *
      * @param array        $errors     An array of error messages (strings) for the given attachment. 
      * @param array        $file       An array containing the $_FILE data for the attachment about to be uploaded
@@ -216,16 +217,27 @@ class MatchSetup
 
     
         /* Test ajax file upload*/
+        if( SCM_DEBUG ){
+            //$logfile = SCM_DEBUG_PATH .'/upload_points_table.json';
+            //$content = file_get_contents($_FILES['async-upload']['tmp_name']);
+            
+            //file_put_contents($logfile,json_encode($file));
+        }
         
-        /*$logfile = __DIR__.'/logs.json';
-        $content = file_get_contents($_FILES['async-upload']['tmp_name']);
-        file_put_contents($logfile,$content);*/
     
         $csvdata = file_get_contents($_FILES['async-upload']['tmp_name']);
     
         $lines = explode("\n", $csvdata); // split data by new lines
     
-        $new_points_table=array("0"=>array(),"1"=>array(),"2"=>array(),"3"=>array(),"-1"=>array(),"-2"=>array(),"-3"=>array());
+        $new_points_table = array(
+            "0"=>array(),
+            "1"=>array(),
+            "2"=>array(),
+            "3"=>array(),
+            "-1"=>array(),
+            "-2"=>array(),
+            "-3"=>array()
+        );
     
         
     
@@ -245,7 +257,17 @@ class MatchSetup
             $new_points_table["-3"][$key]= trim($values[7]); unset($values[7]);
     
         }
-        $match_id=1118;
+
+        // filter user input
+        $match_id = filter_var($_POST['post_id'], FILTER_SANITIZE_NUMBER_INT);
+        // check if post exists
+        $match = get_post($match_id);
+
+        // if post not exists throw exception
+        if(is_null($match)){
+            error_log(__METHOD__ . ' error post_id  ID : ' . $match_id);
+            throw new \Exception(__METHOD__ . ' invalid id for match ( upload custom csv points table) : ' . $match_id );
+        }
 
         update_post_meta( $match_id , 'match_points_table', $new_points_table);
     

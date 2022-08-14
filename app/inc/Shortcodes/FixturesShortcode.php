@@ -37,7 +37,6 @@ class FixturesShortcode
 
         $post_value = null;
         // 'scm_fixture_setup' -> name of nonce field
-
         //var_dump($_POST);
 
         if (isset($_POST['fixture_id'])
@@ -110,12 +109,12 @@ class FixturesShortcode
 
                     $data["match-score"] = $score_home . ' - ' . $score_away;
 
-                    
                     if(isset($player->player_points['fixture_id_' . $fixture_id]['match_id_' . $match->ID]['season-league']['points'])){
                         $points_gained = $player->player_points['fixture_id_' . $fixture_id]['match_id_' . $match->ID]['season-league']['points'];
                         $data['match-points'] = $points_gained;
                     }
 
+                    //if the game has finished no need to calculate score here
                     if(!empty($prediction_post) && isset($prediction_post[0])){
                         $total_points = CalculateScore::calculate_points_after_prediction_submit($prediction_post[0],$current_match);
                         $data['live-score'] = $total_points;
@@ -132,31 +131,15 @@ class FixturesShortcode
                 $output .= "<div id='match_{$match->ID}_pointstable' data-pointstable='{$points_table}'></div>";
 
                 //$prediction_post = ScmData::get_players_predictions_for_match( $match,$player->player_id);
+
+                // show prediction for current match 
+                $data['prediction-string'] = 'Δεν υπάρχει πρόβλεψη!';
                 $prediction_string = '';
                 if(!empty($prediction_post)){
                     $player_prediction = new PlayerPrediction($prediction_post[0]);
-                    
-                    $prediction_string .= 'Προβλέψεις Αγώνα --- ';
-                    foreach($player_prediction->prediction as $key => $prediction){
-                        $value = $prediction;
-
-                        if($key === 'Scorer'){
-                            $value = (get_post($prediction))->post_title;
-                        }
-
-                        if($prediction === '-' || $prediction === '' || $key === 'homeTeam_id' || $key === 'awayTeam_id'){
-                            continue;
-                        }
-
-                        $prediction_string .= $key . ': ' . $value . " | ";
-                    }
-                }
-
-                $data['prediction-string'] = 'Δεν υπάρχει πρόβλεψη!';
-                if($prediction_string){
+                    $prediction_string .= (string) $player_prediction;
                     $data['prediction-string'] = $prediction_string;
                 }
-               
 
                 //error
                 $data['match-date'] = $match_date->getTimestamp();

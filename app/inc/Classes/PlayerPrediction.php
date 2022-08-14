@@ -43,4 +43,41 @@ class PlayerPrediction {
         The Player will be the author of the post with post type prediction
         */
     }
+
+    protected function get_prediction_data(): array {
+
+        $predictions = $this->prediction;
+        
+        $prediction_data = array();
+
+        foreach($predictions as $key => $prediction){
+            $value = $prediction;
+
+            if($prediction === '-' || $prediction === '' || $key === 'homeTeam_id' || $key === 'awayTeam_id'){
+                continue;
+            }
+
+            if($key === 'Scorer'){
+                $value = (get_post($prediction))->post_title;
+            }
+
+            $prediction_data[$key] = $value;
+        }
+
+        return $prediction_data;
+
+    }
+
+    public function __toString(): string {
+        
+        $data = $this->get_prediction_data();
+
+        $str = 'Προβλέψεις Αγώνα --- ';
+
+        foreach( $data as $key => $value ){
+            $str .= $key . ': ' . $value . " | ";
+        }
+
+        return $str;
+    }
 }
