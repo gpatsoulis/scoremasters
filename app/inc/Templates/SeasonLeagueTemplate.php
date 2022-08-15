@@ -39,7 +39,7 @@ HTML;
         <style>
             .scm-season-league-score {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr;
+                grid-template-columns: 1fr 3fr 1fr 2fr;
                 grid-template-rows: auto;
                 max-width: 800px;
                 margin:0 auto;

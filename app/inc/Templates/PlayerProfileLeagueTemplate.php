@@ -46,6 +46,28 @@ HTML;
             margin-right: 40px;
         }
 
+        .scm-player-league-info h3{
+            color: var( --e-global-color-primary );
+            font-family: var( --e-global-typography-c9a579c-font-family ), Sans-serif;
+            font-size: var( --e-global-typography-c9a579c-font-size );
+            font-weight: var( --e-global-typography-c9a579c-font-weight );
+            text-transform: var( --e-global-typography-c9a579c-text-transform );
+            line-height: var( --e-global-typography-c9a579c-line-height );
+            letter-spacing: var( --e-global-typography-c9a579c-letter-spacing );
+            word-spacing: var( --e-global-typography-c9a579c-word-spacing );
+            width: fit-content;
+        }
+
+        .scm-player-league-info {
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .scm-player-league-info img {
+            width: 100px;
+            margin-right: 0px !important;
+        }
+
         </style>
 HTML;
 

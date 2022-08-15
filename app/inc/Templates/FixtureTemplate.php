@@ -189,6 +189,15 @@ HTML;
 				margin: 5px 0 0 0 ;
 			}
 
+			.player-prediction {
+				display: flex;
+				background-color: var( --e-global-color-c15c190 );
+				padding: 8px;
+				color:#fff;
+				justify-content: center;
+				border-bottom: 2px solid #E1C983;
+			}
+
 			@media only screen and (max-width: 600px){
     
 				.scm-fixture-list-row .scm-home-team, .scm-fixture-list-row .scm-away-team{
