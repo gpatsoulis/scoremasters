@@ -358,6 +358,14 @@ function get_player_position($data)
     return get_post_meta($data['id'], 'scm-player-position', true);
 }
 
+register_rest_field('scm-pro-player', 'points', array('get_callback' => 'get_player_points'));
+
+function get_player_points($data)
+{
+    $points = get_post_meta($data['id'], 'scm-player-points', true);
+    return $points;
+}
+
 function debug_redirect_mail($args)
 {
     $args['to'] = array('patsoulis.george@gmail.com', 'kyrkag1@gmail.com', 'tmountakis@gmail.com');

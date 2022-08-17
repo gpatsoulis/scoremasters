@@ -35,6 +35,8 @@ class FixturesShortcode
         //todo: check for valid match date
         // if date has passed disable "play button" from shortcode
 
+        var_dump((ScmData::get_current_season())->post_title);
+        
         $post_value = null;
         // 'scm_fixture_setup' -> name of nonce field
         //var_dump($_POST);
@@ -151,7 +153,13 @@ class FixturesShortcode
                 $data["home-team-id"] = $repeater_teams[0]["home-team"][0]->ID;
                 $data["home-team-image"] = get_the_post_thumbnail($repeater_teams[0]["home-team"][0]->ID);
                 $data['home-team-capability'] = get_field('scm-team-capabilityrange', $repeater_teams[0]["home-team"][0]->ID);
-                //var_dump(get_post_meta($repeater_teams[0]["home-team"][0]->ID,'scm-team-capabilityrange'));
+
+                if(!$data['home-team-capability']){
+                    $data['home-team-capability'] = 0;
+                }
+
+                //var_dump(get_field('scm-team-capabilityrange', $repeater_teams[0]["home-team"][0]->ID));
+                //var_dump(get_post_meta($repeater_teams[0]["home-team"][0]->ID,'scm-team-capabilityrange',true));
 
                 $data["stadium"] = $repeater_teams[0]["home-team"][0]->post_content;
                 $data["match-date-string"] = $match->post_date;
@@ -160,6 +168,10 @@ class FixturesShortcode
                 $data["away-team-id"] = $repeater_teams[0]["away-team"][0]->ID;
                 $data["away-team-image"] = get_the_post_thumbnail($repeater_teams[0]["away-team"][0]->ID);
                 $data['away-team-capability'] = get_field('scm-team-capabilityrange', $repeater_teams[0]["away-team"][0]->ID);
+
+                if(!$data['away-team-capability']){
+                    $data['away-team-capability'] = 0;
+                }
 
                 $output .= $this->template->get_html($data);
             }

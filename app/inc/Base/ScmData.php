@@ -292,7 +292,7 @@ final class ScmData
             error_log(__METHOD__ . ' scm-season-end-date error');
         }
         $season_end_date = new \DateTime($season_end_date_str, new \DateTimeZone('Europe/Athens'));
-
+        
         $args = array(
             'post_type' => 'scm-fixture',
             'post_status' => 'publish',

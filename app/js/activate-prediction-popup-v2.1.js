@@ -309,7 +309,7 @@ async function getPlayersList(team_id) {
 
     //let url = 'http://scoremasters.test/wp-json/wp/v2/scm-pro-player?';
     let url = currentDomain + '/wp-json/wp/v2/scm-pro-player?';
-    let params = 'meta_key=scm-player-team&meta_value=' + team_id + '&per_page=30&_fields=id,status,type,featured_media,acf,title,position';
+    let params = 'meta_key=scm-player-team&meta_value=' + team_id + '&per_page=30&_fields=id,status,type,featured_media,acf,title,position,points';
 
     let responce = await fetch(url + params, {
         method: 'GET',
@@ -354,7 +354,7 @@ function setUpPlayersList(data, popup) {
 
                 let option = new Option(awayTeam_name + ' - ' + playerName, playerID);
                 option.dataset.position = x.position;
-
+                option.dataset.points = x.points;
                 return option;
             }
         );
@@ -378,6 +378,7 @@ function setUpPlayersList(data, popup) {
 
                 let option = new Option(homeTeam_name + ' - ' + playerName, playerID);
                 option.dataset.position = x.position;
+                option.dataset.points = x.points;
 
                 return option;
             }
@@ -471,7 +472,12 @@ function calc_possible_points(event){
 
     if(event.target.id == 'form-field-scm_scorer'){
         let playerPosition = event.target.querySelector('[value="'+event.target.value+'"]');
-        possible_points = player_points_table[playerPosition.dataset.position]
+        if(playerPosition.dataset.points !== ''){
+            possible_points = playerPosition.dataset.points;
+        }else{
+            possible_points = player_points_table[playerPosition.dataset.position];
+        }
+        
     }
 
     if(!points_text){
