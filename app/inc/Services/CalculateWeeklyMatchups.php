@@ -186,6 +186,8 @@ class CalculateWeeklyMatchups
 
         //var_dump($this->matchups->get_all_matchups());
         //var_dump($this->next_matchups);
+
+       
         
         if(is_null($this->next_matchups) || $this->next_matchups === 'not enough players'){
             return;
@@ -199,6 +201,11 @@ class CalculateWeeklyMatchups
 
         if ($id === false) {
             throw new \Exception(__METHOD__ . ' failure or same value for meta "competition_matchups", id: ' . $this->competition_id);
+        }
+
+        if(SCM_DEBUG){
+            file_put_contents(SCM_DEBUG_PATH . '/test_matchups.json', json_encode($data) . "\n",FILE_APPEND);
+            
         }
 
     }

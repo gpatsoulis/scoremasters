@@ -37,7 +37,7 @@ class FixturesShortcode
 
         //var_dump((ScmData::get_current_season())->post_title);
         $current_season = ScmData::get_current_season();
-        echo $current_season->post_title;
+        echo '<p>Season: ' . $current_season->post_title . '</p>';
         
         $post_value = null;
         // 'scm_fixture_setup' -> name of nonce field
@@ -65,6 +65,13 @@ class FixturesShortcode
                 return '<!-- No Current Fixture for Season-->'; 
             }
         }
+
+        $fixture = get_post($fixture_id);
+        if(!$fixture){
+            $fixture = ScmData::get_default_WP_Post();
+        }
+
+        echo '<p>Fixture: ' . $fixture->post_title . '</p>';
 
         $output = '';
         $data = array();

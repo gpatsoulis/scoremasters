@@ -24,11 +24,12 @@ final class ScmData
 
         if (empty($posts)) {
             error_log(static::class . ' exporter ---- no active season');
-            throw new Exception(static::class . ' no active season');
+            return ScmData::get_default_WP_Post();
+            //throw new Exception(static::class . ' no active season');
         }
 
         if (!isset($posts[0])) {
-            return null;
+            return ScmData::get_default_WP_Post();
         }
 
         $curent_season = $posts[0];
@@ -51,12 +52,13 @@ final class ScmData
         $posts = get_posts($args);
 
         if (empty($posts)) {
-            error_log('exporter---- no active fixture');
-            throw new Exception(__METHOD__ . ' no active fixture');
+            error_log(__METHOD__ . ' exporter---- no active fixture');
+            return ScmData::get_default_WP_Post();
+            //throw new \Exception(__METHOD__ . ' no active fixture');
         }
 
         if (!isset($posts[0])) {
-            return null;
+            return ScmData::get_default_WP_Post();
         }
 
         $current_fixture = $posts[0];
@@ -179,16 +181,21 @@ final class ScmData
 
     }
 
-    public static function get_all_matches_for_current_fixture($fixture_id = null)
+    public static function get_all_matches_for_current_fixture($fixture_id = null): array
     {
 
         $current_fixture = self::get_current_fixture($fixture_id);
+
+        if($current_fixture->post_title === 'default'){
+            return array();
+        }
 
         // wrong use of repeater field 'week-matches' !!!!
         $matches = get_field('week-matches', $current_fixture->ID)[0]['week-match'];
 
         if (!$matches) {
             error_log(__METHOD__ . ' get_field("week-matches") error ' . $fixture_id);
+            return array();
             //throw new Exception(static::class . ' get_field("week-matches") error');
         }
 
@@ -283,6 +290,8 @@ final class ScmData
             error_log( __METHOD__ . ' scm-season-start-date error');
         }
         $season_start_date = new \DateTime($season_start_date_str, new \DateTimeZone('Europe/Athens'));
+        //dirty fix
+        $season_start_date->modify('-1 hour');
 
         $season_end_date_str = get_field('scm-season-end-date', $current_season->ID);
         if (!$season_end_date_str) {

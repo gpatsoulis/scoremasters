@@ -17,12 +17,14 @@ class FixtureSetup
     public static function init()
     {
         add_filter('acf/update_value/name=week-start-date', array(static::class, 'scm_fixture_update_post_date'), 10, 4);
+        add_filter('wp_insert_post_data',array(static::class,'set_fixture_status_to_future'),99,4);
         add_action('elementor_pro/forms/new_record', array(static::class, 'scm_player_prediction'), 10, 2);
-        //add_action('publish_scm-fixture', array(static::class, 'add_weekly_championship_players_matchups'), 10, 2);
+        
         add_action('transition_post_status', array(static::class, 'add_weekly_championship_players_matchups'), 10, 3);
         add_action('transition_post_status', array(static::class, 'scm_match_trigger_players_weekly_point_calculation'), 15, 3);
         
-        add_filter('wp_insert_post_data',array(static::class,'set_fixture_status_to_future'),99,4);
+        
+        //add_action('publish_scm-fixture', array(static::class, 'add_weekly_championship_players_matchups'), 10, 2);
         //add_action('wp_after_insert_post',array(static::class,'set_fixture_status_to_future2'),99,4);
     }
 
@@ -75,13 +77,15 @@ class FixtureSetup
             return;
         }
 
+        if($old_status !== 'future'){
+            return;
+        }
+
         if ($new_status !== 'publish') {
             return;
         }
 
-        if ( $old_status !== 'future') {
-            return;
-        }
+        
 
         $prev_fixture = ScmData::get_previous_fixture();
         if($prev_fixture->post_title === 'default'){
@@ -123,10 +127,15 @@ class FixtureSetup
             return;
         }
 
-        if ($new_status !== 'publish' && $old_status === 'publish') {
+        if ($new_status !== 'future') {
             return;
         }
 
+       
+
+        if(SCM_DEBUG){
+            error_log( __METHOD__ . ' calculating weekly matchups' );
+        }
         //weekly-championship
 
         // get competition WP_Post
