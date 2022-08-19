@@ -37,7 +37,7 @@ class FixturesShortcode
 
         //var_dump((ScmData::get_current_season())->post_title);
         $current_season = ScmData::get_current_season();
-        echo '<p>Season: ' . $current_season->post_title . '</p>';
+        echo '<p class="test">Season: ' . $current_season->post_title . '</p>';
         
         $post_value = null;
         // 'scm_fixture_setup' -> name of nonce field
@@ -71,7 +71,7 @@ class FixturesShortcode
             $fixture = ScmData::get_default_WP_Post();
         }
 
-        echo '<p>Fixture: ' . $fixture->post_title . '</p>';
+        echo '<p class="test">Fixture: ' . $fixture->post_title . '</p>';
 
         $output = '';
         $data = array();

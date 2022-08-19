@@ -33,13 +33,13 @@ class CurrentPlayerMatchupShortcode
         $player = new Player(wp_get_current_user());
         //var_dump($player->player_points);
         
-        $palyer_league = $player->get_league();
+        $player_league = $player->get_league();
         $current_fixture = ScmData::get_current_fixture();
 
         $current_weekly_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
         $weekly_matchups = new WeeklyMatchUps($current_weekly_competition->ID);
 
-        $pairs = $weekly_matchups->get_matchups()->by_fixture_id($current_fixture->ID)->by_league_id($palyer_league);
+        $pairs = $weekly_matchups->get_matchups()->by_fixture_id($current_fixture->ID)->by_league_id($player_league);
 
         if(empty( $pairs )){
             $output = $this->template->container_start;
@@ -94,7 +94,7 @@ class CurrentPlayerMatchupShortcode
 
         $future_data = array();
         if ($next_feature->post_type !== 'default') {
-            $future_pairs = $weekly_matchups->get_matchups()->by_fixture_id($next_feature->ID)->by_league_id($palyer_league);
+            $future_pairs = $weekly_matchups->get_matchups()->by_fixture_id($next_feature->ID)->by_league_id($player_league);
             $new_future_pairs = [];
             for ($i = 0; $i < (count($future_pairs) / 2); $i++) {
 
