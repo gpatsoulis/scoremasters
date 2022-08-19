@@ -65,6 +65,10 @@ class MatchSetup
     public static function scm_match_trigger_players_point_calculation($value, $post_id, array $field, $original)
     {
 
+        if($value == ''){
+            return $value;
+        }
+
         if (get_post_type($post_id) !== 'scm-match') {
             return $value;
         }
@@ -81,6 +85,10 @@ class MatchSetup
 
         if (isset($end_time[0]) && $end_time[0] === $value) {
             return $value;
+        }
+
+        if(SCM_DEBUG){
+            error_log(__METHOD__ . ' match event calculate score');
         }
 
         $calc_score = new CalculateMatchScore(intval($post_id));
