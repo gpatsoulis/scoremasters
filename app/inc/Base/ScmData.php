@@ -79,9 +79,7 @@ final class ScmData
         //get active week
         $posts = get_posts($args);
         if(empty($posts)){
-            //needs testing
             return self::get_default_WP_Post();
-            //return '';
         }
 
         $prev_fixture = end($posts);
@@ -89,11 +87,10 @@ final class ScmData
 
         //todo: fix return argument, return default WP_Post object
         if ($prev_fixture_date < $curent_season_date) {
-            return '';
+            return self::get_default_WP_Post();
         }
 
         return $prev_fixture;
-
     }
 
     public static function get_finished_matches_for_fixture(\WP_Post $current_fixture): array

@@ -9,6 +9,7 @@ use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\Player;
 use Scoremasters\Inc\Classes\WeeklyMatchUps;
 use Scoremasters\Inc\Services\CalculateWeeklyMatchups;
+use Scoremasters\Inc\Services\CalculateWeeklyPoints;
 
 class FixtureSetup
 {
@@ -20,9 +21,9 @@ class FixtureSetup
         //add_action('publish_scm-fixture', array(static::class, 'add_weekly_championship_players_matchups'), 10, 2);
         add_action('transition_post_status', array(static::class, 'add_weekly_championship_players_matchups'), 10, 3);
         add_action('transition_post_status', array(static::class, 'scm_match_trigger_players_weekly_point_calculation'), 15, 3);
-
-        //add_filter('acf/update_value/name=week-start-date', 'Scoremasters\Inc\Base\FixtureSetup::scm_fixture_update_post_date', 10, 4);
-        //add_action('elementor_pro/forms/new_record', 'Scoremasters\Inc\Base\FixtureSetup::scm_player_prediction', 10, 2);
+        
+        add_filter('wp_insert_post_data',array(static::class,'set_fixture_status_to_future'),99,4);
+        //add_action('wp_after_insert_post',array(static::class,'set_fixture_status_to_future2'),99,4);
     }
 
     public static function scm_fixture_update_post_date($value, $fixture_id, array $field, $original)
@@ -32,20 +33,31 @@ class FixtureSetup
             return $value;
         }
 
-        //(string)$value format: 20220406
-        $start_date = \DateTime::createFromFormat('Ymd', $value, new \DateTimeZone('Europe/Athens'))->setTime(0, 0);
+        //(string)$value format: 0000-00-00 00:00:00
+        //$start_date = \DateTime::createFromFormat('Y-m-d H:i:s', $value, new \DateTimeZone('Europe/Athens'))->setTime(0, 0);
+        $start_date = \DateTime::createFromFormat('Y-m-d H:i:s', $value, new \DateTimeZone('Europe/Athens'));
         //wp post_date format: 0000-00-00 00:00:00
+
         $wp_formated_date = $start_date->format('Y-m-d H:i:s');
+        $wp_formated_date_gmt =  get_gmt_from_date( $wp_formated_date );
 
         $now = new \DateTimeImmutable('', new \DateTimeZone('Europe/Athens'));
 
-        $post_status = 'publish';
+        $post_status = 'future';
 
-        if ($start_date > $now) {
-            $post_status = 'future';
+        if ($start_date < $now) {
+            $post_status = 'publish';
         }
 
-        $updated = wp_update_post(array('ID' => $fixture_id, 'post_date' => $wp_formated_date, 'post_status' => $post_status));
+       
+
+        $updated = wp_update_post(array('ID' => $fixture_id, 'post_date' => $wp_formated_date, 'post_date_gmt' => $wp_formated_date_gmt, 'post_status' => $post_status));
+
+        if(SCM_DEBUG){
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($value) . "\n",FILE_APPEND);
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($wp_formated_date) . "\n",FILE_APPEND);
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json','Update: ' .  json_encode($updated). "\n",FILE_APPEND);
+        }
 
         if (is_wp_error($updated)) {
             error_log($updated->get_error_messages());
@@ -75,11 +87,11 @@ class FixtureSetup
         if($prev_fixture->post_title === 'default'){
             return;
         }
-        /*
-        if ($prev_fixture === '') {
-            return;
-        }
-        */
+
+
+       if(SCM_DEBUG){
+        error_log( __METHOD__ . ' calculating weekly points');
+       }
 
         $match_data = array(
             'fixture_id' => $prev_fixture->ID,
@@ -282,6 +294,85 @@ class FixtureSetup
         // save user prediction
         $player_prediction = wp_insert_post($player_prediction_post);
         $ajax_handler->is_success = true;
+
+    }
+
+    /**
+     *  Set new post of post type 'scm-fixture' to post_status = future
+     * 
+     *  @param array   $data                 An array of slashed, sanitized, and processed post data.
+     *  @param array   $postarr              An array of sanitized (and slashed) but otherwise unmodified post data.
+     *  @param array   $unsanitized_postarr  An array of slashed yet *unsanitized* and unprocessed post data as originally passed to wp_insert_post().
+     *  @param bool    $update               Whether this is an existing post being updated.
+     */
+
+    public static function set_fixture_status_to_future( $data,$postarr,$unsanitized_postarr,$update ){
+
+        $post_type = "scm-fixture"; 
+
+        if( $data['post_type'] !== $post_type ){
+            return $data;
+        }
+
+        if ($update) {
+            return $data;
+        }
+
+        $post_date = new \DateTime($data['post_date'], new \DateTimeZone('Europe/Athens'));
+        $current_date = new \DateTime('',new \DateTimeZone('Europe/Athens'));
+
+        //add +houer day to newly created post
+        $new_date = $current_date->modify('+1 hour');
+        $data['post_date'] = $new_date->format('Y-m-d H:i:s');
+        $data['post_date_gmt'] = get_gmt_from_date($new_date->format('Y-m-d H:i:s'));
+
+        if(false && SCM_DEBUG){
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($data) . "\n",FILE_APPEND);
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json','Update: ' .  json_encode($update). "\n",FILE_APPEND);
+
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($current_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date > $current_date). "\n",FILE_APPEND);
+
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($_POST). "\n",FILE_APPEND);
+        }
+  
+         return $data;
+    }
+
+    public static function set_fixture_status_to_future2(  int $post_id,\WP_Post $post ,bool $update, $post_before ){
+
+        $post_type = "scm-fixture"; 
+
+        if($post->post_type !== $post_type){
+            return;
+        }
+
+        if( $update ){
+            return;
+        }
+
+        $post_date = new \DateTime($post->post_date, new \DateTimeZone('Europe/Athens'));
+        $current_date = new \DateTime('',new \DateTimeZone('Europe/Athens'));
+
+        $fixture_start_date_acf = get_field('week-start-date',$post_id);
+        $fixture_start_date_meta = get_post_meta($post_id, 'week-start-date');
+        $fixture_start_date = new \DateTime($fixture_start_date_acf, new \DateTimeZone('Europe/Athens'));
+
+
+        if(false && SCM_DEBUG){
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($fixture_start_date_acf) . "\n",FILE_APPEND);
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post) . "\n",FILE_APPEND);
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json','Update: ' .  json_encode($update). "\n",FILE_APPEND);
+
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode('post date: ' . $post_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode('current date: ' . $current_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($fixture_start_date > $current_date). "\n",FILE_APPEND);
+
+            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($_POST). "\n",FILE_APPEND);
+        }
+
+        return;
 
     }
 

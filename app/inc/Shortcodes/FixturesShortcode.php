@@ -35,7 +35,9 @@ class FixturesShortcode
         //todo: check for valid match date
         // if date has passed disable "play button" from shortcode
 
-        var_dump((ScmData::get_current_season())->post_title);
+        //var_dump((ScmData::get_current_season())->post_title);
+        $current_season = ScmData::get_current_season();
+        echo $current_season->post_title;
         
         $post_value = null;
         // 'scm_fixture_setup' -> name of nonce field
@@ -53,6 +55,15 @@ class FixturesShortcode
         if(!$fixture_id){
             $post = ScmData::get_current_fixture($fixture_id);
             $fixture_id = $post->ID;
+
+            $current_season_start_date = get_field('scm-season-start-date',$current_season->ID);
+            $curent_season_date = \DateTime::createFromFormat('Y-m-d H:i:s',$current_season_start_date, new \DateTimeZone('Europe/Athens'));
+            $curent_fixture_start_date = get_field('week-start-date',$fixture_id);
+            $curent_fixture_date = \DateTime::createFromFormat('Y-m-d H:i:s',$curent_fixture_start_date, new \DateTimeZone('Europe/Athens'));
+
+            if( $curent_fixture_date < $curent_season_date){
+                return '<!-- No Current Fixture for Season-->'; 
+            }
         }
 
         $output = '';
