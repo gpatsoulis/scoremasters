@@ -38,8 +38,17 @@ class CurrentPlayerMatchupShortcode
 
         $current_weekly_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
         $weekly_matchups = new WeeklyMatchUps($current_weekly_competition->ID);
+        //$weekly_matchups->get_all_matchups();
 
         $pairs = $weekly_matchups->get_matchups()->by_fixture_id($current_fixture->ID)->by_league_id($player_league);
+
+
+        //var_dump( $player->player_id);
+        //var_dump( $current_fixture->post_name);
+        //var_dump( $current_weekly_competition->post_name);
+        //var_dump( $weekly_matchups->matchups);
+        //var_dump( $player_league);
+      
 
         if(empty( $pairs )){
             $output = $this->template->container_start;

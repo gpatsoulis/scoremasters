@@ -32,6 +32,9 @@ class Player
         //add to factory class for player or to db class 
         $scm_league_array = get_user_meta((int) $this->player_id, 'scm_league_status',true);
         if (!empty($scm_league_array)) {
+            $scm_league = end($scm_league_array);
+            $this->scm_league = $scm_league['league_id'];
+
             if(isset($scm_league_array['season_id:' . $season->ID])){
                 $scm_league = $scm_league_array['season_id:' . $season->ID];
                 $this->scm_league = $scm_league['league_id'];

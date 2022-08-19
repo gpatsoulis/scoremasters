@@ -75,7 +75,6 @@ class WeeklyMatchUps
     //new functions for calculatescore
     public function get_matchups(){
         $current_matchups = get_post_meta($this->competition_id, $this->meta_key, false);
-        
 
         if ($current_matchups === false) {
             throw new \Exception(__METHOD__ . ' invalid post->ID for meta "competition_matchups", id: ' . $competition_id);
@@ -95,10 +94,14 @@ class WeeklyMatchUps
 
         $this->closure = function ( $league_id ) use ($fixture_id) {
 
+            //var_dump($this->matchups['fixture_id_' . $fixture_id]);
+            //var_dump($league_id);
+
             if(!isset($this->matchups['fixture_id_' . $fixture_id]['league_id_' . $league_id])){
                 return array();
             }
 
+            
             $result = $this->matchups['fixture_id_' . $fixture_id]['league_id_' . $league_id];
             return $result;
         };
