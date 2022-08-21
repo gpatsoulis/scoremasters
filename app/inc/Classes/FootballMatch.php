@@ -71,13 +71,13 @@ class FootballMatch {
         $this->match_date =  new \DateTime($wp_match->post_date, new \DateTimeZone('Europe/Athens'));
         
         $points_table = get_field('match_points_table', $match_id);
-        $this->points_table = $points_table;
 
-        if(!$points_table){
+        if( $points_table ){
+            $this->points_table = $points_table;
+        }else{
             $this->points_table = get_option('points_table');
         }
 
-        
     }
 
     public function setup_data(){
@@ -123,7 +123,7 @@ class FootballMatch {
         //$this->home_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->home_team->ID));
         $this->home_team_dynamikotita = intval(get_post_meta( intval($this->home_team->ID), 'scm-team-capabilityrange', true ));
         //$this->away_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->away_team->ID));
-        $this->away_team_dynamikotita = intval(get_post_meta( intval($this->home_team->ID), 'scm-team-capabilityrange', true ));
+        $this->away_team_dynamikotita = intval(get_post_meta( intval($this->away_team->ID), 'scm-team-capabilityrange', true ));
 
 
     }
