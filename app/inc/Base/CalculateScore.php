@@ -278,6 +278,11 @@ class CalculateScore
 
         //return ("Total Points: " . $total_points);
 
+        if(SCM_DEBUG){
+            error_log(__METHOD__ . ' column: ' .  json_encode($column));
+            error_log(__METHOD__ . ' dynamikotita_home_team: ' .  json_encode($dynamikotita_home_team));
+            error_log(__METHOD__ . ' dynamikotita_away_team: ' .  json_encode($dynamikotita_away_team));
+        }
         return $total_points;
 
     }
