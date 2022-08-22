@@ -76,8 +76,6 @@ class FixturesShortcode
         $output = '';
         $data = array();
 
-        
-
         //player data
         $player = new Player(wp_get_current_user());
 
@@ -90,7 +88,7 @@ class FixturesShortcode
         // total weekly points
         if(isset($player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'])){
             $week_total_points = $player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'];
-            $output .= "<div>Πόντοι Εβδομάδας: {$week_total_points}</div>";
+            $output .= "<div class='week-points' >Πόντοι Εβδομάδας: {$week_total_points}</div>";
         }
         
 

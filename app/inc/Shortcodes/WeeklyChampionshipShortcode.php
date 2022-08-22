@@ -38,6 +38,7 @@ class WeeklyChampionshipShortcode
         $weeklyCompetition = new WeeklyChampionshipCompetition($curent_competition,$weekly_matchups);
 
         $participants = $weeklyCompetition->get_participants_by_league_id($current_league->ID)->short();
+        //var_dump($participants);
 
         $output = $this->template->container_start;
         $output .= <<<HTML
