@@ -32,8 +32,12 @@ class CategoryChampionshipShortcode
         //$user = wp_get_current_user();
         //$current_player = new Player($user);
         //$current_players_league = get_post($current_player->get_league());
-        
-        $current_league = get_post();
+
+        $player = new Player(wp_get_current_user());
+        $league_id = $player->get_league();
+        $current_league = get_post($league_id);
+
+        //$current_league = get_post();
 
         $curent_competition = ScmData::get_current_scm_competition_of_type('championship-category');
 
