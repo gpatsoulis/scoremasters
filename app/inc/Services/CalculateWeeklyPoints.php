@@ -71,20 +71,19 @@ class CalculateWeeklyPoints
                 continue;
             }
 
-            switch ($score_diff) {
-                case ($score_diff > 0):
-                    $home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 3;
-                    $away_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 0;
-                    break;
-                case ($score_diff < 0):
-                    $home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 0;
-                    $away_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 3;
-                    break;
-                case ($score_diff == 0):
-                    $home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 1;
-                    $away_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 1;
-                    break;
+            if($score_diff > 0){
+                $home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 3;
+                $away_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 0;
             }
+            if($score_diff < 0){
+                $home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 0;
+                $away_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 3;
+            }
+            if($score_diff === 0){
+                $home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 1;
+                $away_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['score'] = 1;
+            }
+           
 
             $home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['opponent_id'] = $away_player_id;
             $home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']['home_field_advantage'] = true;
@@ -105,7 +104,13 @@ class CalculateWeeklyPoints
             $points_array[$home_player_id] = $home_player_points_array;
             $points_array[$away_player_id] = $away_player_points_array;
 
-            if (SCM_DEBUG) {
+            if (false && SCM_DEBUG) {
+                error_log(__METHOD__ . ' score_diff: ' .json_encode($score_diff));
+                error_log(__METHOD__ . ' home_player_points: ' .json_encode($home_player_points));
+                error_log(__METHOD__ . ' away_player_points: ' .json_encode($away_player_points));
+                
+                error_log(__METHOD__ . ' home_player_points_array ' .json_encode($home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']));
+                error_log(__METHOD__ . ' away_player_points_array ' . json_encode($away_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']));
                 //echo('Home - ' . $home_player_id .' ' . 'Away - ' . $away_player_id . "\n");
                 //var_dump($home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']);
                 //var_dump($away_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']);
