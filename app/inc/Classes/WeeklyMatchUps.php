@@ -94,9 +94,6 @@ class WeeklyMatchUps
 
         $this->closure = function ( $league_id ) use ($fixture_id) {
 
-            //var_dump($this->matchups['fixture_id_' . $fixture_id]);
-            //var_dump($league_id);
-
             if(!isset($this->matchups['fixture_id_' . $fixture_id]['league_id_' . $league_id])){
                 return array();
             }

@@ -33,6 +33,8 @@ class WeeklyChampionshipCompetition extends Competition {
         //$this->type = $terms_array[0]->slug;
 
         $this->competition_id = $scm_competition->ID;
+        
+        //wtf
         $this->is_active = ScmData::competition_is_active($scm_competition);
 
         $this->matchups = $matchups;
@@ -44,12 +46,13 @@ class WeeklyChampionshipCompetition extends Competition {
 
         $league = get_post($league_id);
         $participants = ScmData::get_league_participants($league);
+        
 
         $this->closure =  function () use ( $participants ){
 
             if(!$this->is_active){
-                //todo short playrs for score in older
-                return array();
+                //todo short players for score in older seasons
+                //return array();
             }
             
             usort($participants, array($this,'score_comparator'));

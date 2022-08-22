@@ -11,7 +11,7 @@ class Player
 {
 
     public $wp_player;
-    private $scm_league;
+    private int $scm_league;
     public $can_play_double;
 
     public $user_email;
@@ -29,63 +29,62 @@ class Player
         $this->player_id = intval($user->ID);
 
         $season = ScmData::get_current_season();
-        //add to factory class for player or to db class 
-        $scm_league_array = get_user_meta((int) $this->player_id, 'scm_league_status',true);
+        //add to factory class for player or to db class
+        $scm_league_array = get_user_meta((int) $this->player_id, 'scm_league_status', true);
         if (!empty($scm_league_array)) {
             $scm_league = end($scm_league_array);
             $this->scm_league = $scm_league['league_id'];
 
-            if(isset($scm_league_array['season_id:' . $season->ID])){
+            if (isset($scm_league_array['season_id:' . $season->ID])) {
                 $scm_league = $scm_league_array['season_id:' . $season->ID];
                 $this->scm_league = $scm_league['league_id'];
             }
         }
 
-        $this->player_points = get_user_meta( intval($user->ID), 'score_points_seasonID_' . $season->ID, true);
+        $this->player_points = get_user_meta(intval($user->ID), 'score_points_seasonID_' . $season->ID, true);
 
-        
-        if(!isset($this->player_points['total_points']['season-league'])){
+        if (!isset($this->player_points['total_points']['season-league'])) {
             $total_points = 0;
-        }else{
+        } else {
             $total_points = intval($this->player_points['total_points']['season-league']);
         }
-        
+
         $this->current_season_points = $total_points;
 
-
-        if(!isset($this->player_points['total_points']['weekly-championship'])){
-            $this->weekly_competition_points =  0;
-        }else{
-            $this->weekly_competition_points =  intval($this->player_points['total_points']['weekly-championship']);
+        if (!isset($this->player_points['total_points']['weekly-championship'])) {
+            $this->weekly_competition_points = 0;
+        } else {
+            $this->weekly_competition_points = intval($this->player_points['total_points']['weekly-championship']);
         }
-        
 
     }
 
-    public function set_scm_league($league_id):bool
+    public function set_scm_league($league_id): bool
     {
-        // -------------------- debug -------------------------
-        if( SCM_DEBUG && ($this->player_id !==  1 || $this->player_id !== 2 || $this->player_id !== 3) ){
-            //return false;
-        }
-        // -------------------- debug -------------------------
+         // -------------------- debug -------------------------
+        if (SCM_DEBUG) {
+           
+            if (SCM_DEBUG && ($this->player_id !== 1 || $this->player_id !== 2 || $this->player_id !== 3)) {
+                //return false;
+            }
 
+            if (!is_null($this->scm_league)) {
+                //error_log( __METHOD__ . ' player ' . $this->player_id . ' is already in league: ' . $this->get_league() );
+                error_log(__METHOD__ . ' player ' . $this->player_id . ' is already in league: ' . $this->get_league());
+            }
 
-        if(!is_null($this->scm_league)){
-            //error_log( __METHOD__ . ' player ' . $this->player_id . ' is already in league: ' . $this->get_league() );
-            error_log( __METHOD__ . ' player ' . $this->player_id . ' is already in league: ' . $this->get_league());
         }
 
         $season = ScmData::get_current_season();
 
-        $data = get_user_meta($this->player_id,'scm_league_status',true);
+        $data = get_user_meta($this->player_id, 'scm_league_status', true);
 
-        if(!$data){
+        if (!$data) {
             $data = array();
         }
 
-        $data['season_id:' . $season->ID] = array('league_id' =>  $league_id);
-        
+        $data['season_id:' . $season->ID] = array('league_id' => $league_id);
+
         $success = update_user_meta((int) $this->player_id, 'scm_league_status', $data);
 
         //scm_league_status[ season_id:id => [league_id => id] ]
@@ -99,33 +98,34 @@ class Player
         //$data = get_field('scm-user-players-list',$league_id);
         //var_dump($data);
 
-        $args = array('scm-user-player' => $this->wp_player->ID); 
+        $args = array('scm-user-player' => $this->wp_player->ID);
 
         add_row('scm-user-players-list', $args, $league_id);
 
         return $success;
     }
 
-    public function remove_from_current_league():bool {
+    public function remove_from_current_league(): bool
+    {
 
         // -------------------- debug -------------------------
-        if( SCM_DEBUG && ($this->player_id !==  1 || $this->player_id !== 2 || $this->player_id !== 3) ){
+        if (SCM_DEBUG && ($this->player_id !== 1 || $this->player_id !== 2 || $this->player_id !== 3)) {
             //return false;
         }
         // -------------------- debug -------------------------
 
         $this->scm_league = null;
-        
-        $season = ScmData::get_current_season();
-        $old_data = get_user_meta((int) $this->player_id, 'scm_league_status',true);
 
-        if (empty($old_data) || $old_data === ''){
+        $season = ScmData::get_current_season();
+        $old_data = get_user_meta((int) $this->player_id, 'scm_league_status', true);
+
+        if (empty($old_data) || $old_data === '') {
             return false;
         }
 
         $old_data_array = $old_data;
 
-        if(!isset($old_data_array['season_id:' . $season->ID])){
+        if (!isset($old_data_array['season_id:' . $season->ID])) {
             return false;
         }
 
@@ -138,7 +138,7 @@ class Player
         }
 
         unset($this->scm_league);
-        
+
         return $success;
     }
 
@@ -206,7 +206,7 @@ class Player
 
         $success = wp_mail($to, $subject, $body, $headers);
 
-        if(!$success){
+        if (!$success) {
             error_log(__METHOD__ . ' error sending mail to ' . $to . ' title: ' . $title);
         }
     }
@@ -216,7 +216,6 @@ class Player
         return $this->scm_league;
     }
 
-   
 }
 
 /*
