@@ -54,7 +54,9 @@ class LeagueWeeklyMatchupsShortcode
 
         }
 
+        echo '<pre>';
         var_dump($new_pairs);
+        echo '</pre>';
         //get all players scores
         // SELECT * FROM 
 
