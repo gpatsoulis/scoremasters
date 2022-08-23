@@ -104,7 +104,9 @@ class CalculateWeeklyPoints
             $points_array[$home_player_id] = $home_player_points_array;
             $points_array[$away_player_id] = $away_player_points_array;
 
-            if (false && SCM_DEBUG) {
+            if (SCM_DEBUG) {
+
+                error_log(__METHOD__ . ' ' . get_userdata($home_player_id)->display_name . ' - ' . get_userdata($away_player_id)->display_name);
                 error_log(__METHOD__ . ' score_diff: ' .json_encode($score_diff));
                 error_log(__METHOD__ . ' home_player_points: ' .json_encode($home_player_points));
                 error_log(__METHOD__ . ' away_player_points: ' .json_encode($away_player_points));
