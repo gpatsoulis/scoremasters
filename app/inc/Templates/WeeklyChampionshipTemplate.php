@@ -37,13 +37,14 @@ HTML;
         <style>
             .scm-weekly-championship-score {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-columns: 1fr 8fr 1fr;
                 grid-template-rows: auto;
                 max-width: 800px;
                 margin:0 auto;
 
                 border: 1px solid var( --e-global-color-accent );
                 overflow: scroll;
+                overflow: hidden;
             }
 
             .scm-weekly-championship-score p:nth-child(-n+3) {

@@ -35,6 +35,7 @@ class CategoryChampionshipShortcode
 
         $player = new Player(wp_get_current_user());
         $league_id = $player->get_league();
+        
         $current_league = get_post($league_id);
 
         //$current_league = get_post();
@@ -53,7 +54,7 @@ class CategoryChampionshipShortcode
         <!--<div class='season-league-player-points'>-->
             <p class='player_rank'>A/A</p>
             <p class='player_nick_name'>Όνομα</p>
-            <p class='player_points'>Βαθμοί</p>
+            <p class='player_points'> Πόντοι </p>
         <!--</div>-->
 HTML;
 

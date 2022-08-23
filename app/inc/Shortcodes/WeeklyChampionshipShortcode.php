@@ -45,7 +45,7 @@ class WeeklyChampionshipShortcode
         <!--<div class='season-league-player-points'>-->
             <p class='player_rank'>A/A</p>
             <p class='player_nick_name'>Όνομα</p>
-            <p class='player_points'>Βαθμοί</p>
+            <p class='player_points'>Πόντοι</p>
         <!--</div>-->
 HTML;
         $aa = 1;
