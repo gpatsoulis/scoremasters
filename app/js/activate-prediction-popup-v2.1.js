@@ -452,9 +452,9 @@ function calc_possible_points(event){
     let scoreTable = JSON.parse(document.getElementById('match_'+ match_id +'_pointstable').dataset.pointstable);
    
     let player_points_table = {
-        "Επιθετικός": 4,
-        "Μέσος": 8,
-        "Αμυντικός": 9,
+        "Επιθετικός": 3,
+        "Μέσος": 4,
+        "Αμυντικός": 8,
     };
 
     let home_team_capability = match_el.querySelector('h4.scm-home-team').dataset.home_team_capability;
