@@ -54,16 +54,36 @@ class LeagueWeeklyMatchupsShortcode
 
         }
 
-        echo '<pre>';
-        var_dump($new_pairs);
-        echo '</pre>';
-        //get all players scores
-        // SELECT * FROM 
+        //todo: WeeklyMatchUps, check for artio number o players, else return empty array;
+
+        //echo '<pre>';
+        //var_dump($new_pairs);
+        //echo '</pre>';
+        
+        
+        $output = $this->template->container_start;
+        $data = array();
+
+        foreach($new_pairs as $pair){
+
+            if(isset($pair[0]) && isset($pair[1])){
+                $data['home'] = $pair[0];
+                $data['away'] = $pair[1];
+            }
+            
+            $output .= $this->template->get_html($data);
+        }
+        
+        
+        $output .= $this->template->container_end;
+        $output .= $this->template->get_css();
+
+        return $output;
 
     }
 
     public function get_template()
     {
-        $this->template = new \Scoremasters\Inc\Templates\LeagueWeeklyMatchupsTemplate('div', 'scm-season-league-score', '', array('name' => 'player_id', 'value' => get_current_user_id()));
+        $this->template = new \Scoremasters\Inc\Templates\LeagueWeeklyMatchupsTemplate('div', 'scm-weekly-matchups', '', array('name' => 'player_id', 'value' => get_current_user_id()));
     }
 }

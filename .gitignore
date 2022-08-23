@@ -2,4 +2,8 @@
 /languages
 /js
 /inc
+/app/debug
+/app/depricated
+/app/tools
+/app/export_predictions
 
