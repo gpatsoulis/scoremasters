@@ -11,7 +11,7 @@ class Player
 {
 
     public $wp_player;
-    private int $scm_league;
+    private $scm_league;
     public $can_play_double;
 
     public $user_email;
@@ -31,6 +31,7 @@ class Player
         $season = ScmData::get_current_season();
         //add to factory class for player or to db class
         $scm_league_array = get_user_meta((int) $this->player_id, 'scm_league_status', true);
+
         if (!empty($scm_league_array)) {
             $scm_league = end($scm_league_array);
             $this->scm_league = $scm_league['league_id'];
