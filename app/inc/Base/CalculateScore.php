@@ -246,15 +246,15 @@ class CalculateScore
             if(!$p_scorer_points){
 
                 if (get_field("scm-player-position", $p_scorer) == "Επιθετικός") {
-                    $prediction_points_scorer = 4;
+                    $prediction_points_scorer = 3;
     
                 } elseif (get_field("scm-player-position", $p_scorer) == "Μέσος") {
     
-                    $prediction_points_scorer = 8;
+                    $prediction_points_scorer = 4;
     
                 } elseif (get_field("scm-player-position", $p_scorer) == "Αμυντικός") {
     
-                    $prediction_points_scorer = 9;
+                    $prediction_points_scorer = 8;
     
                 }
             }
@@ -278,7 +278,7 @@ class CalculateScore
 
         //return ("Total Points: " . $total_points);
 
-        if(SCM_DEBUG){
+        if(false && SCM_DEBUG){
             error_log(__METHOD__ . ' column: ' .  json_encode($column));
             error_log(__METHOD__ . ' dynamikotita_home_team: ' .  json_encode($dynamikotita_home_team));
             error_log(__METHOD__ . ' dynamikotita_away_team: ' .  json_encode($dynamikotita_away_team));
