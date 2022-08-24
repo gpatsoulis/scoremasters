@@ -10,7 +10,7 @@ use Scoremasters\Inc\Base\CompetitionSetup;
 use Scoremasters\Inc\Base\ShortcodeController;
 use Scoremasters\Inc\Base\PlayerSelectLeague;
 use Scoremasters\Inc\Base\CompetitionRoundSetup;
-
+use Scoremasters\Inc\Base\ThemeSetup;
 
 define('EXPORT_PATH', __DIR__ . '/export_predictions');
 
@@ -24,5 +24,6 @@ MatchSetup::init();
 ProPlayerSetup::init();
 PlayerSelectLeague::init();
 CompetitionRoundSetup::init();
+ThemeSetup::init();
 
 ShortcodeController::register_shortcodes();

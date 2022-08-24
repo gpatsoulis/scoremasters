@@ -375,6 +375,7 @@ function debug_redirect_mail($args)
 
 add_filter('wp_mail', 'debug_redirect_mail', 10, 1);
 
+
 function start_scoremasters()
 {
 // Scoremasters App
