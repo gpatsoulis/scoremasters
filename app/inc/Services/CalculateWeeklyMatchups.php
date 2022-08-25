@@ -205,7 +205,6 @@ class CalculateWeeklyMatchups
 
         if(SCM_DEBUG){
             file_put_contents(SCM_DEBUG_PATH . '/test_matchups.json', json_encode($data) . "\n",FILE_APPEND);
-            
         }
 
     }

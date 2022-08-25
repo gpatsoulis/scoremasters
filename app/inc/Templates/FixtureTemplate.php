@@ -23,7 +23,7 @@ final class FixtureTemplate implements TemplateInterface
 		
 		$live_score = '';
 		if(isset($data['live-score'])){
-			$live_score = "<p class=\"live-score\">Live Score - {$data['live-score']}</p>";
+			$live_score = "<p class=\"live-score\">Πόντοι - {$data['live-score']}</p>";
 		}
 
 		if ($data['openForPredictions'] === false){
