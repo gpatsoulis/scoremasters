@@ -117,10 +117,6 @@ class CalculateWeeklyPoints
                 error_log(__METHOD__ . ' away_player_points_array ' . json_encode($away_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']));
 
                 error_log(__METHOD__ . ' counter: ' . json_encode($i));
-
-                //echo('Home - ' . $home_player_id .' ' . 'Away - ' . $away_player_id . "\n");
-                //var_dump($home_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']);
-                //var_dump($away_player_points_array['fixture_id_' . $current_fixture_id]['weekly-championship']);
             }
         }
 

@@ -10,6 +10,7 @@ use Scoremasters\Inc\Classes\Player;
 use Scoremasters\Inc\Classes\FootballMatch;
 use Scoremasters\Inc\Classes\PlayerPrediction;
 use Scoremasters\Inc\Base\CalculateScore;
+use Scoremasters\Inc\Services\CalculatePossiblePlayerPoints;
 
 //[Scoremasters\Inc\Shortcodes\FixturesShortcode]
 class FixturesShortcode
@@ -154,9 +155,14 @@ class FixturesShortcode
                 $data['prediction-string'] = 'Δεν υπάρχει πρόβλεψη!';
                 $prediction_string = '';
                 if(!empty($prediction_post)){
-                    $player_prediction = new PlayerPrediction($prediction_post[0]);
-                    $prediction_string .= (string) $player_prediction;
-                    $data['prediction-string'] = $prediction_string;
+                     //test
+                    $possible_points = new CalculatePossiblePlayerPoints($prediction_post[0]);
+                    $possible_points->get_points($current_match);
+
+                    //$player_prediction = new PlayerPrediction($prediction_post[0]);
+                    //$prediction_string .= (string) $player_prediction;
+                    $prediction_string .= (string) $possible_points;
+                    $data['prediction-string'] = $prediction_string; 
                 }
 
                 //error

@@ -11,7 +11,7 @@ use Scoremasters\Inc\Classes\WeeklyMatchUps;
 // 'weekly_matchups'
 // get_post_meta($competition_id,'weekly_matchups,false);
 
-// constrtuct "WeeklyMatchUps" as a service object tha constructor argument
+// constrtuct "WeeklyMatchUps" as a service object the constructor argument
 // should be an object like LeagueChampionship (league,championship)
 
 class CalculateWeeklyMatchups

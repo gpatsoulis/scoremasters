@@ -44,7 +44,7 @@ class PlayerPrediction {
         */
     }
 
-    protected function get_prediction_data(): array {
+    public function get_prediction_data(): array {
 
         $predictions = $this->prediction;
         
@@ -55,10 +55,6 @@ class PlayerPrediction {
 
             if($prediction === '-' || $prediction === '' || $key === 'homeTeam_id' || $key === 'awayTeam_id'){
                 continue;
-            }
-
-            if($key === 'Scorer'){
-                $value = (get_post($prediction))->post_title;
             }
 
             $prediction_data[$key] = $value;
@@ -75,6 +71,27 @@ class PlayerPrediction {
         $str = 'Προβλέψεις Αγώνα --- ';
 
         foreach( $data as $key => $value ){
+
+            if($key === 'Scorer'){
+                $value = (get_post($value))->post_title;
+            }
+
+            if($key === 'SHMEIO'){
+                $key = 'Σημείο';
+            }
+
+            if($key === 'score'){
+                $key = 'Score';
+            }
+
+            if($key === 'Double Points'){
+                $key = 'Διπλασιασμός Πόντων';
+            }
+
+            if($value === 'SHMEIO'){
+                $value = 'Σημείο';
+            }
+
             $str .= $key . ': ' . $value . " | ";
         }
 
