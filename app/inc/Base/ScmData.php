@@ -375,6 +375,9 @@ final class ScmData
 
         $competition_in_season = get_field('scm-season-competition', $competition->ID);
 
+        //var_dump($competition_in_season[0]->ID);
+        //var_dump($current_season->ID);
+
         if ($current_season->ID === $competition_in_season[0]->ID) {
             return true;
         }

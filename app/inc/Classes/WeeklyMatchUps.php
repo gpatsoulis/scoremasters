@@ -98,7 +98,6 @@ class WeeklyMatchUps
                 return array();
             }
 
-            
             $result = $this->matchups['fixture_id_' . $fixture_id]['league_id_' . $league_id];
             return $result;
         };
