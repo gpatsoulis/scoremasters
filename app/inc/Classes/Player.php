@@ -76,6 +76,11 @@ class Player
 
         }
 
+        if(!is_null($this->scm_league)){
+            error_log( __METHOD__ . ' removing from league ');
+            $this->remove_from_current_league();
+        }
+
         $season = ScmData::get_current_season();
 
         $data = get_user_meta($this->player_id, 'scm_league_status', true);
@@ -109,37 +114,55 @@ class Player
     public function remove_from_current_league(): bool
     {
 
+        if(!empty(ScmData::get_all_fixtures_for_season())){
+            error_log( __METHOD__ . ' only remove players at start of season player:' . $this->player_id);
+            //return false;
+        }
+        // scm_league_status = array(season_id => array('league_id' => XX))
+
         // -------------------- debug -------------------------
         if (SCM_DEBUG && ($this->player_id !== 1 || $this->player_id !== 2 || $this->player_id !== 3)) {
             //return false;
         }
         // -------------------- debug -------------------------
 
-        $this->scm_league = null;
+        $current_league_id = $this->scm_league;
+        $success = $this->remove_from_league_acf($current_league_id,$this->player_id);
+        if( !$success ){
+            error_log(__METHOD__ . ' can\'t remove player: ' . $this->wp_player->display_name . ' from league: ' . $current_league_id);
+        }
 
-        $season = ScmData::get_current_season();
         $old_data = get_user_meta((int) $this->player_id, 'scm_league_status', true);
 
-        if (empty($old_data) || $old_data === '') {
+        if(end($old_data)['league_id'] === (int) $current_league_id){
+            $val = array_pop($old_data);
+        }
+       
+        $success = update_user_meta((int) $this->player_id, 'scm_league_status', $old_data);
+
+        if( !$success ){
+            error_log(__METHOD__ . ' can\'t update player league_status meta: ' . $this->wp_player->display_name . ' from league: ' . $current_league_id);
+        }
+
+        return $success;
+    }
+
+    private function remove_from_league_acf($league_id,$player_out_id): bool {
+
+        $league_players = get_field('scm-user-players-list',$league_id);
+    
+        if(!$league_players){
             return false;
         }
-
-        $old_data_array = $old_data;
-
-        if (!isset($old_data_array['season_id:' . $season->ID])) {
-            return false;
-        }
-
-        unset($old_data_array['season_id:' . $season->ID]);
-
-        $success = update_user_meta((int) $this->player_id, 'scm_league_status', $old_data_array);
-
-        if (!$success) {
-            error_log(__METHOD__ . ' error unsetting player scm-league: ' . $this->player_id);
-        }
-
-        unset($this->scm_league);
-
+    
+        $league_players_left =  array_filter($league_players, 
+        fn($player) => $player['scm-user-player'] !== $player_out_id
+        );
+    
+        $new_array = array_values($league_players_left);
+    
+       
+        $success = update_field('scm-user-players-list', $new_array, $league_id);
         return $success;
     }
 
