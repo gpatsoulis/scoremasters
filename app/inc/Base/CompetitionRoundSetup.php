@@ -16,6 +16,7 @@ class CompetitionRoundSetup
     public static function init()
     {
         add_action('transition_post_status', array(static::class, 'add_actions'), 10, 3);
+        add_filter('wp_insert_post_data',array(static::class,'add_actions2'),99,4);
     }
 
     public static function add_actions( string $new_status, string $old_status, \WP_Post $competion_round ){
@@ -40,6 +41,24 @@ class CompetitionRoundSetup
 
     }
 
+    public static function add_actions2( array $data,array $postarr, array $unsanitized_postarr, bool $update){
+        $post_type = 'scm-competition-roun'; 
+
+        if( $data['post_type'] !== $post_type ){
+            return $data;
+        }
+
+        if ($update) {
+            return $data;
+        }
+
+        
+    }
+
+    public static function setup_date2( array $data ){
+
+    }
+    
 
     /**
      * Setup competition_round post date same as the fixture date where 
@@ -54,13 +73,18 @@ class CompetitionRoundSetup
         $fixture_object = (get_field('scm-related-week', $competion_round->ID))[0];
 
         $fixture_date = get_the_date('Y-m-d H:i:s', $fixture_object);
+        $wp_formated_date_gmt =  get_gmt_from_date( $fixture_date );
 
         if (SCM_DEBUG) {
             error_log(static::class . ' setup fixture title ' . $fixture_object->post_title);
             error_log(static::class . ' setup competition round date ' . $fixture_date);
         }
 
-        $updated = wp_update_post(array('ID' => $competion_round->ID, 'post_date' => $fixture_date));
+        $updated = wp_update_post(array(
+            'ID' => $competion_round->ID, 
+            'post_date' => $fixture_date,
+            'post_date_gmt' => $wp_formated_date_gmt,
+        ));
 
     }
 

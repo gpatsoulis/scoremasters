@@ -56,11 +56,11 @@ class PlayerSetup
         
         // check for field 'scm-user-players-list'
 
+        $key = $field['key'];
+
         if (!isset($_POST['acf'][$key])) {
             return;
         }
-
-        $key = $field['key'];
 
         $league = get_post($post_id);
 
