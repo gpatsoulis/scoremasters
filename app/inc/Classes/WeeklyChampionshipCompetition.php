@@ -24,7 +24,7 @@ class WeeklyChampionshipCompetition extends Competition {
 
         //check taxonomy "weekly-championship"
         $terms_array = get_the_terms($scm_competition->ID, 'scm_competition_type');
-        //var_dump($terms_array);
+
 
         if(count($terms_array) !== 1){
             throw new \Exception( __METHOD__ .' invalid no terms in scm_competition_type post id: ' . $scm_competition->ID );

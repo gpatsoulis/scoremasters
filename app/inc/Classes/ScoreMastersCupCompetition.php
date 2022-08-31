@@ -17,7 +17,7 @@ class ScoreMastersCupCompetition extends Competition {
         $all_players = ScmData::get_all_players();
 
         $players_no = count($all_players);
-        var_dump($players_no);
+        //var_dump($players_no);
         
         $power = 0;
         $number = 2;

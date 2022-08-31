@@ -102,7 +102,6 @@ class Player
         $this->scm_league = $league_id;
 
         //$data = get_field('scm-user-players-list',$league_id);
-        //var_dump($data);
 
         $args = array('scm-user-player' => $this->wp_player->ID);
 

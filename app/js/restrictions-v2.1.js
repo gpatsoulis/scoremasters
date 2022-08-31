@@ -18,6 +18,7 @@ function restrictions(event, id, instance) {
 
     let scorerSelect = popup.querySelector('#form-field-scm_scorer');
 
+    // todo : add restrictions
     let doublePoints = popup.querySelector('#form-field-field_c61b597');
 
 

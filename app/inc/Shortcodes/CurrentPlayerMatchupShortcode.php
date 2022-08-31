@@ -84,6 +84,8 @@ class CurrentPlayerMatchupShortcode
         }
 
         $away_user = get_user_by('id', $my_pair[1]);
+        //todo : can't find user
+        
         if($away_user){
             $away_user_name = $away_user->display_name;
         }

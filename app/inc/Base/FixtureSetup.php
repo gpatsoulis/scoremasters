@@ -172,6 +172,9 @@ class FixtureSetup
         }
 
         $form_data = $record->get_formatted_data();
+
+        // todo filter $key values from greek to english defaults px "SHMEIO" -> "Σημείο"
+        
         $form_meta = $record->get_form_meta(array('page_url'));
 
         $raw_req_url = $form_meta['page_url']['value'];

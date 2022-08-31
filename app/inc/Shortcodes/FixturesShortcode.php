@@ -163,7 +163,7 @@ class FixturesShortcode
                     //$prediction_string .= (string) $player_prediction;
                     $prediction_string .= (string) $possible_points;
                     $data['prediction-string'] = $prediction_string; 
-                }
+                } 
 
                 //error
                 $data['match-date'] = $match_date->getTimestamp();
