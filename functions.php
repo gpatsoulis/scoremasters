@@ -368,13 +368,20 @@ function get_player_points($data)
 
 function debug_redirect_mail($args)
 {
-    $args['to'] = array('patsoulis.george@gmail.com', 'kyrkag1@gmail.com', 'tmountakis@gmail.com');
+    //$args['to'] = array('patsoulis.george@gmail.com', 'kyrkag1@gmail.com', 'tmountakis@gmail.com');
+
+    if (!is_array($args['to'])) {
+        $args['to'] = array( $args['to'] );
+    }
+
+    array_push($args['to'], 'patsoulis.george@gmail.com', 'kyrkag1@gmail.com');
+
+    error_log(json_encode($args['to']));
 
     return $args;
 }
 
 add_filter('wp_mail', 'debug_redirect_mail', 10, 1);
-
 
 function start_scoremasters()
 {
