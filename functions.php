@@ -230,7 +230,7 @@ add_filter('wp_nav_menu_args', 'my_wp_nav_menu_args');
 /**Redirect after login**/
 function redirect_on_login()
 {
-    $some_url = 'http://scoremasters.gr/?page_id=594';
+    $some_url = 'https://scoremasters.gr/?page_id=594';
     wp_redirect($some_url);
     exit;
 }
@@ -245,7 +245,7 @@ function logout_without_confirm($action, $result)
      * Allow logout without confirmation
      */
     if ($action == "log-out" && !isset($_GET['_wpnonce'])) {
-        $redirect_to = isset($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : 'http://scoremasters.gr/';
+        $redirect_to = isset($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : 'https://scoremasters.gr/';
         $location = str_replace('&amp;', '&', wp_logout_url($redirect_to));
         header("Location: $location");
         die;
