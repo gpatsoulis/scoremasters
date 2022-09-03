@@ -93,6 +93,7 @@ class CalculateWeeklyMatchups
         //$participants
 
         if($this->matchups_exists_for_fixture($new_fixture_id)){
+            error_log(__METHOD__ . ' matchups exists for fixture: ' . $new_fixture_id);
             return $this;
         }
 
@@ -163,13 +164,26 @@ class CalculateWeeklyMatchups
 
         if( count($participants_ids) < 4 ){
             $next_matchups = 'not enough players';
+            error_log(__METHOD__ . ' not enough players for league: ' . $this->league_id);
             $this->$next_matchups = $next_matchups;
             return;
         }
 
+        if( count($participants_ids) % 2  !== 0 ){
+            $next_matchups = 'not enough players';
+            error_log(__METHOD__ . ' not even number of players for league: ' . $this->league_id);
+            $this->$next_matchups = $next_matchups;
+            return;
+        }
+
+
         $next_matchups = array(
             'fixture_id_' . $fixture_id => array(
-                'league_id_' . $this->league_id => $participants_ids));
+                'league_id_' . $this->league_id => $participants_ids
+            )
+        );
+
+        error_log(__METHOD__ . ' initialize matchups fixture: ' . $new_fixture_id . ' league: ' . $this->league_id  . ' pairs: ' . json_encode($next_matchups));
 
         //$this->next_matchups = array_merge($this->matchups->for_league_id($this->league_id), $next_matchups);
         $this->next_matchups =  $next_matchups;
@@ -181,7 +195,7 @@ class CalculateWeeklyMatchups
         
         //todo: use a service object for writing to the database
 
-        if(is_null($this->next_matchups) || $this->next_matchups === 'not enough players'){
+        if(is_null($this->next_matchups) || $this->next_matchups === 'not enough players' ){
             return;
         }
 
