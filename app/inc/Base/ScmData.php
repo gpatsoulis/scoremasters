@@ -291,7 +291,7 @@ final class ScmData
         }
         $season_start_date = new \DateTime($season_start_date_str, new \DateTimeZone('Europe/Athens'));
         //dirty fix
-        $season_start_date->modify('-1 hour');
+        $season_start_date->modify('-1 day');
 
         $season_end_date_str = get_field('scm-season-end-date', $current_season->ID);
         if (!$season_end_date_str) {
