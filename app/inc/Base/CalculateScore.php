@@ -132,6 +132,8 @@ class CalculateScore
 
         $total_goals = intval($final_score["scm-full-time-home-score"]) + intval($final_score["scm-full-time-away-score"]);
 
+        echo '$total_goals: ' . $total_goals . '<br>';
+
         if ($total_goals < 1.5 && $prediction_content["Under / Over"] == "Under 1.5") {
 
             $total_points = $total_points + intval($prediction_points_under_over);
@@ -142,6 +144,7 @@ class CalculateScore
             $double_uo = true;
         } elseif ($total_goals < 3.5 && $prediction_content["Under / Over"] == "Under 3.5") {
 
+            echo '$total_goals < 1.5 <br>';
             $total_points = $total_points + intval($prediction_points_under_over);
             $double_uo = true;
         } elseif ($total_goals < 4.5 && $prediction_content["Under / Over"] == "Under 4.5") {
