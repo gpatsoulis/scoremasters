@@ -28,12 +28,12 @@ class CalculateScore
 
         $column = strval($dynamikotita_home_team - $dynamikotita_away_team);
 
-        var_dump($column);
+        echo ('dynamikotita: ' . $column);
 
         $points_table = $match->points_table;
 
         echo '<pre>';
-        var_dump($points_table);
+        var_dump($points_table[0]);
         echo '</pre>';
 
         $prediction_points_shmeio = $prediction_points_under_over = $prediction_points_score = 0;
