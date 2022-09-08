@@ -120,7 +120,7 @@ class FixturesShortcode
                     $score_home = $score_acf_group['scm-full-time-home-score'];
                     $score_away = $score_acf_group['scm-full-time-away-score'];
 
-                    if(!$score_acf_group['scm-full-time-home-score']){
+                    if(!$score_acf_group['scm-full-time-home-score'] && !$score_acf_group['scm-full-time-away-score']){
                         $half_time_score = get_field('scm-half-time-score', $match->ID);
                         $score_home = $half_time_score['scm-half-time-home-score'];
                         $score_away = $half_time_score['scm-half-time-away-score'];
