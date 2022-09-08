@@ -284,6 +284,8 @@ class CalculateScore
             echo 'prediction_points_shmeio: ' .$prediction_points_shmeio. '<br>';
             echo 'prediction_points_under_over: ' .$prediction_points_under_over .'<br>';
 
+            var_dump($prediction_content);
+
             //error_log(__METHOD__ . ' column: ' .  json_encode($column));
             //error_log(__METHOD__ . ' dynamikotita_home_team: ' .  json_encode($dynamikotita_home_team));
             //error_log(__METHOD__ . ' dynamikotita_away_team: ' .  json_encode($dynamikotita_away_team));
