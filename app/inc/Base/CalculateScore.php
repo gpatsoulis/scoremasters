@@ -28,7 +28,13 @@ class CalculateScore
 
         $column = strval($dynamikotita_home_team - $dynamikotita_away_team);
 
+        var_dump($column);
+
         $points_table = $match->points_table;
+
+        echo '<pre>';
+        var_dump($points_table);
+        echo '</pre>';
 
         $prediction_points_shmeio = $prediction_points_under_over = $prediction_points_score = 0;
         $double_shmeio = $double_uo = $double_score = $double_scorer = false;
