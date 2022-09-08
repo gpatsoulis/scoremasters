@@ -32,11 +32,6 @@ class CalculateScore
 
         $points_table = $match->points_table;
 
-        //echo ('dynamikotita: ' . $column);
-        //echo '<pre>';
-        //var_dump($points_table[0]);
-        //echo '</pre>';
-
         $prediction_points_shmeio = $prediction_points_under_over = $prediction_points_score = 0;
         $double_shmeio = $double_uo = $double_score = $double_scorer = false;
 
@@ -60,13 +55,6 @@ class CalculateScore
 
         $Half_time_score = $match->half_time_score;
         $final_score = $match->final_score;
-
-        echo '<pre>';
-        echo 'Half_time_score';
-        var_dump($Half_time_score);
-        echo 'final_score';
-        var_dump($final_score);
-        echo '</pre>';
 
         $total_points = 0;
 
@@ -292,10 +280,13 @@ class CalculateScore
 
         //return ("Total Points: " . $total_points);
 
-        if(false && SCM_DEBUG){
-            error_log(__METHOD__ . ' column: ' .  json_encode($column));
-            error_log(__METHOD__ . ' dynamikotita_home_team: ' .  json_encode($dynamikotita_home_team));
-            error_log(__METHOD__ . ' dynamikotita_away_team: ' .  json_encode($dynamikotita_away_team));
+        if(SCM_DEBUG){
+            echo 'prediction_points_shmeio: ' .$prediction_points_shmeio. '<br>';
+            echo 'prediction_points_under_over: ' .$prediction_points_under_over .'<br>';
+
+            //error_log(__METHOD__ . ' column: ' .  json_encode($column));
+            //error_log(__METHOD__ . ' dynamikotita_home_team: ' .  json_encode($dynamikotita_home_team));
+            //error_log(__METHOD__ . ' dynamikotita_away_team: ' .  json_encode($dynamikotita_away_team));
         }
         return $total_points;
 
