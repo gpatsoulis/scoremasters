@@ -28,13 +28,14 @@ class CalculateScore
 
         $column = strval($dynamikotita_home_team - $dynamikotita_away_team);
 
-        echo ('dynamikotita: ' . $column);
+        
 
         $points_table = $match->points_table;
 
-        echo '<pre>';
-        var_dump($points_table[0]);
-        echo '</pre>';
+        //echo ('dynamikotita: ' . $column);
+        //echo '<pre>';
+        //var_dump($points_table[0]);
+        //echo '</pre>';
 
         $prediction_points_shmeio = $prediction_points_under_over = $prediction_points_score = 0;
         $double_shmeio = $double_uo = $double_score = $double_scorer = false;
@@ -59,6 +60,13 @@ class CalculateScore
 
         $Half_time_score = $match->half_time_score;
         $final_score = $match->final_score;
+
+        echo '<pre>';
+        echo 'Half_time_score';
+        var_dump($Half_time_score);
+        echo 'final_score';
+        var_dump($final_score);
+        echo '</pre>';
 
         $total_points = 0;
 
