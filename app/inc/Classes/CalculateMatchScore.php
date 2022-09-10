@@ -45,7 +45,7 @@ class CalculateMatchScore
             $points = CalculateScore::calculate_points_after_prediction_submit($prediction, $this->match);
 
             if(SCM_DEBUG){
-                error_log( __METHOD__ . ' when match is finished - points calculated: ' . $points );
+                error_log( __METHOD__ . ' when match is finished - points calculated: ' . $points . ' for prediction: ' . $prediction->ID);
             }
 
             $data_to_insert_in_db[] = array(
