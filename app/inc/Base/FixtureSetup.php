@@ -55,7 +55,7 @@ class FixtureSetup
 
         $updated = wp_update_post(array('ID' => $fixture_id, 'post_date' => $wp_formated_date, 'post_date_gmt' => $wp_formated_date_gmt, 'post_status' => $post_status));
 
-        if(SCM_DEBUG){
+        if(false && SCM_DEBUG){
             file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($value) . "\n",FILE_APPEND);
             file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($wp_formated_date) . "\n",FILE_APPEND);
             file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json','Update: ' .  json_encode($updated). "\n",FILE_APPEND);
@@ -94,7 +94,7 @@ class FixtureSetup
 
 
        if(SCM_DEBUG){
-        error_log( __METHOD__ . ' calculating weekly points');
+        error_log( __METHOD__ . ' calculating weekly points for fixture: ' . $fixture_post->ID);
        }
 
         $match_data = array(
@@ -134,12 +134,14 @@ class FixtureSetup
        
 
         if(SCM_DEBUG){
-            error_log( __METHOD__ . ' calculating weekly matchups' );
+            error_log( __METHOD__ . ' calculating weekly matchups for fixture: ' .  $fixture_post->ID);
         }
         //weekly-championship
 
         // get competition WP_Post
+        // todo: check competition is in current season 
         $weekly_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
+
         $matchups = new WeeklyMatchUps($weekly_competition->ID);
 
         // get all active leagues WP_Post[]
@@ -167,7 +169,6 @@ class FixtureSetup
 
         if ($form_name !== 'scm-prediction-form') {
             error_log(static::class . ' - invalid form name - ' . $form_name);
-            //send error message to ajax handler
             return;
         }
 

@@ -132,7 +132,6 @@ class CalculateScore
 
         $total_goals = intval($final_score["scm-full-time-home-score"]) + intval($final_score["scm-full-time-away-score"]);
 
-        echo '$total_goals: ' . $total_goals . '<br>';
 
         if ($total_goals < 1.5 && $prediction_content["Under / Over"] == "Under 1.5") {
 
@@ -144,7 +143,6 @@ class CalculateScore
             $double_uo = true;
         } elseif ($total_goals < 3.5 && $prediction_content["Under / Over"] == "Under 3.5") {
 
-            echo '$total_goals < 1.5 <br>';
             $total_points = $total_points + intval($prediction_points_under_over);
             $double_uo = true;
         } elseif ($total_goals < 4.5 && $prediction_content["Under / Over"] == "Under 4.5") {
@@ -283,14 +281,14 @@ class CalculateScore
 
         //return ("Total Points: " . $total_points);
 
-        if(SCM_DEBUG){
-            echo 'prediction_points_shmeio: ' .$prediction_points_shmeio. '<br>';
-            echo 'prediction_points_under_over: ' .$prediction_points_under_over .'<br>';
+        if(false && SCM_DEBUG){
+            //echo 'prediction_points_shmeio: ' .$prediction_points_shmeio. '<br>';
+            //echo 'prediction_points_under_over: ' .$prediction_points_under_over .'<br>';
 
-            echo '<pre>';
-            var_dump($prediction_content);
-            var_dump($total_points);
-            echo '</pre>';
+            //echo '<pre>';
+            //var_dump($prediction_content);
+            //var_dump($total_points);
+            //echo '</pre>';
 
             //error_log(__METHOD__ . ' column: ' .  json_encode($column));
             //error_log(__METHOD__ . ' dynamikotita_home_team: ' .  json_encode($dynamikotita_home_team));
