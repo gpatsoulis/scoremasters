@@ -28,6 +28,61 @@ class FixtureSetup
         //add_action('wp_after_insert_post',array(static::class,'set_fixture_status_to_future2'),99,4);
     }
 
+     /**
+     *  Set new post of post type 'scm-fixture' to post_status = future
+     * 
+     *  @param array   $data                 An array of slashed, sanitized, and processed post data.
+     *  @param array   $postarr              An array of sanitized (and slashed) but otherwise unmodified post data.
+     *  @param array   $unsanitized_postarr  An array of slashed yet *unsanitized* and unprocessed post data as originally passed to wp_insert_post().
+     *  @param bool    $update               Whether this is an existing post being updated.
+     */
+
+    public static function set_fixture_status_to_future( $data,$postarr,$unsanitized_postarr,$update ){
+
+        $post_type = "scm-fixture"; 
+
+        if( $data['post_type'] !== $post_type ){
+            return $data;
+        }
+
+        if ($update) {
+            return $data;
+        }
+
+        $post_date = new \DateTime($data['post_date'], new \DateTimeZone('Europe/Athens'));
+        $current_date = new \DateTime('',new \DateTimeZone('Europe/Athens'));
+
+        //add +hour day to newly created post
+        $new_date = $current_date->modify('+1 hour');
+        $data['post_date'] = $new_date->format('Y-m-d H:i:s');
+        $data['post_date_gmt'] = get_gmt_from_date($new_date->format('Y-m-d H:i:s'));
+
+        if( SCM_DEBUG ){
+            error_log(__METHOD__ . ' post_date: ' . $post_date->format('Y-m-d H:i:s'));
+            error_log(__METHOD__ . ' current_date: ' . $current_date->format('Y-m-d H:i:s'));
+
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($data) . "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json','Update: ' .  json_encode($update). "\n",FILE_APPEND);
+
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($current_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date > $current_date). "\n",FILE_APPEND);
+
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($_POST). "\n",FILE_APPEND);
+        }
+  
+         return $data;
+    }
+
+    /**
+     *  Set fixture date same as scm-fixture-start-date
+     * 
+     *  @param mixed        $value            The field value
+     *  @param int|string   $fixture_id       The post ID where the value is saved.
+     *  @param array        $field            The field array containing all settings.
+     *  @param mixed        $original         The original value before modification.
+     */
+
     public static function scm_fixture_update_post_date($value, $fixture_id, array $field, $original)
     {
         //todo: set post status to future
@@ -35,8 +90,10 @@ class FixtureSetup
             return $value;
         }
 
-        //(string)$value format: 0000-00-00 00:00:00
+
+
         //$start_date = \DateTime::createFromFormat('Y-m-d H:i:s', $value, new \DateTimeZone('Europe/Athens'))->setTime(0, 0);
+
         $start_date = \DateTime::createFromFormat('Y-m-d H:i:s', $value, new \DateTimeZone('Europe/Athens'));
         //wp post_date format: 0000-00-00 00:00:00
 
@@ -51,14 +108,14 @@ class FixtureSetup
             $post_status = 'publish';
         }
 
-       
-
         $updated = wp_update_post(array('ID' => $fixture_id, 'post_date' => $wp_formated_date, 'post_date_gmt' => $wp_formated_date_gmt, 'post_status' => $post_status));
 
-        if(false && SCM_DEBUG){
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($value) . "\n",FILE_APPEND);
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($wp_formated_date) . "\n",FILE_APPEND);
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json','Update: ' .  json_encode($updated). "\n",FILE_APPEND);
+        if(SCM_DEBUG){
+            error_log(__METHOD__ . ' original value: '. $original);
+            error_log(__METHOD__ . ' if post status != future -> egine malakia post status:' .  $post_status);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($value) . "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($wp_formated_date) . "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json','Update: ' .  json_encode($updated). "\n",FILE_APPEND);
         }
 
         if (is_wp_error($updated)) {
@@ -84,8 +141,6 @@ class FixtureSetup
         if ($new_status !== 'publish') {
             return;
         }
-
-        
 
         $prev_fixture = ScmData::get_previous_fixture();
         if($prev_fixture->post_title === 'default'){
@@ -310,48 +365,7 @@ class FixtureSetup
 
     }
 
-    /**
-     *  Set new post of post type 'scm-fixture' to post_status = future
-     * 
-     *  @param array   $data                 An array of slashed, sanitized, and processed post data.
-     *  @param array   $postarr              An array of sanitized (and slashed) but otherwise unmodified post data.
-     *  @param array   $unsanitized_postarr  An array of slashed yet *unsanitized* and unprocessed post data as originally passed to wp_insert_post().
-     *  @param bool    $update               Whether this is an existing post being updated.
-     */
-
-    public static function set_fixture_status_to_future( $data,$postarr,$unsanitized_postarr,$update ){
-
-        $post_type = "scm-fixture"; 
-
-        if( $data['post_type'] !== $post_type ){
-            return $data;
-        }
-
-        if ($update) {
-            return $data;
-        }
-
-        $post_date = new \DateTime($data['post_date'], new \DateTimeZone('Europe/Athens'));
-        $current_date = new \DateTime('',new \DateTimeZone('Europe/Athens'));
-
-        //add +houer day to newly created post
-        $new_date = $current_date->modify('+1 hour');
-        $data['post_date'] = $new_date->format('Y-m-d H:i:s');
-        $data['post_date_gmt'] = get_gmt_from_date($new_date->format('Y-m-d H:i:s'));
-
-        if(false && SCM_DEBUG){
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($data) . "\n",FILE_APPEND);
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json','Update: ' .  json_encode($update). "\n",FILE_APPEND);
-
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($current_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date > $current_date). "\n",FILE_APPEND);
-
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($_POST). "\n",FILE_APPEND);
-        }
-  
-         return $data;
-    }
+   
 
     public static function set_fixture_status_to_future2(  int $post_id,\WP_Post $post ,bool $update, $post_before ){
 
