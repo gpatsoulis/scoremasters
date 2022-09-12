@@ -95,6 +95,7 @@ class FixtureSetup
         //$start_date = \DateTime::createFromFormat('Y-m-d H:i:s', $value, new \DateTimeZone('Europe/Athens'))->setTime(0, 0);
 
         $start_date = \DateTime::createFromFormat('Y-m-d H:i:s', $value, new \DateTimeZone('Europe/Athens'));
+        $start_date->modify('+1 hour');
         //wp post_date format: 0000-00-00 00:00:00
 
         $wp_formated_date = $start_date->format('Y-m-d H:i:s');
