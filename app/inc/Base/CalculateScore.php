@@ -173,7 +173,7 @@ class CalculateScore
 
         //These option are not in select option yet, because they are in Greek--- Start //
 
-        elseif ($total_goals < 3 && $prediction_content["Under / Over"] == "1 ή 2") {
+        elseif ($total_goals > 0 && $total_goals < 3 && $prediction_content["Under / Over"] == "1 ή 2") {
 
             $total_points = $total_points + intval($prediction_points_under_over);
             $double_uo = true;
