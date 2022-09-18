@@ -230,7 +230,31 @@ class FixtureSetup
 
         $form_data = $record->get_formatted_data();
 
-        // todo filter $key values from greek to english defaults px "SHMEIO" -> "Σημείο"
+        //error_log( json_encode($form_data,  JSON_UNESCAPED_UNICODE) );
+        /*
+{"SHMEIO":"1\/1","Under \/ Over":"Under 4.5","score":"-","Scorer":"1051","Double Points":"SHMEIO"}
+{"SHMEIO":"1\/1","Under \/ Over":"-","score":"2-0","Scorer":"1051","Double Points":"UNDER \/ OVER"}
+{"SHMEIO":"1\/1","Under \/ Over":"-","score":"2-0","Scorer":"1051","Double Points":"SCORER"}
+
+        */
+
+        $translations = array(
+             'ΣΗΜΕΙΟ'              => 'SHMEIO',
+             'ΣΚΟΡΕΡ'              => 'Scorer',
+             'ΔΙΠΛΑΣΙΑΣΜΟΣ ΠΟΝΤΩΝ' => 'Double Points',
+             'ΣΚΟΡ'                => 'score'
+        );
+
+        foreach( $form_data as $key => $value){
+            if(isset($translations[$key])){
+                $form_data[$translations[$key]] = $form_data[$key];
+                unset($form_data[$key]);
+            }
+        }
+
+        error_log( json_encode($form_data,  JSON_UNESCAPED_UNICODE) );
+        
+        // todo: filter $key values from greek to english defaults px "SHMEIO" -> "Σημείο"
         
         $form_meta = $record->get_form_meta(array('page_url'));
 
@@ -266,7 +290,6 @@ class FixtureSetup
 
         //if $req_url === false log error, stop action, return error message to fron end
 
-        //todo: check valid form name
         //todo: check if player can make predictions
         //todo: check if is for active week
         //todo: check for valid data
