@@ -1,6 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/app/tools/calculate_matchups_for_fixture.php';
-
 require_once dirname(__FILE__) . '/app/tools/calculate_weekly_score_for_fixture.php';
 
 echo 'hello';
