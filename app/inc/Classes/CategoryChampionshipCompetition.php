@@ -32,7 +32,6 @@ class CategoryChampionshipCompetition extends Competition {
         //$terms_array = get_the_terms($scm_competition, 'scm_competition_type');
      
         $terms_array = get_the_terms($scm_competition->ID, 'scm_competition_type');
-        //var_dump($terms_array);
 
         if(count($terms_array) !== 1){
             throw new \Exception( __METHOD__ .' inval no terms in scm_competition_type post id: ' . $post->ID );

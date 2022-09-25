@@ -291,7 +291,7 @@ final class ScmData
         }
         $season_start_date = new \DateTime($season_start_date_str, new \DateTimeZone('Europe/Athens'));
         //dirty fix
-        $season_start_date->modify('-1 hour');
+        $season_start_date->modify('-1 day');
 
         $season_end_date_str = get_field('scm-season-end-date', $current_season->ID);
         if (!$season_end_date_str) {
@@ -373,10 +373,7 @@ final class ScmData
 
         $current_season = self::get_current_season();
 
-        $competition_in_season = get_field('scm-season-competition', $competition->ID);
-
-        //var_dump($competition_in_season[0]->ID);
-        //var_dump($current_season->ID);
+        $competition_in_season = get_field('scm-season-competition', $competition->ID);      
 
         if ($current_season->ID === $competition_in_season[0]->ID) {
             return true;

@@ -27,7 +27,7 @@ class FixturesSelectWeekShortcode
 
     public function output(){
 
-        $fixtures = ScmData::get_all_fixtures_for_season();
+        $fixtures = ScmData::get_all_fixtures_for_season(); 
 
         $output = $this->template->container_start;
 
@@ -38,6 +38,17 @@ class FixturesSelectWeekShortcode
         <form action="{$action}" method="post">
             <select name="fixture_id" id="scm-fixtures-selection-week">
 HTML;
+        if(empty($fixtures)){
+            $data = array(
+                'fixture_id' => -99,
+                'fixture_title' => 'Δεν υπάρχουν αγωνιστικές εβδομάδες',
+                'fixture_start_date' => '',
+                'fixture_end_date' => '',
+            );
+
+            $output .= $this->template->get_html($data);
+        }
+
         foreach( $fixtures as $fixture ){
 
             $data = array(

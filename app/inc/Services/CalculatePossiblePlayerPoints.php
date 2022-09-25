@@ -27,10 +27,6 @@ class CalculatePossiblePlayerPoints
 
         $capabilityDiff = $match->home_team_dynamikotita - $match->away_team_dynamikotita;
 
-        //var_dump($capabilityDiff);
-        //var_dump($prediction_data);
-        //var_dump($match_points_table);
-
         $player_points_table = array(
             "Επιθετικός" => 3,
             "Μέσος" => 4,
@@ -49,7 +45,9 @@ class CalculatePossiblePlayerPoints
                     $scorer_points = $player_points_table[$player_position];
                 }
 
-                $tmp['prediction_key'] = $key;
+                //$tmp['prediction_key'] = $key;
+                $tmp['prediction_key'] = 'Σκόρερ';
+              
                 $tmp['prediction_string'] = (get_post($prediction_string))->post_title;
                 $tmp['possible_points'] = $scorer_points;
                 $data[] = $tmp;
@@ -75,6 +73,11 @@ class CalculatePossiblePlayerPoints
             $tmp['prediction_key'] = $key;
             $tmp['prediction_string'] = $prediction_string;
             $tmp['possible_points'] = $possible_points;
+
+            // todo: test
+            if ($key === 'SHMEIO'){
+                $tmp['prediction_key'] = 'Σημείο';
+            }
 
             $data[] = $tmp;
 

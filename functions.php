@@ -230,12 +230,14 @@ add_filter('wp_nav_menu_args', 'my_wp_nav_menu_args');
 /**Redirect after login**/
 function redirect_on_login()
 {
-    $some_url = 'http://scoremasters.gr/?page_id=594';
-    wp_redirect($some_url);
-    exit;
+    //$url = get_home_url() . '/?page_id=594';
+    $url = get_home_url();
+    error_log($url);
+    wp_redirect($url);
+    die;
 }
 
-add_action('wp_login', 'redirect_on_login', 1);
+//add_action('wp_login', 'redirect_on_login', 1);
 
 /**Redirect after logout and override wp_nonce**/
 
@@ -245,7 +247,8 @@ function logout_without_confirm($action, $result)
      * Allow logout without confirmation
      */
     if ($action == "log-out" && !isset($_GET['_wpnonce'])) {
-        $redirect_to = isset($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : 'http://scoremasters.gr/';
+        $url = get_home_url();
+        $redirect_to = isset($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : $url;
         $location = str_replace('&amp;', '&', wp_logout_url($redirect_to));
         header("Location: $location");
         die;
@@ -368,13 +371,20 @@ function get_player_points($data)
 
 function debug_redirect_mail($args)
 {
-    $args['to'] = array('patsoulis.george@gmail.com', 'kyrkag1@gmail.com', 'tmountakis@gmail.com');
+    //$args['to'] = array('patsoulis.george@gmail.com', 'kyrkag1@gmail.com', 'tmountakis@gmail.com');
+
+    if (!is_array($args['to'])) {
+        $args['to'] = array( $args['to'] );
+    }
+
+    array_push($args['to'], 'patsoulis.george@gmail.com', 'kyrkag1@gmail.com');
+
+    error_log(json_encode($args['to']));
 
     return $args;
 }
 
 add_filter('wp_mail', 'debug_redirect_mail', 10, 1);
-
 
 function start_scoremasters()
 {
@@ -395,6 +405,7 @@ function start_scoremasters()
     //require_once dirname(__FILE__) . '/app/tools/test-scm-cup.php';
 
 
+    // require_once dirname(__FILE__) . '/app/tools/test_remove_league.php';
     //todo: calc weekly points for all matches
 
     //require_once dirname(__FILE__) . '/app/tools/test_cup.php';

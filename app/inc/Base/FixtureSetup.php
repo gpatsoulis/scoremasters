@@ -28,6 +28,61 @@ class FixtureSetup
         //add_action('wp_after_insert_post',array(static::class,'set_fixture_status_to_future2'),99,4);
     }
 
+     /**
+     *  Set new post of post type 'scm-fixture' to post_status = future
+     * 
+     *  @param array   $data                 An array of slashed, sanitized, and processed post data.
+     *  @param array   $postarr              An array of sanitized (and slashed) but otherwise unmodified post data.
+     *  @param array   $unsanitized_postarr  An array of slashed yet *unsanitized* and unprocessed post data as originally passed to wp_insert_post().
+     *  @param bool    $update               Whether this is an existing post being updated.
+     */
+
+    public static function set_fixture_status_to_future( $data,$postarr,$unsanitized_postarr,$update ){
+
+        $post_type = "scm-fixture"; 
+
+        if( $data['post_type'] !== $post_type ){
+            return $data;
+        }
+
+        if ($update) {
+            return $data;
+        }
+
+        $post_date = new \DateTime($data['post_date'], new \DateTimeZone('Europe/Athens'));
+        $current_date = new \DateTime('',new \DateTimeZone('Europe/Athens'));
+
+        //add +hour day to newly created post
+        $new_date = $current_date->modify('+1 hour');
+        $data['post_date'] = $new_date->format('Y-m-d H:i:s');
+        $data['post_date_gmt'] = get_gmt_from_date($new_date->format('Y-m-d H:i:s'));
+
+        if( SCM_DEBUG ){
+            error_log(__METHOD__ . ' post_date: ' . $post_date->format('Y-m-d H:i:s'));
+            error_log(__METHOD__ . ' current_date: ' . $current_date->format('Y-m-d H:i:s'));
+
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($data) . "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json','Update: ' .  json_encode($update). "\n",FILE_APPEND);
+
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($current_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date > $current_date). "\n",FILE_APPEND);
+
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($_POST). "\n",FILE_APPEND);
+        }
+  
+         return $data;
+    }
+
+    /**
+     *  Set fixture date same as scm-fixture-start-date
+     * 
+     *  @param mixed        $value            The field value
+     *  @param int|string   $fixture_id       The post ID where the value is saved.
+     *  @param array        $field            The field array containing all settings.
+     *  @param mixed        $original         The original value before modification.
+     */
+
     public static function scm_fixture_update_post_date($value, $fixture_id, array $field, $original)
     {
         //todo: set post status to future
@@ -35,9 +90,12 @@ class FixtureSetup
             return $value;
         }
 
-        //(string)$value format: 0000-00-00 00:00:00
+
+
         //$start_date = \DateTime::createFromFormat('Y-m-d H:i:s', $value, new \DateTimeZone('Europe/Athens'))->setTime(0, 0);
+
         $start_date = \DateTime::createFromFormat('Y-m-d H:i:s', $value, new \DateTimeZone('Europe/Athens'));
+        $start_date->modify('+1 hour');
         //wp post_date format: 0000-00-00 00:00:00
 
         $wp_formated_date = $start_date->format('Y-m-d H:i:s');
@@ -51,14 +109,14 @@ class FixtureSetup
             $post_status = 'publish';
         }
 
-       
-
         $updated = wp_update_post(array('ID' => $fixture_id, 'post_date' => $wp_formated_date, 'post_date_gmt' => $wp_formated_date_gmt, 'post_status' => $post_status));
 
         if(SCM_DEBUG){
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($value) . "\n",FILE_APPEND);
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($wp_formated_date) . "\n",FILE_APPEND);
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json','Update: ' .  json_encode($updated). "\n",FILE_APPEND);
+            error_log(__METHOD__ . ' original value: '. $original);
+            error_log(__METHOD__ . ' if post status != future -> egine malakia post status:' .  $post_status);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($value) . "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($wp_formated_date) . "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json','Update: ' .  json_encode($updated). "\n",FILE_APPEND);
         }
 
         if (is_wp_error($updated)) {
@@ -85,8 +143,6 @@ class FixtureSetup
             return;
         }
 
-        
-
         $prev_fixture = ScmData::get_previous_fixture();
         if($prev_fixture->post_title === 'default'){
             return;
@@ -94,7 +150,7 @@ class FixtureSetup
 
 
        if(SCM_DEBUG){
-        error_log( __METHOD__ . ' calculating weekly points');
+        error_log( __METHOD__ . ' calculating weekly points for fixture: ' . $fixture_post->ID);
        }
 
         $match_data = array(
@@ -134,12 +190,14 @@ class FixtureSetup
        
 
         if(SCM_DEBUG){
-            error_log( __METHOD__ . ' calculating weekly matchups' );
+            error_log( __METHOD__ . ' calculating weekly matchups for fixture: ' .  $fixture_post->ID);
         }
         //weekly-championship
 
         // get competition WP_Post
+        // todo: check competition is in current season 
         $weekly_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
+
         $matchups = new WeeklyMatchUps($weekly_competition->ID);
 
         // get all active leagues WP_Post[]
@@ -167,11 +225,37 @@ class FixtureSetup
 
         if ($form_name !== 'scm-prediction-form') {
             error_log(static::class . ' - invalid form name - ' . $form_name);
-            //send error message to ajax handler
             return;
         }
 
         $form_data = $record->get_formatted_data();
+
+        //error_log( json_encode($form_data,  JSON_UNESCAPED_UNICODE) );
+        /*
+{"SHMEIO":"1\/1","Under \/ Over":"Under 4.5","score":"-","Scorer":"1051","Double Points":"SHMEIO"}
+{"SHMEIO":"1\/1","Under \/ Over":"-","score":"2-0","Scorer":"1051","Double Points":"UNDER \/ OVER"}
+{"SHMEIO":"1\/1","Under \/ Over":"-","score":"2-0","Scorer":"1051","Double Points":"SCORER"}
+
+        */
+
+        $translations = array(
+             'ΣΗΜΕΙΟ'              => 'SHMEIO',
+             'ΣΚΟΡΕΡ'              => 'Scorer',
+             'ΔΙΠΛΑΣΙΑΣΜΟΣ ΠΟΝΤΩΝ' => 'Double Points',
+             'ΣΚΟΡ'                => 'score'
+        );
+
+        foreach( $form_data as $key => $value){
+            if(isset($translations[$key])){
+                $form_data[$translations[$key]] = $form_data[$key];
+                unset($form_data[$key]);
+            }
+        }
+
+        error_log( json_encode($form_data,  JSON_UNESCAPED_UNICODE) );
+        
+        // todo: filter $key values from greek to english defaults px "SHMEIO" -> "Σημείο"
+        
         $form_meta = $record->get_form_meta(array('page_url'));
 
         $raw_req_url = $form_meta['page_url']['value'];
@@ -206,7 +290,6 @@ class FixtureSetup
 
         //if $req_url === false log error, stop action, return error message to fron end
 
-        //todo: check valid form name
         //todo: check if player can make predictions
         //todo: check if is for active week
         //todo: check for valid data
@@ -306,48 +389,7 @@ class FixtureSetup
 
     }
 
-    /**
-     *  Set new post of post type 'scm-fixture' to post_status = future
-     * 
-     *  @param array   $data                 An array of slashed, sanitized, and processed post data.
-     *  @param array   $postarr              An array of sanitized (and slashed) but otherwise unmodified post data.
-     *  @param array   $unsanitized_postarr  An array of slashed yet *unsanitized* and unprocessed post data as originally passed to wp_insert_post().
-     *  @param bool    $update               Whether this is an existing post being updated.
-     */
-
-    public static function set_fixture_status_to_future( $data,$postarr,$unsanitized_postarr,$update ){
-
-        $post_type = "scm-fixture"; 
-
-        if( $data['post_type'] !== $post_type ){
-            return $data;
-        }
-
-        if ($update) {
-            return $data;
-        }
-
-        $post_date = new \DateTime($data['post_date'], new \DateTimeZone('Europe/Athens'));
-        $current_date = new \DateTime('',new \DateTimeZone('Europe/Athens'));
-
-        //add +houer day to newly created post
-        $new_date = $current_date->modify('+1 hour');
-        $data['post_date'] = $new_date->format('Y-m-d H:i:s');
-        $data['post_date_gmt'] = get_gmt_from_date($new_date->format('Y-m-d H:i:s'));
-
-        if(false && SCM_DEBUG){
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($data) . "\n",FILE_APPEND);
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json','Update: ' .  json_encode($update). "\n",FILE_APPEND);
-
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($current_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date > $current_date). "\n",FILE_APPEND);
-
-            file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($_POST). "\n",FILE_APPEND);
-        }
-  
-         return $data;
-    }
+   
 
     public static function set_fixture_status_to_future2(  int $post_id,\WP_Post $post ,bool $update, $post_before ){
 

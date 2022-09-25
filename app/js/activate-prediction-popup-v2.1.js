@@ -102,6 +102,20 @@ function render_submited_prediction_data(popup, data) {
     let array_of_labels = popup.querySelectorAll('label');
     //console.log(data);
 
+    //translate data 
+    data['ΣΗΜΕΙΟ']              = data['SHMEIO'];
+    delete data['SHMEIO'];
+
+    data['ΣΚΟΡ']                = data['score'];
+    delete data['score'];
+
+    data['ΣΚΟΡΕΡ']              = data['Scorer'];
+    delete data['Scorer'];
+    
+    data['ΔΙΠΛΑΣΙΑΣΜΟΣ ΠΟΝΤΩΝ'] = data['Double Points'];
+    delete data['Double Points'];
+
+
     for (const [key, value] of Object.entries(data)) {
 
         let select_id = find_element_by_text_content(key, [...array_of_labels]);

@@ -28,6 +28,8 @@ class CalculateScore
 
         $column = strval($dynamikotita_home_team - $dynamikotita_away_team);
 
+        
+
         $points_table = $match->points_table;
 
         $prediction_points_shmeio = $prediction_points_under_over = $prediction_points_score = 0;
@@ -130,6 +132,7 @@ class CalculateScore
 
         $total_goals = intval($final_score["scm-full-time-home-score"]) + intval($final_score["scm-full-time-away-score"]);
 
+
         if ($total_goals < 1.5 && $prediction_content["Under / Over"] == "Under 1.5") {
 
             $total_points = $total_points + intval($prediction_points_under_over);
@@ -170,7 +173,7 @@ class CalculateScore
 
         //These option are not in select option yet, because they are in Greek--- Start //
 
-        elseif ($total_goals < 3 && $prediction_content["Under / Over"] == "1 ή 2") {
+        elseif ($total_goals > 0 && $total_goals < 3 && $prediction_content["Under / Over"] == "1 ή 2") {
 
             $total_points = $total_points + intval($prediction_points_under_over);
             $double_uo = true;
@@ -279,9 +282,17 @@ class CalculateScore
         //return ("Total Points: " . $total_points);
 
         if(false && SCM_DEBUG){
-            error_log(__METHOD__ . ' column: ' .  json_encode($column));
-            error_log(__METHOD__ . ' dynamikotita_home_team: ' .  json_encode($dynamikotita_home_team));
-            error_log(__METHOD__ . ' dynamikotita_away_team: ' .  json_encode($dynamikotita_away_team));
+            //echo 'prediction_points_shmeio: ' .$prediction_points_shmeio. '<br>';
+            //echo 'prediction_points_under_over: ' .$prediction_points_under_over .'<br>';
+
+            //echo '<pre>';
+            //var_dump($prediction_content);
+            //var_dump($total_points);
+            //echo '</pre>';
+
+            //error_log(__METHOD__ . ' column: ' .  json_encode($column));
+            //error_log(__METHOD__ . ' dynamikotita_home_team: ' .  json_encode($dynamikotita_home_team));
+            //error_log(__METHOD__ . ' dynamikotita_away_team: ' .  json_encode($dynamikotita_away_team));
         }
         return $total_points;
 

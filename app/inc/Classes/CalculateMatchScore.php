@@ -44,6 +44,10 @@ class CalculateMatchScore
         foreach ($this->predictions as $prediction) {
             $points = CalculateScore::calculate_points_after_prediction_submit($prediction, $this->match);
 
+            if(SCM_DEBUG){
+                error_log( __METHOD__ . ' when match is finished - points calculated: ' . $points . ' for prediction: ' . $prediction->ID);
+            }
+
             $data_to_insert_in_db[] = array(
                 'player_id' => $prediction->post_author,
                 'season_id' => $this->current_season->ID,
@@ -90,6 +94,7 @@ class CalculateMatchScore
              if(!isset($players_score['total_points']['season-league'])){
                 $players_score['total_points']['season-league'] = 0;
             }
+
             $players_score['total_points']['season-league'] = intval($score) + intval($players_score['total_points']['season-league']);
 
             //weekly score for weekly championship competition
@@ -155,7 +160,7 @@ class CalculateMatchScore
         return $this;
     }
 
-    public function send_predictions_by_email($email = 'patsoulis.george@gmail.com,kyrkag1@gmail.com,tmountakis@gmail.com')
+    public function send_predictions_by_email($email = array('patsoulis.george@gmail.com','kyrkag1@gmail.com','tmountakis@gmail.com'))
     {
         //tmountakis@gmail.com
 

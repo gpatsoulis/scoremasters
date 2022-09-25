@@ -116,11 +116,12 @@ class FixturesShortcode
                 if ($current_date > $match_date) {
                     $data['openForPredictions'] = false;
 
+                    //todo: check default values in acf
                     $score_acf_group = get_field('scm-full-time-score', $match->ID);
                     $score_home = $score_acf_group['scm-full-time-home-score'];
                     $score_away = $score_acf_group['scm-full-time-away-score'];
 
-                    if(!$score_acf_group['scm-full-time-home-score']){
+                    if(!$score_acf_group['scm-full-time-home-score'] && !$score_acf_group['scm-full-time-away-score']){
                         $half_time_score = get_field('scm-half-time-score', $match->ID);
                         $score_home = $half_time_score['scm-half-time-home-score'];
                         $score_away = $half_time_score['scm-half-time-away-score'];
@@ -163,7 +164,7 @@ class FixturesShortcode
                     //$prediction_string .= (string) $player_prediction;
                     $prediction_string .= (string) $possible_points;
                     $data['prediction-string'] = $prediction_string; 
-                }
+                } 
 
                 //error
                 $data['match-date'] = $match_date->getTimestamp();

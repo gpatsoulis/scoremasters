@@ -22,6 +22,12 @@ class ThemeSetup
             $current_user = wp_get_current_user();
             $player = new Player($current_user);
             $league_id = $player->get_league();
+
+            if($league_id){
+                $league = get_post($league_id);
+            }
+
+
             $league = get_post($league_id);
         }
 
@@ -29,8 +35,14 @@ class ThemeSetup
 
             if ($menu_item->post_title === 'scm-league-name') {
                 
-                $menu_item->title = $league->post_title;
-                $menu_item->url = $league->guid;
+                //$menu_item->title = $league->post_title;
+                $menu_item->title = 'Εβδομαδιαίο Πρωτάθλημα';
+
+                //todo: url = Λίστα Πρωταθλημάτων
+                $menu_item->url = '#';
+                if(isset($league)){
+                    $menu_item->url = $league->guid;
+                }
 
             }
 
