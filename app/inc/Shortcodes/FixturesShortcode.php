@@ -116,6 +116,7 @@ class FixturesShortcode
                 if ($current_date > $match_date) {
                     $data['openForPredictions'] = false;
 
+                    //todo: check default values in acf
                     $score_acf_group = get_field('scm-full-time-score', $match->ID);
                     $score_home = $score_acf_group['scm-full-time-home-score'];
                     $score_away = $score_acf_group['scm-full-time-away-score'];

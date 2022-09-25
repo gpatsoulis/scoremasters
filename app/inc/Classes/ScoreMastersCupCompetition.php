@@ -11,6 +11,41 @@ use Scoremasters\Inc\Base\ScmData;
 
 class ScoreMastersCupCompetition extends Competition {
 
+    public \WP_post $post_object;
+
+    public string $description;
+
+    public array $participants;
+
+    // taxonomy slug
+    public string $type;
+
+    //public $standings;
+
+    public bool $is_active;
+
+    //cup rounds
+    public array $rounds;
+
+
+    public function __construct( \WP_Post $competition ){
+
+         //check if is scm-competiton post type
+         if( 'scm-competition' !== get_post_type($competition)){
+            throw new \Exception( __METHOD__ . ' invalid post type post id: ' . $competition->ID );
+        }
+
+         // set competition type by taxonomy term 
+         $terms_array = get_the_terms($competition, 'scm_competition_type');
+         if(count($terms_array) !== 1){
+             throw new \Exception(__METHOD__ .'  invalid post term post id: ' . $competition->ID );
+         }
+
+         $this->type = $terms_array[0]->slug;
+
+         $this->post_object = $post;
+
+    }
 
     public static function init_get_participants(){
         //get all players
@@ -44,5 +79,4 @@ class ScoreMastersCupCompetition extends Competition {
 
     }
 
-   
 }
