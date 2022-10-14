@@ -37,6 +37,7 @@ class CalculateWeeklyMatchups
         $this->matchups = $matchups;
 
         $this->previous_matchups = $matchups->get_all_matchups();
+
         $this->fixture_no = count($this->previous_matchups);
 
     }

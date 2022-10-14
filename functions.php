@@ -412,6 +412,11 @@ function start_scoremasters()
     //require_once dirname(__FILE__) . '/app/tools/players-list.php';
     //require_once dirname(__FILE__) . '/app/tools/test_matchups_algorithm.php';
 
+    //new test
+    //require_once dirname(__FILE__) . '/app/tools/test_matchups_algorithm_2.php';
+    //require_once dirname(__FILE__) . '/app/tools/debug_get_player_score.php';
+
+
     //exporter
     //require_once dirname(__FILE__) . '/app/tools/export_predictions.php';
 

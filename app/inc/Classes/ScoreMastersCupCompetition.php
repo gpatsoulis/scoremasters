@@ -75,8 +75,58 @@ class ScoreMastersCupCompetition extends Competition {
 
         $participants = array_slice($players,0,$participants_no);
 
-        $this->participants = $participants;
+        $this->participants = [ [ 'round' => 0, 'participants' => $participants ] ];
 
     }
+
+    public function save_participants( $participants ):bool {
+
+        // save at end of each round
+
+        $season = get_post_meta( $this->post_object->ID, 'scm-season-competition', true  );
+
+        if( $season_id === false || $season_id === '' ){
+            error_log( __METHOD__ . '  meta($season_id) invalid $post_id (non-numeric, zero, or negative value) id: ' . $this->post_object->ID);
+            return false;
+        }
+
+        $season_id = $season[0];
+
+        $key = 'scm_cup_participants_seasonID_' . $season_id;
+
+        $current_participants = get_post_meta( $this->post_object->ID, $key, false);
+
+        if( $current_participants === false){
+            error_log( __METHOD__ . ' meta($current_participants) invalid $post_id (non-numeric, zero, or negative value) id: ' . $this->post_object->ID);
+            return false;
+        }
+
+        // get the last round saved and add +1 for new
+        $round = 0;
+        $last_entry = current($current_participants);
+        if(isset( $last_entry['round'] ) ){
+            $round = $last_entry['round'] + 1;
+        }
+
+
+        $data = [ 'round' => $round, 'participants' => $participants ];
+
+        $current_participants[] = $data;
+
+        $success = update_post_meta($this->post_object->ID, $key, $current_participants );
+
+        if( !$success ){
+            error_log( __METHOD__ . ' error updating meta ' . $key . ' round: ' . $round);
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+
+    //save participants for each round
+    // participants: [ 'round' => int, [ phase => int, participants => array [ player_id ], ... ]
 
 }

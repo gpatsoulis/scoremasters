@@ -20,8 +20,11 @@ class FixtureSetup
         add_filter('wp_insert_post_data',array(static::class,'set_fixture_status_to_future'),99,4);
         add_action('elementor_pro/forms/new_record', array(static::class, 'scm_player_prediction'), 10, 2);
         
+        // actions run on fixture end
+        // todo: change action from 'transition_post_status' to custom cron job 
         add_action('transition_post_status', array(static::class, 'add_weekly_championship_players_matchups'), 10, 3);
         add_action('transition_post_status', array(static::class, 'scm_match_trigger_players_weekly_point_calculation'), 15, 3);
+        add_action('transition_post_status', array(static::class, 'trigger_players_cup_point_calculation'), 15, 3);
         
         
         //add_action('publish_scm-fixture', array(static::class, 'add_weekly_championship_players_matchups'), 10, 2);
@@ -40,7 +43,7 @@ class FixtureSetup
     public static function set_fixture_status_to_future( $data,$postarr,$unsanitized_postarr,$update ){
 
         $post_type = "scm-fixture"; 
-
+        
         if( $data['post_type'] !== $post_type ){
             return $data;
         }
@@ -215,6 +218,24 @@ class FixtureSetup
         // save matchups in custom meta for each championship
 
         // seasonid_XXX [ 'fid_XXX' => ['leagueid_XXX' => ['pairs'],'leagueid_XXX' => ['pairs']]];
+
+    }
+
+    public static function trigger_players_cup_point_calculation(string $new_status, string $old_status, \WP_Post $fixture_post){
+         
+        // use transition_post_status hook
+         if ($old_status === $new_status) {
+            return;
+        }
+
+        if($old_status !== 'future'){
+            return;
+        }
+
+        if ($new_status !== 'publish') {
+            return;
+        }
+
 
     }
 
@@ -426,5 +447,12 @@ class FixtureSetup
         return;
 
     }
+
+    public static function check_fixture_enddate(){
+        // add custom cron job 
+        // create custom hook
+        // run custom hook
+    }
+
 
 }

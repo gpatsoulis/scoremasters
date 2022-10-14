@@ -253,3 +253,20 @@ Double: (bool) true/false //use twice per week
 }
 
  */
+
+ /*
+player_points
+
+['fixture_id_3935'=> [
+    match_id_3631 => [ 'season-league' => ['score' => int ]],
+    match_id_3637 => [ 'season-league' => ['score' => int ]],
+    weekly-championship => [ points => int,score => int,opponent_id => int ,home_field_advantage => bool]
+    ],
+ 'total_points' => [
+    'season-league' => int,
+    'weekly-championship' => int 
+ ]
+    
+]
+
+ */

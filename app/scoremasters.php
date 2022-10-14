@@ -23,7 +23,10 @@ CompetitionSetup::init();
 MatchSetup::init();
 ProPlayerSetup::init();
 PlayerSelectLeague::init();
+
+//-- debug --
 CompetitionRoundSetup::init();
+
 ThemeSetup::init();
 
 ShortcodeController::register_shortcodes();
