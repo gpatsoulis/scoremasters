@@ -420,7 +420,10 @@ final class ScmData
 
     // todo: replace old name with new "get_current_scm_competition_of_type"
     public static function get_current_scm_competition_of_type(string $scm_competition_taxonomy): \WP_Post
+
     {
+
+        $season = self::get_current_season();
 
         $args = array(
             'post_type' => 'scm-competition',
@@ -433,10 +436,22 @@ final class ScmData
                     'terms' => $scm_competition_taxonomy,
                 ),
             ),
+            'meta_query' => array(
+                array(
+                    'key' => 'scm-season-competition',
+                    'value' => serialize(array( (string) $season->ID )),
+                    'compare' => '='
+                ),
+            )
         );
 
         $posts = get_posts($args);
 
+        if(!empty($posts)){
+            return $posts[0];
+        }
+
+        //todo: return default post object
         return $posts[0];
     }
 
@@ -547,6 +562,56 @@ final class ScmData
 
         return $next_future[0];
     }
+
+    public static function get_current_phase_for_competition( string $scm_competition_type, string $post_status = 'publish' ):\WP_Post {
+        
+        $competition = self::get_current_scm_competition_of_type($scm_competition_type);
+
+        $args = array(
+            'post_status' => $post_status,
+            'post_type'  => 'scm-competition-roun',
+            'post_per_page' => 1,
+            'meta_query' => array(
+                array(
+                    'key' => 'scm-related-competition',
+                    'value' => serialize(array( (string) $competition->ID )),
+                    'compare' => '='
+                ),
+            )
+        );
+
+        $posts = get_posts($args);
+
+        if(!empty($posts)){
+            return $posts[0];
+        }
+
+        return self::get_default_WP_Post();
+    }
+
+    public static function get_competition_phases_by_fixture_id(int $fixture_id ):array
+    {
+        
+        $args = array(
+            'post_status' => 'any',
+            'post_type'  => 'scm-competition-roun',
+            'post_per_page' => 2,
+            'meta_query' => array(
+                array(
+                    'key' => 'scm-related-week',
+                    'value' =>  serialize((string) $fixture_id) ,
+                    //todo: malakia query δεν θα πρέπει να γίνεται με LIKE χρειάζεται άλλη δομή δεδομένων
+                    //https://wordpress.stackexchange.com/questions/16709/meta-query-with-meta-values-as-serialize-arrays
+                    'compare' => 'LIKE'
+                ),
+            )
+        );
+        
+        $phases_array = get_posts($args);
+
+        return $phases_array;
+    }
+
 
     // return default wp_post of type 'default' instead of null
     public static function get_default_WP_Post(): \WP_Post

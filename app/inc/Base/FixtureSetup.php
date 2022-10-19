@@ -24,12 +24,55 @@ class FixtureSetup
         // todo: change action from 'transition_post_status' to custom cron job 
         add_action('transition_post_status', array(static::class, 'add_weekly_championship_players_matchups'), 10, 3);
         add_action('transition_post_status', array(static::class, 'scm_match_trigger_players_weekly_point_calculation'), 15, 3);
+
+        //todo: remove trigger_players_cup_point_calculation action
         add_action('transition_post_status', array(static::class, 'trigger_players_cup_point_calculation'), 15, 3);
+
+        //todo: put add_weekly_championship_players_matchups and 
+        // scm_match_trigger_players_weekly_point_calculation actions 
+        // under new_fixture_published action
+        add_action('transition_post_status', array(static::class, 'new_fixture_published'), 20, 3);
         
         
         //add_action('publish_scm-fixture', array(static::class, 'add_weekly_championship_players_matchups'), 10, 2);
         //add_action('wp_after_insert_post',array(static::class,'set_fixture_status_to_future2'),99,4);
     }
+
+    public static function new_fixture_published( string $new_status, string $old_status, \WP_Post $fixture_post ){
+
+        $post_type = 'scm-fixture';
+
+        if( $fixture_post->post_type !== $post_type){
+            return;
+        }
+
+        // use transition_post_status hook
+        if ($old_status === $new_status) {
+            return;
+        }
+
+        if($old_status !== 'future'){
+            return;
+        }
+
+        if ($new_status !== 'publish') {
+            return;
+        }
+        
+        if( SCM_DEBUG ){
+            error_log( __METHOD__ . ' new fixture published ---EVENT--- ! id: ' .  $fixture_post->ID );
+        }
+
+        do_action('new_fixture_published_event', $new_status, $old_status, $fixture_post);
+        
+        /*
+        if (!array_key_exists('new_fixture_published_event', $GLOBALS['wp_filter'])) {
+            do_action('new_fixture_published_event', $new_status, $old_status, $fixture_post);
+        }
+        */
+
+    }
+
 
      /**
      *  Set new post of post type 'scm-fixture' to post_status = future
@@ -52,6 +95,8 @@ class FixtureSetup
             return $data;
         }
 
+        
+
         $post_date = new \DateTime($data['post_date'], new \DateTimeZone('Europe/Athens'));
         $current_date = new \DateTime('',new \DateTimeZone('Europe/Athens'));
 
@@ -61,17 +106,9 @@ class FixtureSetup
         $data['post_date_gmt'] = get_gmt_from_date($new_date->format('Y-m-d H:i:s'));
 
         if( SCM_DEBUG ){
+            error_log( __METHOD__ . ' set_fixture_status_to_future! ' .  $data['post_title']);
             error_log(__METHOD__ . ' post_date: ' . $post_date->format('Y-m-d H:i:s'));
             error_log(__METHOD__ . ' current_date: ' . $current_date->format('Y-m-d H:i:s'));
-
-            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($data) . "\n",FILE_APPEND);
-            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json','Update: ' .  json_encode($update). "\n",FILE_APPEND);
-
-            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
-            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($current_date->format('Y-m-d H:i:s')). "\n",FILE_APPEND);
-            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($post_date > $current_date). "\n",FILE_APPEND);
-
-            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_status.json', json_encode($_POST). "\n",FILE_APPEND);
         }
   
          return $data;
@@ -92,8 +129,6 @@ class FixtureSetup
         if (get_post_type($fixture_id) !== 'scm-fixture') {
             return $value;
         }
-
-
 
         //$start_date = \DateTime::createFromFormat('Y-m-d H:i:s', $value, new \DateTimeZone('Europe/Athens'))->setTime(0, 0);
 
@@ -116,10 +151,7 @@ class FixtureSetup
 
         if(SCM_DEBUG){
             error_log(__METHOD__ . ' original value: '. $original);
-            error_log(__METHOD__ . ' if post status != future -> egine malakia post status:' .  $post_status);
-            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($value) . "\n",FILE_APPEND);
-            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json', json_encode($wp_formated_date) . "\n",FILE_APPEND);
-            //file_put_contents(SCM_DEBUG_PATH . '/test_fixture_update_post_date.json','Update: ' .  json_encode($updated). "\n",FILE_APPEND);
+            error_log(__METHOD__ . ' if post status != future -> egine malakia --- post status:' .  $post_status);
         }
 
         if (is_wp_error($updated)) {
@@ -132,6 +164,10 @@ class FixtureSetup
     // todo: use match object instead of match_data array
     public static function scm_match_trigger_players_weekly_point_calculation(string $new_status, string $old_status, \WP_Post $fixture_post)
     {
+        
+        if( $fixture_post->post_type !== 'scm-fixture'){
+            return;
+        }
 
         // use transition_post_status hook
         if ($old_status === $new_status) {
@@ -181,6 +217,11 @@ class FixtureSetup
 
     public static function add_weekly_championship_players_matchups(string $new_status, string $old_status, \WP_Post $fixture_post)
     {
+
+        if( $fixture_post->post_type !== 'scm-fixture'){
+            return;
+        }
+
         // use transition_post_status hook
         if ($old_status === $new_status) {
             return;
@@ -222,7 +263,12 @@ class FixtureSetup
     }
 
     public static function trigger_players_cup_point_calculation(string $new_status, string $old_status, \WP_Post $fixture_post){
-         
+        
+
+        if( $fixture_post->post_type !== 'scm-fixture'){
+            return;
+        }
+
         // use transition_post_status hook
          if ($old_status === $new_status) {
             return;

@@ -16,6 +16,7 @@ use \Scoremasters\Inc\Shortcodes\CurrentPlayerMatchupShortcode;
 use \Scoremasters\Inc\Shortcodes\ShowPlayerScoreShortcode;
 use \Scoremasters\Inc\Shortcodes\PlayerProfileLeagueShortcode;
 use \Scoremasters\Inc\Shortcodes\LeagueWeeklyMatchupsShortcode;
+use \Scoremasters\Inc\Shortcodes\CupShortcode;
 
 class ShortcodeController {
 
@@ -35,7 +36,8 @@ class ShortcodeController {
 			\Scoremasters\Inc\Shortcodes\CurrentPlayerMatchupShortcode::class,
 			\Scoremasters\Inc\Shortcodes\ShowPlayerScoreShortcode::class,
 			\Scoremasters\Inc\Shortcodes\PlayerProfileLeagueShortcode::class,
-			\Scoremasters\Inc\Shortcodes\LeagueWeeklyMatchupsShortcode::class
+			\Scoremasters\Inc\Shortcodes\LeagueWeeklyMatchupsShortcode::class,
+			\Scoremasters\Inc\Shortcodes\CupShortcode::class,
         );
     }
 
