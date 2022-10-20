@@ -17,6 +17,8 @@ define('EXPORT_PATH', __DIR__ . '/export_predictions');
 define('SCM_DEBUG', true);
 define('SCM_DEBUG_PATH', __DIR__ . '/debug');
 
+define('SCM_STAGING', true);
+
 FixtureSetup::init();
 PlayerSetup::init();
 CompetitionSetup::init(); 

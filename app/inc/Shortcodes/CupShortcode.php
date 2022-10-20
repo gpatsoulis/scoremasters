@@ -58,8 +58,9 @@ class CupShortcode
         
         $template_data = $this->get_template_data( $matchups,$cup_phase_fixtures_array,$competition_season);
 
-        var_dump($template_data) ;
-        //var_dump($template_data[0]['rounds']);
+        foreach($template_data as $data){
+            $output .= $this->template->get_html($data);
+        }
 
         $output .= $this->template->container_end;
         $output .= $this->template->get_css();
@@ -121,9 +122,6 @@ class CupShortcode
                     'p2_score'  => $score_data_p2['cup_score'],
                 ];
             }
-
-            var_dump($data);
-            
 
             $output_data[] = $data;
 
