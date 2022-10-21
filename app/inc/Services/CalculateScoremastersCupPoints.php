@@ -62,10 +62,23 @@ final class CalculateScoremastersCupPoints  {
             }
 
             if( $player_a_score == $player_b_score ){
-                $score[] = [ 
-                    ['player_id' => $players[0]->player_id,'cup_points' => 1],
-                    ['player_id' => $players[1]->player_id,'cup_points' => 1] 
-                ];
+                // get players scm-league score, in case of draw player with most season-league points advances
+                $p1_points = $players[0]->player_points['total_points']['season-league'];
+                $p2_points = $players[1]->player_points['total_points']['season-league'];
+
+                if($p1_points > $p2_points){
+                    $score[] = [ 
+                        ['player_id' => $players[0]->player_id,'cup_points' => 1],
+                        ['player_id' => $players[1]->player_id,'cup_points' => 0] 
+                    ];
+                }else{
+                    $score[] = [ 
+                        ['player_id' => $players[0]->player_id,'cup_points' => 0],
+                        ['player_id' => $players[1]->player_id,'cup_points' => 1] 
+                    ];
+                }
+
+                
             }
 
         }
