@@ -3,6 +3,12 @@ require_once dirname(__FILE__) . '/app/tools/calculate_matchups_for_fixture.php'
 require_once dirname(__FILE__) . '/app/tools/calculate_weekly_score_for_fixture.php';
 
 use Scoremasters\Inc\Base\ScmData;
+use Scoremasters\Inc\Classes\WeeklyMatchUps;
+use Scoremasters\Inc\Services\CalculateWeeklyMatchups;
+
+$test = new WeeklyMatchUps(3703);
+
+var_dump($test->get_all_matchups());
 
 echo 'hello';
 //local_id:        2574
@@ -69,41 +75,12 @@ $args = array(
     ),
 );
 
-$phase = get_posts($args)[0];
+$phase = get_posts($args);
 
 var_dump($phase);
 
-//var_dump(get_field('scm-related-competition',$phase->ID));
-//var_dump(serialize(get_post_meta(5378, 'scm-related-week',true)));
-//var_dump(get_post_meta(5378,'scm-related-competition'));
-//var_dump(get_field('scm-related-week', 5378));
-//var_dump(get_field('scm-related-competition', 5378));
-
-//var_dump(get_field('groups__headsup',5378));
-
-$acf_matchups = get_field('groups__headsup', 5378);
-
-$acf_fixtures = get_field('scm-related-week', 5378);
-var_dump($acf_fixtures);
-//scm-related-competition
-$competition = get_field('scm-related-competition', 5378);
-var_dump($competition);
 
 
-
-$matchups = [];
-foreach ($acf_matchups as $group) {
-    $players = [];
-    foreach ($group['group__headsup'] as $acf_player) {
-        $players[] = $acf_player['scm-group-player'];
-    }
-
-    $matchups[] = $players;
-}
-
-var_dump($matchups);
-
-$score = get_user_meta(30,'score_points_seasonID_3701');
 //var_dump( $score[0]['fixture_id_3709'] );
 /*
 [ 'total_points' => ['season-league' => int,'weekly-championship' => int]

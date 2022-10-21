@@ -25,8 +25,8 @@ class CalculateWeeklyMatchups
     public $previous_matchups;
 
     private $meta_key = 'weekly_matchups';
-
-    public $fixture_no;
+    
+    public int $fixture_no; //count how many fixtures are
 
     public function __construct(WeeklyMatchUps $matchups, $league_id)
     {
@@ -81,6 +81,7 @@ class CalculateWeeklyMatchups
     public function get_previous_matchups( $new_fixture_id ){
 
         $previous = end($this->previous_matchups);
+
         if(isset($this->previous_matchups['fixture_id_' . $new_fixture_id])){
             $previous = prev($this->previous_matchups);
         }
@@ -88,7 +89,13 @@ class CalculateWeeklyMatchups
         return $previous;
     }
 
-    public function for_fixture_id($new_fixture_id)
+    /**
+     * When new fixture is created set the weekly matchups
+     * check if matchups already exists
+     * check if previous matchups exist, if not initialize matchups
+     * 
+     */
+    public function for_fixture_id( int $new_fixture_id)
     {
 
         //$participants
@@ -108,6 +115,12 @@ class CalculateWeeklyMatchups
 
         //count how many fixtures
         $fixture_no = $this->fixture_no;
+        
+        // if new fixture_id entry is created for the "weekly_matchups" meta
+        // fixture_no has a +1 error
+        if( isset($this->previous_matchups['fixture_id_' . $new_fixture_id]) ){
+            $fixture_no = $this->fixture_no - 1;
+        }
 
         $no_of_participants = count($previous_matchups);
 
@@ -152,8 +165,27 @@ class CalculateWeeklyMatchups
 
         $this->next_matchups = $next_matchups;
 
-        return $this;
+        if(SCM_DEBUG){
+            error_log(__METHOD__ . ' week number :' . ($fixture_no % 2) );
+        }
 
+        return $this;
+        /*
+         [ fixture_id_xxx: [
+                    league_id_xxx: [ xx,xx,xx,xx,xx,xx],
+                    league_id_xxx: [ xx,xx,xx,xx,xx,xx],
+                    ...
+            ],
+        fixture_id_xxx: [
+                    league_id_xxx: [ xx,xx,xx,xx,xx,xx],
+                    league_id_xxx: [ xx,xx,xx,xx,xx,xx],
+                    ...
+            ],
+
+        ....
+         ]
+        
+        */
     }
 
     protected function initialize_matchups($fixture_id)
