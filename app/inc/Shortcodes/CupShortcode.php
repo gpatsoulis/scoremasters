@@ -95,7 +95,7 @@ class CupShortcode
         return $matchups;
     }
 
-    public function get_template_data( $matchups, $fixtures_array,$competition_season ){
+    public function get_template_data( array $matchups, $fixtures_array,$competition_season ){
 
         
         $output_data = [];
@@ -145,7 +145,7 @@ class CupShortcode
       */
     }
 
-    private function get_points_per_fixture( $player, $fixture ,$competition_season ): array {
+    private function get_points_per_fixture( \WP_Post $player,int $fixture ,\WP_Post $competition_season ): array {
 
 
         $key = 'score_points_seasonID_' . $competition_season->ID; 
