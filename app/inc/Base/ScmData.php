@@ -202,7 +202,7 @@ final class ScmData
         return $matches;
     }
 
-    public static function get_all_matches_for_fixture($fixture)
+    public static function get_all_matches_for_fixture(\WP_Post $fixture): array
     {
 
         $current_fixture = $fixture;
