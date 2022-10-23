@@ -155,7 +155,14 @@ class CupShortcode
         
 
         if(!isset( $score[ $fixture_id ][ 'score-masters-cup' ])){
-            return [ 'cup_score' => 0,'fixture_points' => 0 ] ;
+            $cup_score = 0;
+            $fixture_points = 0;
+
+            if(isset($score[ $fixture_id ][ 'weekly-championship' ][ 'points' ])){
+                $fixture_points =$score[ $fixture_id ][ 'weekly-championship' ][ 'points' ];
+            }
+
+            return [ 'cup_score' => $cup_score,'fixture_points' => $fixture_points ] ;
         }
 
         $score = $score[ $fixture_id ][ 'score-masters-cup' ][ 'score' ];

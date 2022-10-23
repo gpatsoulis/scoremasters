@@ -455,7 +455,7 @@ final class ScmData
         return $posts[0];
     }
 
-    public static function get_all_leagues(string $post_type = 'scm_league')
+    public static function get_all_leagues(string $post_type = 'scm_league'): array
     {
         $args = array(
             'post_type' => $post_type,
