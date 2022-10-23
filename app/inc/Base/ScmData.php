@@ -211,7 +211,7 @@ final class ScmData
         $matches = get_field('week-matches', $current_fixture->ID)[0]['week-match'];
 
         if (!$matches) {
-            throw new Exception(static::class . ' get_field("week-matches") error');
+            throw new \Exception(static::class . ' get_field("week-matches") error');
         }
 
         return $matches;
