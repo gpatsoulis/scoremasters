@@ -241,20 +241,21 @@ final class ScmData
 
         if (!$fixture_start_date_str) {
             error_log('ScmData::get_all_player_predictions_for_fixture\ error value in acf field week-start-date');
-            throw new Exception(static::class . ' no active fixture');
+            throw new \Exception(static::class . ' --- [no fixture selected] ---');
         }
         $fixture_start_date = new \DateTime($fixture_start_date_str, new \DateTimeZone('Europe/Athens'));
 
         $fixture_end_date_str = get_field('week-end-date', $fixture->ID);
         if (!$fixture_end_date_str) {
             error_log('ScmData::get_all_player_predictions_for_fixture\ error value in acf field week-end-date');
-            throw new Exception(static::class . ' no fixture_end_date_str');
+            throw new \Exception(static::class . ' no fixture_end_date_str');
         }
         $fixture_end_date = new \DateTime($fixture_end_date_str, new \DateTimeZone('Europe/Athens'));
 
         $args = array(
-            'aurhor' => $player_id,
+            'author' => $player_id,
             'post_type' => 'scm-prediction',
+            'posts_per_page' => -1,
             'post_status' => 'any',
             'date_query' => array(
                 'after' => array(
@@ -570,7 +571,7 @@ final class ScmData
         $args = array(
             'post_status' => $post_status,
             'post_type'  => 'scm-competition-roun',
-            'post_per_page' => 1,
+            'posts_per_page' => 1,
             'meta_query' => array(
                 array(
                     'key' => 'scm-related-competition',
@@ -595,7 +596,7 @@ final class ScmData
         $args = array(
             'post_status' => 'any',
             'post_type'  => 'scm-competition-roun',
-            'post_per_page' => 2,
+            'posts_per_page' => 2,
             'meta_query' => array(
                 array(
                     'key' => 'scm-related-week',
