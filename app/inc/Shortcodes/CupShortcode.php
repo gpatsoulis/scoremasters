@@ -27,7 +27,7 @@ class CupShortcode
         add_shortcode($this->name, array($this, 'output'));
     }
 
-    public function output(){
+    public function output():string {
 
         //curent cup round - phase
         //player pairs
@@ -95,7 +95,7 @@ class CupShortcode
         return $matchups;
     }
 
-    public function get_template_data( array $matchups, $fixtures_array,$competition_season ){
+    public function get_template_data( array $matchups, array $fixtures_array,\WP_Post $competition_season ):array {
 
         
         $output_data = [];

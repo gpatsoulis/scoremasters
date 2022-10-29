@@ -87,12 +87,19 @@ class CompetitionRoundSetup
         }
     }
 
+    /**
+     * actions_on_new_fixture_published
+     * 
+     * When a new fixture changes status from future to publish, checks previous fixture
+     * for existing cup phase, calculates score and update player's data. 
+     * Runs action on custom wp event "new_fixture_published_event"
+     * 
+     * @param string  $new_status   The competition post of type scm-competition-roun
+     * @param string  $old_status   The competition post of type scm-competition-roun
+     * @param WP_Post  $fixture_post   The competition post of type scm-competition-roun
+     */
     public static function actions_on_new_fixture_published(string $new_status, string $old_status, \WP_Post $fixture_post)
     {
-
-        // When new fixture is published
-        // check previous fixture for cup phase-round
-        // if exists -> calculate score
 
         $prev_fixture = ScmData::get_previous_fixture();
 

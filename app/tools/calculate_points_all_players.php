@@ -25,7 +25,10 @@ $args = array(
     'posts_per_page' => -1,
 );
 
-$predictions = get_posts($args);
+//$predictions = get_posts($args); 
+
+$match = get_post( 5772 );
+$predictions = ScmData::get_players_predictions_for_match( $match );
 
 //var_dump(count($predictions));
 
@@ -36,8 +39,6 @@ $current_season = ScmData::get_current_season();
 
 
 foreach($predictions as $prediction){
-
-    //var_dump($prediction);
 
     $match_id = explode('-',$prediction->post_title)[0];
     $match = (new FootballMatch(intval($match_id)))->setup_data();
@@ -97,18 +98,37 @@ foreach ($data_to_insert_in_db as $player_score_data) {
         $old_meta_value = array();
     }
 
+    var_dump($old_meta_value['total_points']['season-league']);
+
+    if( isset($old_meta_value['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points']) ){
+        $old_meta_value['total_points']['season-league'] = intval($old_meta_value['total_points']['season-league']) - $old_meta_value['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'];
+    }
+
+    if( isset($old_meta_value['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points']) ){
+
+        var_dump('old points: ' . $old_meta_value['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points']);
+        var_dump('new points: ' . $score);
+        $old_meta_value['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'] = $score;
+        
+    }
+/*
     if (isset($old_meta_value['fixture_id_' . $fixture_id])) {
         $merged_matches = array_merge($old_meta_value['fixture_id_' . $fixture_id], array('match_id_' . $match_id => $score));
         $old_meta_value['fixture_id_' . $fixture_id] = $merged_matches;
     } else {
         $old_meta_value['fixture_id_' . $fixture_id] = array('match_id_' . $match_id => $score);
     }
+    */
 
     if(!isset($old_meta_value['total_points'])){
-        $old_meta_value['total_points'] = 0;
+        //$old_meta_value['total_points'] = 0;
     }
 
-    $old_meta_value['total_points'] = intval($score) + intval($old_meta_value['total_points']);
+    
+    $old_meta_value['total_points']['season-league'] = intval($score) + intval($old_meta_value['total_points']['season-league']);
+
+    
+    var_dump($old_meta_value['total_points']['season-league']);
 
     $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $old_meta_value);
 
@@ -116,12 +136,23 @@ foreach ($data_to_insert_in_db as $player_score_data) {
         error_log(__METHOD__ . ' error updating score metadata for user: ' . $player_id);
     }
 
-    update_user_meta($player_id, 'total_points', $old_meta_value['total_points']);
+    //update_user_meta($player_id, 'total_points', $old_meta_value['total_points']);
 
     //$find_key = preg_replace("/[^0-9.]/", "", 'fixture_id_850');
 
 }
 
+/*
+        [ 'total_points' => ['season-league' => int,'weekly-championship' => int]
+          'fixture_id_3709' => [ 
+            'match_id_3631' => ['season-league' => ['points' => int ]], 
+            'match_id_3637' => ...,
+            'weekly-championship' => [ 'points' => int,'score' => int,'opponent_id' => int,'home_field_advantage' => boolean],
+            'score-masters-cup' => [ 'score' => int ,'opponent_id' => int, 'phase_id'=> int]
+            ]
+        ]
+        */
+        
 $endtime = microtime(true);
 $timediff = $endtime - $starttime;
 

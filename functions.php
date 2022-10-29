@@ -421,6 +421,7 @@ function start_scoremasters()
     //require_once dirname(__FILE__) . '/app/tools/export_predictions.php';
 
     //require_once dirname(__FILE__) . '/app/tools/export_predictions_by_match.php';
+
     //require_once dirname(__FILE__) . '/app/tools/calculate_points_all_players.php';
 
 }
