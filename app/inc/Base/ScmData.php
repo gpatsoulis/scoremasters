@@ -241,14 +241,14 @@ final class ScmData
 
         if (!$fixture_start_date_str) {
             error_log('ScmData::get_all_player_predictions_for_fixture\ error value in acf field week-start-date');
-            throw new \Exception(static::class . ' --- [no fixture selected] ---');
+            throw new \Exception( __METHOD__ . ' --- [no fixture selected] ---');
         }
         $fixture_start_date = new \DateTime($fixture_start_date_str, new \DateTimeZone('Europe/Athens'));
 
         $fixture_end_date_str = get_field('week-end-date', $fixture->ID);
         if (!$fixture_end_date_str) {
             error_log('ScmData::get_all_player_predictions_for_fixture\ error value in acf field week-end-date');
-            throw new \Exception(static::class . ' no fixture_end_date_str');
+            throw new \Exception(__METHOD__ . ' no fixture_end_date_str');
         }
         $fixture_end_date = new \DateTime($fixture_end_date_str, new \DateTimeZone('Europe/Athens'));
 
