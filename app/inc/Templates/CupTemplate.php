@@ -181,6 +181,10 @@ HTML;
         padding: 16px;
         margin:  0px 16px 0px 16px;
     }
+
+    .fixture-results {
+        margin-bottom: 4em;  
+    }
 }
 
         </style>
