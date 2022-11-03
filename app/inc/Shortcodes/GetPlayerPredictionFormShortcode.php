@@ -35,8 +35,11 @@ class GetPlayerPredictionFormShortcode
             && wp_verify_nonce($_POST['scm_get_players_predictions'], 'submit_form')
         ) {
             //valid request
-            $selected_fixture = get_post(filter_var($_POST['fixture_id'], FILTER_VALIDATE_INT)) ?? ScmData::get_current_fixture();
-            $selected_user_id = filter_var($_POST['player_id'], FILTER_VALIDATE_INT) ?? $user->ID;
+            $ui_fixture_id = filter_var($_POST['fixture_id'], FILTER_VALIDATE_INT);
+            $selected_fixture = ( $ui_fixture_id ) ? get_post( intval($ui_fixture_id) ) : ScmData::get_current_fixture();
+
+            $ui_user_id = filter_var($_POST['player_id'], FILTER_VALIDATE_INT);
+            $selected_user_id = ( $ui_user_id ) ? $ui_user_id : $user->ID;
 
             //get db data
             $predictions = ScmData::get_all_player_predictions_for_fixture($selected_fixture, $selected_user_id);
