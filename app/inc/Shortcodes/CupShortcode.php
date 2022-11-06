@@ -32,14 +32,24 @@ class CupShortcode
         //curent cup round - phase
         //player pairs
         //fixtures for cup round
+        //get_all_rounds_for_season()
 
-        $cup_competition_phase = ScmData::get_current_phase_for_competition('score-masters-cup');
+        if (isset($_POST['cup_round_id'])
+            && isset($_POST['scm_cup_round_input'])
+            && wp_verify_nonce($_POST['scm_cup_round_input'], 'cup_submit_form')) {
 
-        if( $cup_competition_phase->post_title == 'default'){
-            $cup_competition_phase = ScmData::get_current_phase_for_competition('score-masters-cup','future');
+            $post_value = filter_var($_POST['cup_round_id'], FILTER_VALIDATE_INT);
         }
+        
 
-
+        if(isset($post_value)){
+            $cup_competition_phase = get_post( (int) $post_value );
+        }else{
+            $cup_competition_phase = ScmData::get_current_phase_for_competition('score-masters-cup');
+            if( $cup_competition_phase->post_title == 'default'){
+                $cup_competition_phase = ScmData::get_current_phase_for_competition('score-masters-cup','future');
+            }
+        }
 
         $output = $this->template->container_start;
 
@@ -57,6 +67,9 @@ class CupShortcode
     
         
         $template_data = $this->get_template_data( $matchups,$cup_phase_fixtures_array,$competition_season);
+
+        $form_options_data = ScmData::get_all_cup_rounds_for_current_season();
+        $output .= $this->template->get_input_form($form_options_data);
 
         foreach($template_data as $data){
             $output .= $this->template->get_html($data);
@@ -105,9 +118,6 @@ class CupShortcode
             $data = [];
             $data['p1_name'] = $players_pair[0]->display_name;
             $data['p2_name'] = $players_pair[1]->display_name;
-
-
-          
 
             foreach( $fixtures_array as $fixture_obj ){
 

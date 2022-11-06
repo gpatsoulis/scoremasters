@@ -39,6 +39,7 @@ class FixturesSelectWeekShortcode
             <select name="fixture_id" id="scm-fixtures-selection-week">
 HTML;
         if(empty($fixtures)){
+            // todo: needs fix ScmData::get_all_fixtures_for_season return default post instead of empty array
             $data = array(
                 'fixture_id' => -99,
                 'fixture_title' => 'Δεν υπάρχουν αγωνιστικές εβδομάδες',

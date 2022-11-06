@@ -24,27 +24,8 @@ final class CupTemplate implements TemplateInterface
         $p2_name = $data['p2_name'];
         $p1_score = 0;
         $p2_score = 0;
-        
-        $inner_tmp = '<!-- inner html -->';
-        foreach($data['rounds'] as $round){
-            $fixture_title = $round['fixture']->post_title;
-            $p1_points = $round['p1_points'];
-            $p2_points = $round['p2_points'];
-
-            $p1_score += $round['p1_score'];
-            $p2_score += $round['p2_score'];
-
-
-            $inner_tmp .= $inner_html = <<<HTML
-            <div class="week-score">
-                <div class="week-score-home"><h4>{$p1_points}</h4></div>
-                <div class="week-number">{$fixture_title}</div>
-                <div class="week-score-away"><h4>{$p2_points}</h4></div>
-            </div>
-HTML;
-
-        }
-
+       
+        $inner_tmp = self::fixture_results($data,$p1_score,$p2_score);
 
         $template_html = <<<HTML
 
@@ -68,9 +49,61 @@ HTML;
         </div>
 HTML;
 
-  
-
         return $template_html;
+    }
+
+
+    private function fixture_results( $data, &$p1_score, &$p2_score ):string {
+
+        $inner_tmp = '<!-- inner html -->';
+
+        foreach($data['rounds'] as $round){
+
+            $fixture_title = $round['fixture']->post_title;
+
+            $p1_points = $round['p1_points'];
+            $p2_points = $round['p2_points'];
+
+            $p1_score += $round['p1_score'];
+            $p2_score += $round['p2_score'];
+
+
+            $inner_tmp .= $inner_html = <<<HTML
+            <div class="week-score">
+                <div class="week-score-home"><h4>{$p1_points}</h4></div>
+                <div class="week-number">{$fixture_title}</div>
+                <div class="week-score-away"><h4>{$p2_points}</h4></div>
+            </div>
+HTML;
+
+        }
+
+        return $inner_tmp;
+
+    }
+
+    public function get_input_form(array $data ):string {
+
+        $action = htmlspecialchars($_SERVER['REQUEST_URI']);
+        $nonce = wp_nonce_field( 'cup_submit_form', 'scm_cup_round_input' );
+
+        $html_options = '';
+
+        foreach( $data as $option){
+            $html_options .= "<option value=\"{$option->ID}\">{$option->post_title}</option>";
+        }
+
+        $form = <<<HTML
+        <form action="{$action}" method="post">
+            <select name="cup_round_id" id="scm-cup-round-select">
+                {$html_options }
+            </select>
+            {$nonce}
+            <input type="submit" name="submit" value="Προβολή" />
+        </form>
+        HTML;
+
+        return $form;
     }
 
     public function get_css(array $data = array()): string

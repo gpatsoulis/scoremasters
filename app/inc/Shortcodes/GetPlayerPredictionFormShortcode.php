@@ -36,6 +36,7 @@ class GetPlayerPredictionFormShortcode
         ) {
             //valid request
             $ui_fixture_id = filter_var($_POST['fixture_id'], FILTER_VALIDATE_INT);
+
             $selected_fixture = ( $ui_fixture_id ) ? get_post( intval($ui_fixture_id) ) : ScmData::get_current_fixture();
 
             $ui_user_id = filter_var($_POST['player_id'], FILTER_VALIDATE_INT);

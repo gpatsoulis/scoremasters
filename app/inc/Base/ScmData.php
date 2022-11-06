@@ -448,11 +448,10 @@ final class ScmData
 
         $posts = get_posts($args);
 
-        if(!empty($posts)){
-            return $posts[0];
+        if(empty($posts)){
+            return array();
         }
 
-        //todo: return default post object
         return $posts[0];
     }
 
@@ -583,11 +582,11 @@ final class ScmData
 
         $posts = get_posts($args);
 
-        if(!empty($posts)){
-            return $posts[0];
+        if(empty($posts)){
+            return self::get_default_WP_Post();
         }
 
-        return self::get_default_WP_Post();
+        return $posts[0];
     }
 
     public static function get_competition_phases_by_fixture_id(int $fixture_id ):array
@@ -613,6 +612,67 @@ final class ScmData
         return $phases_array;
     }
 
+    public static function get_current_competition_of_type(string $competition_type ): \WP_post {
+
+        // type = 'score-masters-cup'
+
+        $args = array(
+            'post_status' => 'publish',
+            'posts_per_page' => 1,
+            'post_type' => 'scm-competition',
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'scm_competition_type',
+                    'field'    => 'slug',
+                    'terms'    => $competition_type,
+                ),
+            ),
+        );
+
+        $posts = get_posts( $args );
+
+        if(empty($posts)){
+            return self::get_default_WP_Post();
+        }
+
+        return $posts[0];
+    }
+
+    public static function get_all_cup_rounds_for_current_season( ):array {
+
+        $current_season = self::get_current_season();
+        
+        $current_cup_competition = self::get_current_competition_of_type('score-masters-cup');
+
+        // check if current season has competiton
+        $current_season_for_cup_competition = get_field('scm-season-competition',$current_cup_competition->ID)[0];
+        //$current_season_for_cup_competition = get_post_meta($current_cup_competition->ID,'scm-season-competition',true)[0];
+
+        if( $current_season->ID !== $current_season_for_cup_competition->ID){
+            return array();
+        }
+
+        $args = array(
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'post_type' => 'scm-competition-roun',
+            'meta_query' => array(
+                array(
+                    'key' => 'scm-related-competition',
+                    //a:1:{i:0;s:4:"3701";}
+                    //todo: malakia query δεν θα πρέπει να γίνεται με LIKE χρειάζεται άλλη δομή δεδομένων
+                    //https://wordpress.stackexchange.com/questions/16709/meta-query-with-meta-values-as-serialize-arrays
+                    'value' =>  serialize( strval($current_cup_competition->ID) ) ,
+                    'compare' => 'LIKE',
+                ),
+            ),
+
+        );
+
+        $posts = get_posts( $args );
+
+        return $posts;
+    }
 
     // return default wp_post of type 'default' instead of null
     public static function get_default_WP_Post(): \WP_Post
