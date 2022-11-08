@@ -60,7 +60,7 @@ class FixtureSetup
         }
         
         if( SCM_DEBUG ){
-            error_log( __METHOD__ . ' new fixture published ---EVENT--- ! id: ' .  $fixture_post->ID );
+            error_log( __METHOD__ . ' ---- new fixture published ---EVENT--- ! id: ' .  $fixture_post->ID );
         }
 
         do_action('new_fixture_published_event', $new_status, $old_status, $fixture_post);
@@ -106,9 +106,9 @@ class FixtureSetup
         $data['post_date_gmt'] = get_gmt_from_date($new_date->format('Y-m-d H:i:s'));
 
         if( SCM_DEBUG ){
-            error_log( __METHOD__ . ' set_fixture_status_to_future! ' .  $data['post_title']);
-            error_log(__METHOD__ . ' post_date: ' . $post_date->format('Y-m-d H:i:s'));
-            error_log(__METHOD__ . ' current_date: ' . $current_date->format('Y-m-d H:i:s'));
+            error_log( __METHOD__ . ' ---- set_fixture_status_to_future! ' .  $data['post_title']);
+            error_log(__METHOD__ . ' ---- post_date: ' . $post_date->format('Y-m-d H:i:s'));
+            error_log(__METHOD__ . ' ---- current_date: ' . $current_date->format('Y-m-d H:i:s'));
         }
   
          return $data;
@@ -136,7 +136,7 @@ class FixtureSetup
         $start_date->modify('+1 hour');
 
         if(SCM_STAGING){
-            $start_date->modify('-1 hour');
+            //$start_date->modify('-1 hour');
         }
         //wp post_date format: 0000-00-00 00:00:00
 
@@ -193,7 +193,7 @@ class FixtureSetup
 
 
        if(SCM_DEBUG){
-        error_log( __METHOD__ . ' calculating weekly points for fixture: ' . $fixture_post->ID);
+        error_log( __METHOD__ . ' ---- calculating weekly points for fixture: ' . $prev_fixture . ' current_fixture: ' . $fixture_post->ID);
        }
 
         $match_data = array(

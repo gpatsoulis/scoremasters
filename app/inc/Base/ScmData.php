@@ -653,7 +653,8 @@ final class ScmData
         }
 
         $args = array(
-            'post_status' => 'publish',
+            //'post_status' => 'publish',
+            'post_status' => 'any',
             'posts_per_page' => -1,
             'post_type' => 'scm-competition-roun',
             'meta_query' => array(
