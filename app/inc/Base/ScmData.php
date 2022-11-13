@@ -604,7 +604,14 @@ final class ScmData
                     //https://wordpress.stackexchange.com/questions/16709/meta-query-with-meta-values-as-serialize-arrays
                     'compare' => 'LIKE'
                 ),
-            )
+            ),
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'scm_competition_type',
+                    'field'    => 'slug',
+                    'terms'    => 'score-masters-cup',
+                ),
+            ),
         );
         
         $phases_array = get_posts($args);

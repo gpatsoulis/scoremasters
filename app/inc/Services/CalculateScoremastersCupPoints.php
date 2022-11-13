@@ -3,7 +3,9 @@
  * @package scoremasters
  */
 
-namespace Scoremasters\Inc\Classes;
+namespace Scoremasters\Inc\Services;
+
+use Scoremasters\Inc\Classes\Player;
 
 final class CalculateScoremastersCupPoints
 {
@@ -77,6 +79,7 @@ final class CalculateScoremastersCupPoints
 
         //returns
         // array [ [0:[player_id,cup_points],1:[player_id,cup_points]],[] ... ]
+        //
 
         return $score;
     }

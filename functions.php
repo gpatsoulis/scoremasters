@@ -424,5 +424,7 @@ function start_scoremasters()
 
     //require_once dirname(__FILE__) . '/app/tools/calculate_points_all_players.php';
 
+    //require_once dirname(__FILE__) . '/app/tools/calculate_cup_score.php';
+
 }
 add_action('init', 'start_scoremasters');

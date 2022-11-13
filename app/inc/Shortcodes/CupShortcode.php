@@ -40,7 +40,6 @@ class CupShortcode
 
             $post_value = filter_var($_POST['cup_round_id'], FILTER_VALIDATE_INT);
         }
-        
 
         if(isset($post_value)){
             $cup_competition_phase = get_post( (int) $post_value );
@@ -175,12 +174,23 @@ class CupShortcode
             return [ 'cup_score' => $cup_score,'fixture_points' => $fixture_points ] ;
         }
 
-        $score = $score[ $fixture_id ][ 'score-masters-cup' ][ 'score' ];
+        $cup_score = $score[ $fixture_id ][ 'score-masters-cup' ][ 'score' ];
         $points = $score[ $fixture_id ][ 'weekly-championship' ][ 'points' ];
 
 
-        return ['cup_score' => $score,'fixture_points' => $points];
+        return ['cup_score' => $cup_score,'fixture_points' => $points];
     }
+
+     /*
+        [ 'total_points' => ['season-league' => int,'weekly-championship' => int]
+          'fixture_id_3709' => [ 
+            'match_id_3631' => ['season-league' => ['points' => int ]], 
+            'match_id_3637' => ...,
+            'weekly-championship' => [ 'points' => int,'score' => int,'opponent_id' => int,'home_field_advantage' => boolean],
+            'score-masters-cup' => [ 'score' => int ,'opponent_id' => int, 'phase_id'=> int]
+            ]
+        ]
+        */
 
 }
 
