@@ -44,6 +44,8 @@ class GetPlayerPredictionFormShortcode
 
             //get db data
             $predictions = ScmData::get_all_player_predictions_for_fixture($selected_fixture, $selected_user_id);
+
+            var_dump( $predictions );
         }
 
         //setup template data
@@ -52,6 +54,7 @@ class GetPlayerPredictionFormShortcode
 
         $data['fixtures'] = $fixtures;
         $data['players'] = $players;
+
         if (isset($predictions)) {
             $data['predictions'] = $predictions;
             $data = self::setup_prediction_data( $data );
