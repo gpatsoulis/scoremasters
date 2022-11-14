@@ -65,10 +65,13 @@ class CupShortcode
         $matchups = $this->get_matchups_array( $cup_competition_phase );
     
         
-        $template_data = $this->get_template_data( $matchups,$cup_phase_fixtures_array,$competition_season);
+        $template_data = $this->get_template_data( $matchups, $cup_phase_fixtures_array,$competition_season);
 
         $form_options_data = ScmData::get_all_cup_rounds_for_current_season();
-        $output .= $this->template->get_input_form($form_options_data);
+
+        //----------------------------------------- 
+        $selected_id = $post_value ?? '';
+        $output .= $this->template->get_input_form( $form_options_data, $selected_id );
 
         foreach($template_data as $data){
             $output .= $this->template->get_html($data);

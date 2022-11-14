@@ -82,7 +82,7 @@ HTML;
 
     }
 
-    public function get_input_form(array $data ):string {
+    public function get_input_form( array $data, $selected_id = '' ):string {
 
         $action = htmlspecialchars($_SERVER['REQUEST_URI']);
         $nonce = wp_nonce_field( 'cup_submit_form', 'scm_cup_round_input' );
@@ -90,7 +90,13 @@ HTML;
         $html_options = '';
 
         foreach( $data as $option){
-            $html_options .= "<option value=\"{$option->ID}\">{$option->post_title}</option>";
+
+            $selected_string = '';
+            if( intval($selected_id) === $option->ID  ){
+                $selected_string = 'selected';
+            }
+
+            $html_options .= "<option value=\"{$option->ID}\" {$selected_string} >{$option->post_title}</option>";
         }
 
         $form = <<<HTML
