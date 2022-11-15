@@ -30,6 +30,7 @@ final class GetPlayerPredictionFormTemplate implements TemplateInterface
 
         $template_html = <<<HTML
         <form action="{$action}" method="post">
+			<fieldset>
             <input list="scm-fixtures-list" name="fixture_id" id="fixture_name_selection" placeholder="Εβδομάδα" >
                 <datalist id="scm-fixtures-list">
                     {$datalist_fixtures}
@@ -40,6 +41,7 @@ final class GetPlayerPredictionFormTemplate implements TemplateInterface
                 </datalist>
             {$nonce}
             <input type="submit" name="submit" value="Προβολή Προβλέψεων" />
+			</fieldset>
         </form>
         {$prediction_output}
 HTML;
@@ -53,8 +55,13 @@ HTML;
         <style>
         form {
             color: black;
-			margin: 0 auto;
+			width: 100%;
         }
+
+		form > fieldset {
+			margin: 0 auto;
+			width: auto;
+		}
 
 		#fixture_name_selection {
 			border: 1px solid white;
