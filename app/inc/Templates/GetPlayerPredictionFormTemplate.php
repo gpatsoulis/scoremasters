@@ -61,6 +61,10 @@ HTML;
 		form > fieldset {
 			margin: 0 auto;
 			width: auto;
+			display: flex;
+			border: 0px;
+			justify-content: center;
+
 		}
 
 		#fixture_name_selection {
