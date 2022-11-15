@@ -86,13 +86,14 @@ class GetPlayerPredictionFormShortcode
     private function setup_prediction_data($data)
     {
         if (!isset($data['predictions'])) {
-            return '<!-- No availiable predictions >';
+            //error_log( __METHOD__ . ' No availiable predictions');
+            //return '<!-- No availiable predictions >';
         }
 
         $template_data = [];
         foreach ($data['predictions'] as $prediction) {
 
-            $scm_prediction = unserialize($prediction->post_content);
+            //$scm_prediction = unserialize($prediction->post_content);
 
             $info = explode('-', $prediction->post_title);
             $match_id = $info[0];

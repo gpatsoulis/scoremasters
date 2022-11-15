@@ -57,12 +57,14 @@ HTML;
 
 		#fixture_name_selection {
 			border: 1px solid white;
-			padding: 10px 15px;
+			padding: 12px 15px;
+			margin-right: 20px;
 		}
 
 		#player_name_selection {
 			border: 1px solid white;
-			padding: 10px 15px;
+			padding: 12px 15px;
+			margin-right: 20px;
 		}
 
         .scm-fixture-list {
