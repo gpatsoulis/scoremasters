@@ -244,7 +244,7 @@ HTML;
 
     private function show_predictions($data):string {
         if(!isset($data['predictions'])) {
-            return '<!-- No availiable predictions >';
+            //return '<!-- No availiable predictions >';
         }
 
         $output = '';
