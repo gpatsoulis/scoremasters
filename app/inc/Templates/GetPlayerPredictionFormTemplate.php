@@ -30,11 +30,11 @@ final class GetPlayerPredictionFormTemplate implements TemplateInterface
 
         $template_html = <<<HTML
         <form action="{$action}" method="post">
-            <input list="scm-fixtures-list" name="fixture_id" id="fixture_name_selection">
+            <input list="scm-fixtures-list" name="fixture_id" id="fixture_name_selection" placeholder="Εβδομάδα" >
                 <datalist id="scm-fixtures-list">
                     {$datalist_fixtures}
                 </datalist>
-            <input list="scm-players-list" name="player_id" id="player_name_selection">
+            <input list="scm-players-list" name="player_id" id="player_name_selection" placeholder="Παίκτης">
                 <datalist id="scm-players-list">
                     {$datalist_players}
                 </datalist>
@@ -53,6 +53,7 @@ HTML;
         <style>
         form {
             color: black;
+			margin: 0 auto;
         }
 
 		#fixture_name_selection {
