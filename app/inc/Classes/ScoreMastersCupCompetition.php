@@ -43,11 +43,11 @@ class ScoreMastersCupCompetition extends Competition {
 
          $this->type = $terms_array[0]->slug;
 
-         $this->post_object = $post;
+         $this->post_object = $competition;
 
     }
 
-    public static function init_get_participants(){
+    public function init_get_participants(){
         //get all players
         $all_players = ScmData::get_all_players();
 
@@ -85,13 +85,14 @@ class ScoreMastersCupCompetition extends Competition {
 
         $season = get_post_meta( $this->post_object->ID, 'scm-season-competition', true  );
 
+        $season_id = $season[0];
+
         if( $season_id === false || $season_id === '' ){
             error_log( __METHOD__ . '  meta($season_id) invalid $post_id (non-numeric, zero, or negative value) id: ' . $this->post_object->ID);
             return false;
         }
 
-        $season_id = $season[0];
-
+    
         $key = 'scm_cup_participants_seasonID_' . $season_id;
 
         $current_participants = get_post_meta( $this->post_object->ID, $key, false);

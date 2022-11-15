@@ -31,6 +31,7 @@ class GetPlayerPredictionFormShortcode
     {
         $user = wp_get_current_user();
 
+        
         if (isset($_POST['scm_get_players_predictions'])
             && wp_verify_nonce($_POST['scm_get_players_predictions'], 'submit_form')
         ) {

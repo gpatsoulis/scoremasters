@@ -252,6 +252,14 @@ final class ScmData
         }
         $fixture_end_date = new \DateTime($fixture_end_date_str, new \DateTimeZone('Europe/Athens'));
 
+        // user can't see future predictions
+        $today = new \DateTime('today', new \DateTimeZone('Europe/Athens'));
+        if( $fixture_end_date > $today) {
+            $fixture_end_date = $today;
+            //subtruct one day from today, because query is inclusive
+            $fixture_end_date->modify('-1 day');
+        }
+
         $args = array(
             'author' => $player_id,
             'post_type' => 'scm-prediction',
