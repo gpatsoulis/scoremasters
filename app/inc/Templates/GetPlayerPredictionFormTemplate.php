@@ -55,6 +55,16 @@ HTML;
             color: black;
         }
 
+		#fixture_name_selection {
+			border: 1px solid white;
+			padding: 10px 15px;
+		}
+
+		#player_name_selection {
+			border: 1px solid white;
+			padding: 10px 15px;
+		}
+
         .scm-fixture-list {
 				list-style: none;
 				padding:0px;
@@ -80,6 +90,7 @@ HTML;
 		    color: var( --e-global-color-primary );
 			text-transform: uppercase;
 		}
+
 		.team-image{
 			width:80px;
 			display: block;
