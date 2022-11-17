@@ -26,23 +26,45 @@ final class GetPlayerPredictionFormTemplate implements TemplateInterface
         $datalist_players  = self::setup_players_datalist($data['players']);
         $prediction_output = self::show_predictions($data);
 
-        
+        $str1 = '$(document).ready(function() {$(\'.select2-fixture\').select2();});';
+		$str2 = '$(document).ready(function() {$(\'.select2-player\').select2();});';
 
         $template_html = <<<HTML
+		<script
+			  src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
+			  integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA="
+			  crossorigin="anonymous"></script>
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
         <form action="{$action}" method="post">
 			<fieldset>
-            <input list="scm-fixtures-list" name="fixture_id" id="fixture_name_selection" placeholder="Εβδομάδα" >
+
+            <!--<input list="scm-fixtures-list" name="fixture_id" id="fixture_name_selection" placeholder="Εβδομάδα" >
                 <datalist id="scm-fixtures-list">
                     {$datalist_fixtures}
                 </datalist>
             <input list="scm-players-list" name="player_id" id="player_name_selection" placeholder="Παίκτης">
                 <datalist id="scm-players-list">
                     {$datalist_players}
-                </datalist>
+                </datalist>-->
+
+
+			<select class='select2-fixture' name='fixture_id' id="fixture_name_selection">
+			{$datalist_fixtures}
+			</select>
+			<select class='select2-player' name='player_id' id="player_name_selection">
+			{$datalist_players}
+			</select>
+
             {$nonce}
             <input type="submit" name="submit" value="Προβολή Προβλέψεων" />
 			</fieldset>
         </form>
+		<script>
+			{$str1}
+			{$str2}
+		</script>
         {$prediction_output}
 HTML;
 
@@ -245,6 +267,7 @@ HTML;
     private function show_predictions($data):string {
         if(!isset($data['predictions'])) {
             //return '<!-- No availiable predictions >';
+			return '';
         }
 
         $output = '';
