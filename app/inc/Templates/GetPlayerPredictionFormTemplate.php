@@ -39,23 +39,16 @@ final class GetPlayerPredictionFormTemplate implements TemplateInterface
 
         <form action="{$action}" method="post">
 			<fieldset>
-
-            <!--<input list="scm-fixtures-list" name="fixture_id" id="fixture_name_selection" placeholder="Εβδομάδα" >
-                <datalist id="scm-fixtures-list">
-                    {$datalist_fixtures}
-                </datalist>
-            <input list="scm-players-list" name="player_id" id="player_name_selection" placeholder="Παίκτης">
-                <datalist id="scm-players-list">
-                    {$datalist_players}
-                </datalist>-->
-
-
+			<div class='style-select'>
 			<select class='select2-fixture' name='fixture_id' id="fixture_name_selection">
 			{$datalist_fixtures}
 			</select>
+			</div>
+			<div class='style-select'>
 			<select class='select2-player' name='player_id' id="player_name_selection">
 			{$datalist_players}
 			</select>
+			</div>
 
             {$nonce}
             <input type="submit" name="submit" value="Προβολή Προβλέψεων" />
@@ -82,23 +75,28 @@ HTML;
 
 		form > fieldset {
 			margin: 0 auto;
-			width: auto;
-			display: flex;
+			width: auto;id="scm-fixtures-list"
 			border: 0px;
+			display: flex;
 			justify-content: center;
 
+		}
+
+		.style-select {
+			margin-right: 20px;
+			display: inline-block;
 		}
 
 		#fixture_name_selection {
 			border: 1px solid white;
 			padding: 12px 15px;
-			margin-right: 20px;
+			/margin-right: 20px;
 		}
 
 		#player_name_selection {
 			border: 1px solid white;
 			padding: 12px 15px;
-			margin-right: 20px;
+			/margin-right: 20px;
 		}
 
         .scm-fixture-list {
