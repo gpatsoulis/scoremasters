@@ -252,12 +252,17 @@ final class ScmData
         }
         $fixture_end_date = new \DateTime($fixture_end_date_str, new \DateTimeZone('Europe/Athens'));
 
+        $before = array(
+            'year' => (int) $fixture_end_date->format('Y'),
+            'month' => (int) $fixture_end_date->format('n'),
+            'day' => (int) $fixture_end_date->format('j'),
+        );
         // user can't see future predictions
-        $today = new \DateTime('today', new \DateTimeZone('Europe/Athens'));
+        $today = new \DateTime('now', new \DateTimeZone('Europe/Athens'));
         if( $fixture_end_date > $today) {
             $fixture_end_date = $today;
             //subtruct one day from today, because query is inclusive
-            $fixture_end_date->modify('-1 day');
+            $before = $fixture_end_date->format('Y-m-d H:i:s');
         }
 
         $args = array(
@@ -271,11 +276,8 @@ final class ScmData
                     'month' => (int) $fixture_start_date->format('n'),
                     'day' => (int) $fixture_start_date->format('j'),
                 ),
-                'before' => array(
-                    'year' => (int) $fixture_end_date->format('Y'),
-                    'month' => (int) $fixture_end_date->format('n'),
-                    'day' => (int) $fixture_end_date->format('j'),
-                ),
+                'before' => $before,
+                
             ),
             'inclusive' => true,
         );
