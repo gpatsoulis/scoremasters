@@ -30,10 +30,10 @@ final class GetPlayerPredictionFormTemplate implements TemplateInterface
 		$str2 = '$(document).ready(function() {$(\'.select2-player\').select2();});';
 
         $template_html = <<<HTML
-		<script
+		<!--<script
 			  src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
 			  integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA="
-			  crossorigin="anonymous"></script>
+			  crossorigin="anonymous"></script>-->
 		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -45,7 +45,7 @@ final class GetPlayerPredictionFormTemplate implements TemplateInterface
 			</select>
 			</div>
 			<div class='style-select'>
-			<select class='select2-player' name='player_id' id="player_name_selection">
+			<select class='select2-player' name='player_id' id="player_name_selection" style="height: 50px;">
 			{$datalist_players}
 			</select>
 			</div>
@@ -75,10 +75,11 @@ HTML;
 
 		form > fieldset {
 			margin: 0 auto;
-			width: auto;id="scm-fixtures-list"
+			width: auto;
 			border: 0px;
 			display: flex;
 			justify-content: center;
+			align-items: center;
 
 		}
 
