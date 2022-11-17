@@ -55,8 +55,11 @@ final class GetPlayerPredictionFormTemplate implements TemplateInterface
 			</fieldset>
         </form>
 		<script>
-			{$str1}
-			{$str2}
+			window.onload = function () {
+				{$str1}
+				{$str2}
+			}
+			
 		</script>
         {$prediction_output}
 HTML;
