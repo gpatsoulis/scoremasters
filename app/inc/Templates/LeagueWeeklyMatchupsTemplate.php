@@ -28,7 +28,9 @@ final class LeagueWeeklyMatchupsTemplate implements TemplateInterface
     <div class="scm-player-headsup-home">
         <h4>{$data['home']}</h4>
     </div>
-    <span class="vs">VS</span>
+    <span class="score1">{$data['home_score']}</span>
+    <span class="vs">-</span>
+    <span class="score2">{$data['away_score']}</span>
     <div class="scm-player-headsup-away">
         <h4>{$data['away']}</h4>
     </div>
@@ -83,6 +85,18 @@ $css = <<<HTML
         letter-spacing: var( --e-global-typography-c8c68e1-letter-spacing );
         word-spacing: var( --e-global-typography-c8c68e1-word-spacing );
     }
+
+    span.score1, span.score2 {
+        color: var( --e-global-color-accent );
+        font-family: var( --e-global-typography-c8c68e1-font-family ), Sans-serif;
+        font-size: var( --e-global-typography-secondary-font-size );
+        font-weight: var( --e-global-typography-c8c68e1-font-weight );
+        text-transform: var( --e-global-typography-c8c68e1-text-transform );
+        line-height: var( --e-global-typography-c8c68e1-line-height );
+        letter-spacing: var( --e-global-typography-c8c68e1-letter-spacing );
+        word-spacing: var( --e-global-typography-c8c68e1-word-spacing );
+    }
+    
     @media only screen and (max-width: 600px)
 {
      .scm-player-headsup-away h4 {

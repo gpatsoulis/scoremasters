@@ -282,18 +282,11 @@ class CalculateScore
         //return ("Total Points: " . $total_points);
 
         if(false && SCM_DEBUG){
-            //echo 'prediction_points_shmeio: ' .$prediction_points_shmeio. '<br>';
-            //echo 'prediction_points_under_over: ' .$prediction_points_under_over .'<br>';
-
-            //echo '<pre>';
-            //var_dump($prediction_content);
-            //var_dump($total_points);
-            //echo '</pre>';
-
             //error_log(__METHOD__ . ' column: ' .  json_encode($column));
             //error_log(__METHOD__ . ' dynamikotita_home_team: ' .  json_encode($dynamikotita_home_team));
             //error_log(__METHOD__ . ' dynamikotita_away_team: ' .  json_encode($dynamikotita_away_team));
         }
+        
         return $total_points;
 
     }
@@ -345,7 +338,7 @@ class CalculateScore
         $player_shmeio_array = explode('/',$player_shmeio);
 
         $success = (($player_shmeio_array[0] == '-') && ($player_shmeio_array[1] == $match_shmeio_array[1])) ||
-        (($player_shmeio_array[0] == match_shmeio_array[0]) && ($player_shmeio_array[1] == $match_shmeio_array[1]));
+        (($player_shmeio_array[0] == $match_shmeio_array[0]) && ($player_shmeio_array[1] == $match_shmeio_array[1]));
 
         return $success;
     }

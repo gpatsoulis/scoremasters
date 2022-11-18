@@ -25,7 +25,7 @@ final class CupTemplate implements TemplateInterface
         $p1_score = 0;
         $p2_score = 0;
        
-        $inner_tmp = self::fixture_results($data,$p1_score,$p2_score);
+        $inner_tmp = $this->fixture_results($data,$p1_score,$p2_score);
 
         $template_html = <<<HTML
 

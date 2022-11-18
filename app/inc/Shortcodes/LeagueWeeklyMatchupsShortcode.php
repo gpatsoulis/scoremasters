@@ -9,6 +9,7 @@ use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\Player;
 use Scoremasters\Inc\Classes\WeeklyMatchUps;
 
+// todo: fix show points
 //[Scoremasters\Inc\Shortcodes\LeagueWeeklyMatchupsShortcode]
 class LeagueWeeklyMatchupsShortcode
 {
@@ -50,7 +51,8 @@ class LeagueWeeklyMatchupsShortcode
         for ($i = 0; $i < (count($pairs) / 2); $i++) {
 
             $z = 2 * $i;
-            $new_pairs[] = array(get_userdata($pairs[$z])->display_name, get_userdata($pairs[$z + 1])->display_name);
+            //$new_pairs[] = array(get_userdata($pairs[$z])->display_name, get_userdata($pairs[$z + 1])->display_name);
+            $new_pairs[] = array(get_userdata($pairs[$z]), get_userdata($pairs[$z + 1]));
 
         }
 
@@ -67,8 +69,13 @@ class LeagueWeeklyMatchupsShortcode
         foreach($new_pairs as $pair){
 
             if(isset($pair[0]) && isset($pair[1])){
-                $data['home'] = $pair[0];
-                $data['away'] = $pair[1];
+                $data['home'] = $pair[0]->display_name;
+                $data['away'] = $pair[1]->display_name;
+
+                $home_user = $pair[0];
+                $away_user = $pair[1];
+                $data['home_score'] = (new Player($home_user))->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'];
+                $data['away_score'] = (new Player($away_user))->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'];
             }
             
             $output .= $this->template->get_html($data);

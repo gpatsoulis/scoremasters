@@ -87,7 +87,9 @@ class CurrentPlayerMatchupShortcode
         }
 
         $data['home'] = $home_user_name;
+        //$data['home_score'] = (new Player($home_user))->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'];
         $data['away'] = $away_user_name;
+        //$data['away_score'] = (new Player($away_user))->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'];
         $data['fixture'] = urldecode($current_fixture->post_name);
 
         //get next weeks pairs

@@ -160,7 +160,7 @@ class FixtureSetup
         }
 
         if (is_wp_error($updated)) {
-            error_log($updated->get_error_messages());
+            error_log(json_encode($updated->get_error_messages()));
         }
 
         return $value;
@@ -287,11 +287,13 @@ class FixtureSetup
             return;
         }
 
+        $prev_fixture = ScmData::get_previous_fixture();
+
         if(SCM_DEBUG){
             error_log( __METHOD__ . ' ---- calculating cup points for fixture: ' .  $prev_fixture->ID);
         }
 
-        $prev_fixture = ScmData::get_previous_fixture();
+      
 
         $cup_competition_phase_array = ScmData::get_competition_phases_by_fixture_id($prev_fixture->ID );
         if(empty( $cup_competition_phase_array )){
@@ -491,7 +493,7 @@ class FixtureSetup
         //check if player can play for Double Points
         if (is_array($existing_player_prediction)) {
             error_log(static::class . ' - too many posts with type: "scm-prediction", should be only one');
-            throw new Exception(static::class . ' many existing_player_prediction');
+            throw new \Exception(static::class . ' many existing_player_prediction');
         }
 
         if (is_null($existing_player_prediction)) {

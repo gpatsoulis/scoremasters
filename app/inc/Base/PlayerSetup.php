@@ -131,14 +131,6 @@ class PlayerSetup
 
         // -------------------- debug -------------------------
         if(SCM_DEBUG ){
-            //file_put_contents(SCM_DEBUG_PATH . '/acf_players_post_data.json', 'acf_values ' . json_encode($_POST['acf']) . "\n", FILE_APPEND);
-            
-            //file_put_contents(SCM_DEBUG_PATH . '/assign_player_in_scm_league.json', 'get_old_array_dif ' . json_encode($get_old_array_dif) . "\n", FILE_APPEND);
-            //file_put_contents(SCM_DEBUG_PATH . '/assign_player_in_scm_league.json', 'get_new_array_dif ' . json_encode($get_new_array_dif) . "\n", FILE_APPEND);
-            //file_put_contents(__DIR__ . '/debug.json','all_values ' .  json_encode($all_values) . "\n",  FILE_APPEND);
-            //file_put_contents(SCM_DEBUG_PATH . '/assign_player_in_scm_league.json', 'old_values_array ' . json_encode($old_values_array) . "\n", FILE_APPEND);
-            //file_put_contents(SCM_DEBUG_PATH . '/assign_player_in_scm_league.json', 'new_values_array ' . json_encode($new_values_array) . "\n", FILE_APPEND);
-            //file_put_contents(SCM_DEBUG_PATH . '/assign_player_in_scm_league.json', "\n", FILE_APPEND);
         } 
         // -------------------- debug -------------------------
         

@@ -83,7 +83,7 @@ class CompetitionRoundSetup
         );
 
         if (is_wp_error($updated)) {
-            error_log($updated->get_error_messages());
+            error_log(__METHOD__ . ' ---- ' .json_encode($updated->get_error_messages()));
         }
     }
 
