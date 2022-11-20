@@ -74,6 +74,8 @@ class LeagueWeeklyMatchupsShortcode
 
                 $home_user = $pair[0];
                 $away_user = $pair[1];
+
+                //todo: check if isset[fixture_id]
                 $data['home_score'] = (new Player($home_user))->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'];
                 $data['away_score'] = (new Player($away_user))->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'];
             }
