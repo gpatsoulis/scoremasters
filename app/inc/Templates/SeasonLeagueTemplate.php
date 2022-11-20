@@ -27,13 +27,11 @@ final class SeasonLeagueTemplate implements TemplateInterface
     <p class='player_name'>{$data['player_name']}</p>
     <p class='player_points'>{$data['player_points']}</p>
     <div class='league_data'>
-        <h4 class='player_league'>{$data['player_league']}</h4>
+        <h5 class='player_league'>{$data['player_league']}</h5>
         
         <a href="{$data['league_url']}" class='league_image'>
                 {$data['league_image']}
         </a>
-        
-        
     </div>
 <!--</div>-->
 HTML;
@@ -48,13 +46,17 @@ HTML;
             .league_data {
                 width: 100%;
                 display: grid;
-                grid-template-columns: 2fr 1fr;
+                grid-template-columns: 3fr 1fr;
                 grid-template-rows: auto;
                 padding: 0 20px;
+                align-items: end;
             }
 
             .player_league {
                 color: white;
+                margin: 0;
+                font-size: 16px !important;
+                margin-right: 10px
             }
 
             .scm-season-league-score {
@@ -64,7 +66,7 @@ HTML;
                 max-width: 800px;
                 margin:0 auto;
 
-                align-items: center;
+                align-items: end;
 
                 border: 1px solid var( --e-global-color-accent );
                 overflow: scroll;
