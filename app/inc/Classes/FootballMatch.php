@@ -129,14 +129,18 @@ class FootballMatch {
 
         if(empty($dynamikotites) || !isset($dynamikotites['home-team'])){
             $dynamikotites = array();
+            error_log(__METHOD__ . ' error dynamikotites not defined ');
         }
+
         //backwards combatibility
         if(!isset($dynamikotites['home-team'])){
             $dynamikotites['home-team'] = get_post_meta( intval($this->home_team->ID), 'scm-team-capabilityrange', true );
+            error_log(__METHOD__ . ' error dynamikotites not defined $dynamikotites:' . $dynamikotites['home-team']);
         }
 
         if(!isset($dynamikotites['away-team'])){
             $dynamikotites['away-team'] = get_post_meta( intval($this->away_team->ID), 'scm-team-capabilityrange', true );
+            error_log(__METHOD__ . ' error dynamikotites not defined $dynamikotites:' . $dynamikotites['away-team']);
         }
 
         $this->home_team_dynamikotita = intval($dynamikotites['home-team']);
