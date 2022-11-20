@@ -71,8 +71,9 @@ class CurrentPlayerMatchupShortcode
         if($home_user){
             $home_user_name = $home_user->display_name;
         }
+
         if(!$home_user){
-            error_log(__METHOD__ . ' error user not found id: ' . $my_pair[0]);
+            error_log(__METHOD__ . ' error user not found id: ' . $my_pair[0] . ' current user:' . $player->display_name . ' id:' . $player->ID);
             $home_user_name = '';
         }
 
@@ -84,7 +85,7 @@ class CurrentPlayerMatchupShortcode
         }
         
         if(!$away_user){
-            error_log(__METHOD__ . ' error user not found id: ' . $my_pair[1]);
+            error_log(__METHOD__ . ' error user not found id: ' . $my_pair[1] . ' current user:' . $player->display_name . ' id:' . $player->ID);
             $away_user_name = '';
         }
 
@@ -107,7 +108,7 @@ class CurrentPlayerMatchupShortcode
                 $new_future_pairs[] = array($future_pairs[$z], $future_pairs[$z + 1]);
 
             }
-            
+
             //$my_future_pair = current(array_filter($new_future_pairs, fn($pair_array) => in_array($player->player_id, $pair_array)));
             $my_future_pair = current(array_filter($new_future_pairs, function($pair_array) use ($player) {return in_array($player->player_id, $pair_array);}));
 
