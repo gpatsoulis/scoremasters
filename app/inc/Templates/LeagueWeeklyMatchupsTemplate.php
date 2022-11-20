@@ -117,6 +117,12 @@ $css = <<<HTML
         padding: 10px 80px 0px 10px;
     }
  }
+
+ @media screen and (max-width:380px) {
+    .score1, .score2 {
+        font-size: 32px !important;
+    }
+}
        
         </style>
 HTML;

@@ -30,7 +30,7 @@ class WeeklyMatchUps
         
 
         if ($current_matchups === false) {
-            throw new \Exception(__METHOD__ . ' invalid post->ID for meta "competition_matchups", id: ' . $competition_id);
+            throw new \Exception(__METHOD__ . ' invalid post->ID for meta "competition_matchups", id: ' . $this->competition_id);
         }
 
         if ( $current_matchups === '' || empty($current_matchups)){
@@ -77,7 +77,7 @@ class WeeklyMatchUps
         $current_matchups = get_post_meta($this->competition_id, $this->meta_key, false);
 
         if ($current_matchups === false) {
-            throw new \Exception(__METHOD__ . ' invalid post->ID for meta "competition_matchups", id: ' . $competition_id);
+            throw new \Exception(__METHOD__ . ' invalid post->ID for meta "competition_matchups", id: ' . $this->competition_id);
         }
 
         if ( $current_matchups === '' || empty($current_matchups)){

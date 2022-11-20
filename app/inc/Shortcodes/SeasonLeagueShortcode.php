@@ -57,11 +57,20 @@ HTML;
             $data['player_points']    = $player->current_season_points;
 
             $league = '';
+            $league_name = '';
+            $league_thumbnail = '';
+            $league_permalink = '';
+
             if( $player->get_league() ){
-                $league = (get_post($player->get_league()))->post_title;
+                $league = get_post($player->get_league());
+                $league_name = $league->post_title;
+                $league_permalink = get_permalink( $league->ID );
+                $league_thumbnail = get_the_post_thumbnail($league->ID);
             }
 
-            $data['player_league']    = $league;
+            $data['player_league']    = $league_name;
+            $data['league_image']     = $league_thumbnail;
+            $data['league_url']       = $league_permalink;
 
             $output .= $this->template->get_html($data);
         }

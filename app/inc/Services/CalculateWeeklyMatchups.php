@@ -216,7 +216,7 @@ class CalculateWeeklyMatchups
             )
         );
 
-        error_log(__METHOD__ . ' initialize matchups fixture: ' . $new_fixture_id . ' league: ' . $this->league_id  . ' pairs: ' . json_encode($next_matchups));
+        error_log(__METHOD__ . ' initialize matchups fixture: ' . $fixture_id . ' league: ' . $this->league_id  . ' pairs: ' . json_encode($next_matchups));
 
         //$this->next_matchups = array_merge($this->matchups->for_league_id($this->league_id), $next_matchups);
         $this->next_matchups =  $next_matchups;

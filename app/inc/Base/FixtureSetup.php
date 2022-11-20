@@ -12,6 +12,8 @@ use Scoremasters\Inc\Services\CalculateWeeklyMatchups;
 use Scoremasters\Inc\Services\CalculateWeeklyPoints;
 use Scoremasters\Inc\Services\CalculateScoremastersCupPoints;
 
+//todo: remove all logic add only actions for new fixture
+
 class FixtureSetup
 {
 
@@ -220,6 +222,10 @@ class FixtureSetup
 
     }
 
+    /**
+     *  Create matchups when a new fixture is created with status future
+     * 
+     */
     public static function add_weekly_championship_players_matchups(string $new_status, string $old_status, \WP_Post $fixture_post)
     {
 
