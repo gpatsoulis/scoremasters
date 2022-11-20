@@ -27,12 +27,12 @@ final class SeasonLeagueTemplate implements TemplateInterface
     <p class='player_name'>{$data['player_name']}</p>
     <p class='player_points'>{$data['player_points']}</p>
     <div class='league_data'>
-        <div class='player_league'>{$data['player_league']}</div>
-        <div class='league_image'>
-            <a href="{$data['league_url']}">
+        <h4 class='player_league'>{$data['player_league']}</h4>
+        
+        <a href="{$data['league_url']}" class='league_image'>
                 {$data['league_image']}
-            </a>
-        </div>
+        </a>
+        
         
     </div>
 <!--</div>-->
