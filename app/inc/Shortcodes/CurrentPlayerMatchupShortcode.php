@@ -107,7 +107,9 @@ class CurrentPlayerMatchupShortcode
                 $new_future_pairs[] = array($future_pairs[$z], $future_pairs[$z + 1]);
 
             }
-            $my_future_pair = current(array_filter($new_future_pairs, fn($pair_array) => in_array($player->player_id, $pair_array)));
+            
+            //$my_future_pair = current(array_filter($new_future_pairs, fn($pair_array) => in_array($player->player_id, $pair_array)));
+            $my_future_pair = current(array_filter($new_future_pairs, function($pair_array) use ($player) {return in_array($player->player_id, $pair_array);}));
 
             $future_data['home'] = (get_user_by('id', $my_future_pair[0]))->display_name;
             $future_data['away'] = (get_user_by('id', $my_future_pair[1]))->display_name;
