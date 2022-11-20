@@ -47,15 +47,11 @@ HTML;
         <style>
             .league_data {
                 width: 100%;
-                display: flex;
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                grid-template-rows: auto;
             }
-
-            .league_data div {
-                width: 50%;
-            }
-
-
-
+            
             .scm-season-league-score {
                 display: grid;
                 grid-template-columns: 1fr 3fr 1fr 2fr;
