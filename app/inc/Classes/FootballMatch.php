@@ -127,6 +127,9 @@ class FootballMatch {
 
         $dynamikotites = get_field( 'scm-match-team-capabilityrange', intval($this->match_id));
 
+        if(empty($dynamikotites) || !isset($dynamikotites['home-team'])){
+            $dynamikotites = array();
+        }
         //backwards combatibility
         if(!isset($dynamikotites['home-team'])){
             $dynamikotites['home-team'] = get_post_meta( intval($this->home_team->ID), 'scm-team-capabilityrange', true );
