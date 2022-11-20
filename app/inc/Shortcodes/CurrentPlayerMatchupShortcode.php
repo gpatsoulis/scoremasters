@@ -59,8 +59,11 @@ class CurrentPlayerMatchupShortcode
 
         }
 
-        $my_pair = current(array_filter($new_pairs, fn($pair_array) => in_array($player->player_id, $pair_array)));
-
+        
+        //$my_pair = current(array_filter($new_pairs, fn($pair_array) => in_array($player->player_id, $pair_array)));
+        //error with arrow function in production server
+        $my_pair = current(array_filter($new_pairs, function($pair_array) use ($player) {return in_array($player->player_id, $pair_array);}));
+        
         
         //$data['home'] = ($my_pair[0] === $player->player_id) ? $player : ( get_user_by( 'id', $my_pair[0] ) )->display_name;
         //$data['away'] = ($my_pair[1]=== $player->player_id) ? $player : ( get_user_by( 'id', $my_pair[1] ) )->display_name;
