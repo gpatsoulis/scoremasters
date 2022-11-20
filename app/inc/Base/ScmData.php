@@ -504,8 +504,8 @@ final class ScmData
             return array();
         }
         
-        //$participants = array_map(function ($field){return $field['scm-user-player'];} , $repeater_array);
-        $participants = array_map(fn($field) => $field['scm-user-player'], $repeater_array);
+        //$participants = array_map(fn($field) => $field['scm-user-player'], $repeater_array);
+        $participants = array_map(function($field){return $field['scm-user-player'];}, $repeater_array);
         $wp_users = get_users(array('include' => $participants));
 
         $players = [];
