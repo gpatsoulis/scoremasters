@@ -26,11 +26,14 @@ final class SeasonLeagueTemplate implements TemplateInterface
     <!--<p class='player_nick_name'>{$data['player_nick_name']}</p>-->
     <p class='player_name'>{$data['player_name']}</p>
     <p class='player_points'>{$data['player_points']}</p>
-    <div>
+    <div class='league_data'>
         <div class='player_league'>{$data['player_league']}</div>
-        <a href="{$data['league_url']}">
-            {$data['league_image']}
-        </a>
+        <div class='league_image'>
+            <a href="{$data['league_url']}">
+                {$data['league_image']}
+            </a>
+        </div>
+        
     </div>
 <!--</div>-->
 HTML;
@@ -42,6 +45,17 @@ HTML;
     {
         $template_css = <<<HTML
         <style>
+            .league_data {
+                width: 100%;
+                display: flex;
+            }
+
+            .league_data div {
+                width: 50%;
+            }
+
+
+
             .scm-season-league-score {
                 display: grid;
                 grid-template-columns: 1fr 3fr 1fr 2fr;
