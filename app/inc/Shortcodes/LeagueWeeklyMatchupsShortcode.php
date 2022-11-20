@@ -76,8 +76,20 @@ class LeagueWeeklyMatchupsShortcode
                 $away_user = $pair[1];
 
                 //todo: check if isset[fixture_id]
-                $data['home_score'] = (new Player($home_user))->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'];
-                $data['away_score'] = (new Player($away_user))->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'];
+                $home_player = new Player($home_user);
+                $away_player = new Player($away_user);
+
+                $home_score = 0;
+                $away_score = 0;
+                if(isset($home_player->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'])){
+                    $home_score = $home_player->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'];
+                }
+                if(isset($away_player->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'])){
+                    $away_score = $away_player->player_points['fixture_id_'.$current_fixture->ID]['weekly-championship']['points'];
+                }
+
+                $data['home_score'] = $home_score;
+                $data['away_score'] = $away_score;
             }
             
             $output .= $this->template->get_html($data);
