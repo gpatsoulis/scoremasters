@@ -155,7 +155,8 @@ class Player
         }
     
         $league_players_left =  array_filter($league_players, 
-        fn($player) => $player['scm-user-player'] !== $player_out_id
+        //fn($player) => $player['scm-user-player'] !== $player_out_id
+        function($player) use ($player_out_id) {return $player['scm-user-player'] !== $player_out_id;}
         );
     
         $new_array = array_values($league_players_left);
