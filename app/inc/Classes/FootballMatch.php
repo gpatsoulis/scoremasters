@@ -125,12 +125,13 @@ class FootballMatch {
         //$this->away_team_dynamikotita = intval(get_field('scm-team-capabilityrange',$this->away_team->ID));
         //$this->away_team_dynamikotita = intval(get_post_meta( intval($this->away_team->ID), 'scm-team-capabilityrange', true ));
 
-        $dynamikotites = get_post_meta( intval($this->match_id), 'scm-team-capabilityrange', true );
+        $dynamikotites = get_field( 'scm-match-team-capabilityrange', intval($this->match_id));
 
         //backwards combatibility
         if(!isset($dynamikotites['home-team'])){
             $dynamikotites['home-team'] = get_post_meta( intval($this->home_team->ID), 'scm-team-capabilityrange', true );
         }
+
         if(!isset($dynamikotites['away-team'])){
             $dynamikotites['away-team'] = get_post_meta( intval($this->away_team->ID), 'scm-team-capabilityrange', true );
         }

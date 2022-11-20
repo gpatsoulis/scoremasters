@@ -13,4 +13,10 @@ echo do_shortcode ('[Scoremasters\Inc\Shortcodes\GetPlayerPredictionFormShortcod
 //var_dump( ScmData::get_all_cup_rounds_for_current_season() );
 //echo do_shortcode ('[Scoremasters\Inc\Shortcodes\CupShortcode]');
 
+//$dynamikotites = get_post_meta( 5966, 'scm-match-team-capabilityrange', true );
+$dynamikotites = get_field( 'scm-match-team-capabilityrange',5966);
+
+var_dump( $dynamikotites );
+
+
 exit;
