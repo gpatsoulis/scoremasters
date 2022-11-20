@@ -50,14 +50,21 @@ HTML;
                 display: grid;
                 grid-template-columns: 2fr 1fr;
                 grid-template-rows: auto;
+                padding: 0 20px;
             }
-            
+
+            .player_league {
+                color: white;
+            }
+
             .scm-season-league-score {
                 display: grid;
                 grid-template-columns: 1fr 3fr 1fr 2fr;
                 grid-template-rows: auto;
                 max-width: 800px;
                 margin:0 auto;
+
+                align-items: center;
 
                 border: 1px solid var( --e-global-color-accent );
                 overflow: scroll;
