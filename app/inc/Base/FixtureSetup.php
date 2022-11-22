@@ -196,7 +196,7 @@ class FixtureSetup
 
 
        if(SCM_DEBUG){
-        error_log( __METHOD__ . ' ---- calculating weekly points for fixture: ' . $prev_fixture . ' current_fixture: ' . $fixture_post->ID);
+        error_log( __METHOD__ . ' ---- calculating weekly points for fixture: ' . $prev_fixture->ID . ' current_fixture: ' . $fixture_post->ID);
        }
 
         $match_data = array(
