@@ -7,6 +7,7 @@ namespace Scoremasters\Inc\Shortcodes;
 
 use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\SeasonLeagueCompetition;
+use Scoremasters\Inc\Templates\SeasonLeagueTemplate;
 
 //[Scoremasters\Inc\Shortcodes\SeasonLeagueShortcode]
 class SeasonLeagueShortcode
@@ -84,7 +85,8 @@ HTML;
 
     public function get_template()
     {
-        $this->template = new \Scoremasters\Inc\Templates\SeasonLeagueTemplate('div', 'scm-season-league-score', '', array('name' => 'player_id', 'value' => get_current_user_id()));
+        //$this->template = new \Scoremasters\Inc\Templates\SeasonLeagueTemplate('div', 'scm-season-league-score', '', array('name' => 'player_id', 'value' => get_current_user_id()));
+        $this->template = new SeasonLeagueTemplate('div', 'scm-season-league-score', '', array('name' => 'player_id', 'value' => get_current_user_id()));
     }
 
 }

@@ -27,6 +27,6 @@ HTML;
 
     public function get_css( array $data = array()):string
     {
-
+        return '';
     }
 }
