@@ -5,7 +5,7 @@ use Scoremasters\Inc\Classes\WeeklyMatchUps;
 use Scoremasters\Inc\Services\CalculateWeeklyMatchups;
 
 
-require_once dirname(__FILE__) . '/app/inc/tools/calculate_weekly_score_for_fixture.php';
+require_once __DIR__ . '/app/tools/calculate_weekly_score_for_fixture.php';
 scm_match_trigger_players_weekly_point_calculation(7349);
 //var_dump($test->get_all_matchups());
 
