@@ -39,8 +39,8 @@ function scm_match_trigger_players_weekly_point_calculation( $fixture_id )
             $matchups = $weekly_matchups->by_fixture_id($prev_fixture->ID)->by_league_id($league->ID);
 
             $calculate_weekly_points = new CalculateWeeklyPoints($match_data, $matchups);
-            $calculate_weekly_points->calculate()->save();
-            //$calculate_weekly_points->calculate();
+            //$calculate_weekly_points->calculate()->save();
+            $calculate_weekly_points->calculate();
 
             echo '<pre>';
             var_dump( $matchups );

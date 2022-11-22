@@ -126,6 +126,7 @@ class GetPlayerPredictionFormShortcode
             $possible_points = new CalculatePossiblePlayerPoints($prediction);
 
             $current_match = new FootballMatch($match_id);
+            $current_match->setup_data();
             $possible_points->get_points($current_match);
             $prediction_string = (string) $possible_points;
             $template_data[$prediction->post_title]['prediction-string'] = $prediction_string;
