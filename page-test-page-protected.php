@@ -14,9 +14,7 @@ echo do_shortcode ('[Scoremasters\Inc\Shortcodes\GetPlayerPredictionFormShortcod
 //echo do_shortcode ('[Scoremasters\Inc\Shortcodes\CupShortcode]');
 
 //$dynamikotites = get_post_meta( 5966, 'scm-match-team-capabilityrange', true );
-$dynamikotites = get_field( 'scm-match-team-capabilityrange',5966);
 
-var_dump( $dynamikotites );
 
 
 exit;

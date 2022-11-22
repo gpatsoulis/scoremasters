@@ -48,6 +48,16 @@ class GetPlayerPredictionFormShortcode
 
         }
 
+        if(SCM_DEBUG){
+            error_log( __METHOD__ . ' ---- ' . count($predictions));
+        }
+
+        if(is_page(3813)){
+            var_dump( $predictions );
+        }
+
+
+
         //setup template data
         $fixtures = ScmData::get_all_fixtures_for_season();
         $players = ScmData::get_all_scm_users();
