@@ -253,7 +253,7 @@ final class ScmData
         $fixture_end_date = new \DateTime($fixture_end_date_str, new \DateTimeZone('Europe/Athens'));
 
         $after = $fixture_start_date->format('Y-m-d H:i:s');
-        
+
         $before = array(
             'year' => (int) $fixture_end_date->format('Y'),
             'month' => (int) $fixture_end_date->format('n'),
@@ -270,7 +270,11 @@ final class ScmData
         }
 
         if(is_page(3813)){
+            echo '<pre>';
+            var_dump( $after );
             var_dump( $before );
+            echo '</pre>';
+            
         }
 
         $args = array(
