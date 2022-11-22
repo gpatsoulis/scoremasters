@@ -49,7 +49,6 @@ class GetPlayerPredictionFormShortcode
         }
 
         if(SCM_DEBUG){
-            error_log( __METHOD__ . ' ---- ' . count($predictions));
         }
 
         if(is_page(3813)){
