@@ -265,6 +265,10 @@ final class ScmData
             $before = $fixture_end_date->format('Y-m-d H:i:s');
         }
 
+        if(is_page(3813)){
+            var_dump( $before );
+        }
+
         $args = array(
             'author' => $player_id,
             'post_type' => 'scm-prediction',
