@@ -425,7 +425,10 @@ class FixtureSetup
             }
         }
 
-        error_log( json_encode($form_data,  JSON_UNESCAPED_UNICODE) );
+        if(SCM_DEBUG){
+            error_log( __METHOD__ . ' ---- ' . json_encode($form_data,  JSON_UNESCAPED_UNICODE) );
+        }
+        
         
         // todo: filter $key values from greek to english defaults px "SHMEIO" -> "Σημείο"
         

@@ -539,7 +539,8 @@ final class ScmData
         }
 
         //$participants = array_map(function ($field){return $field['scm-user-player'];} , $repeater_array);
-        $participants = array_map(fn($field) => $field['scm-user-player'], $repeater_array);
+        //$participants = array_map(fn($field) => $field['scm-user-player'], $repeater_array);
+        $participants = array_map(function ($field){return $field['scm-user-player'];} , $repeater_array);
 
         return $participants;
     }
