@@ -254,11 +254,15 @@ final class ScmData
 
         $after = $fixture_start_date->format('Y-m-d H:i:s');
 
+        /*
         $before = array(
             'year' => (int) $fixture_end_date->format('Y'),
             'month' => (int) $fixture_end_date->format('n'),
             'day' => (int) $fixture_end_date->format('j'),
         );
+        */
+
+        $before = $fixture_end_date->format('Y-m-d H:i:s');
 
         
         // user can't see future predictions
