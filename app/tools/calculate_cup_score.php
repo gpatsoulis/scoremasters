@@ -46,14 +46,14 @@ $score_array = CalculateScoremastersCupPoints::calculate($cup_matchups, $prev_fi
 // $score_array = array [ [0:[player_id,cup_points],1:[player_id,cup_points]],[] ... ]
 
 echo '<pre>';
-var_dump( $score_array );
+//var_dump( $score_array );
 echo '</pre>';
 
 //save points
 foreach ($score_array as $players_pairs) {
-    
+
     echo '<pre>';
-    var_dump( $players_pairs );
+    //var_dump( $players_pairs );
     echo '</pre>';
 
     $home_player_id = $players_pairs[0]['player_id'];
@@ -75,7 +75,9 @@ foreach ($score_array as $players_pairs) {
     );
 
     echo '<pre>';
+    echo 'score_masters_cup_home';
     var_dump( $score_masters_cup_home );
+    echo 'score_masters_cup_away';
     var_dump( $score_masters_cup_away );
     echo '</pre>';
 

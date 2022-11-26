@@ -31,6 +31,7 @@ final class CalculateScoremastersCupPoints
             if (!isset($players[0]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'])) {
                 error_log(__METHOD__ . ' - error no score for player: ' . $players[0]->player_id);
                 $player_a_score = self::get_player_points_for_week($players[0],$fixture_id);
+                error_log(__METHOD__ . ' - new score: ' . $player_a_score);
             } else {
                 $player_a_score = (int) $players[0]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'];
             }
@@ -38,6 +39,7 @@ final class CalculateScoremastersCupPoints
             if (!isset($players[1]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'])) {
                 error_log(__METHOD__ . ' - error no score for player: ' . $players[1]->player_id);
                 $player_b_score = self::get_player_points_for_week($players[1],$fixture_id);
+                error_log(__METHOD__ . ' - new score: ' . $player_b_score);
             } else {
                 $player_b_score = (int) $players[1]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'];
             }
@@ -93,14 +95,14 @@ final class CalculateScoremastersCupPoints
 
         $week_data = $player->player_points['fixture_id_' . $fixture_id];
 
-        $score = 0;
+        $week_points = 0;
         foreach( $week_data as $key => $data ){
             if( preg_match('/match_id_\d+/',$key)){
-                $score += $data['season-league']['points'];
+                $week_points += $data['season-league']['points'];
             }
         }
 
-        return $score;
+        return $week_points;
     }
 
      /*
