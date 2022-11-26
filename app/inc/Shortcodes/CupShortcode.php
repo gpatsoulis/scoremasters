@@ -123,8 +123,8 @@ class CupShortcode
 
             foreach( $fixtures_array as $fixture_obj ){
 
-                $score_data_p1 = $this::get_points_per_fixture($players_pair[0],$fixture_obj->ID,$competition_season);
-                $score_data_p2 = $this::get_points_per_fixture($players_pair[1],$fixture_obj->ID,$competition_season);
+                $score_data_p1 = $this->get_points_per_fixture($players_pair[0],$fixture_obj->ID,$competition_season);
+                $score_data_p2 = $this->get_points_per_fixture($players_pair[1],$fixture_obj->ID,$competition_season);
 
                 $data['rounds'][] = [
                     'fixture'   => $fixture_obj, 
@@ -172,6 +172,8 @@ class CupShortcode
 
             if(isset($score[ $fixture_id ][ 'weekly-championship' ][ 'points' ])){
                 $fixture_points =$score[ $fixture_id ][ 'weekly-championship' ][ 'points' ];
+            }else{
+                $fixture_points = $this->get_player_points_for_week($score,$fixture);
             }
 
             return [ 'cup_score' => $cup_score,'fixture_points' => $fixture_points ] ;
@@ -182,6 +184,22 @@ class CupShortcode
 
 
         return ['cup_score' => $cup_score,'fixture_points' => $points];
+    }
+
+    private function get_player_points_for_week(array $score,int $fixture_id){
+
+        if(!isset($score['fixture_id_' . $fixture_id])){
+            return 0;
+        }
+
+        $week_points = 0;
+        foreach( $score as $key => $data ){
+            if( preg_match('/match_id_\d+/',$key)){
+                $week_points += $data['season-league']['points'];
+            }
+        }
+
+        return $week_points;
     }
 
      /*
