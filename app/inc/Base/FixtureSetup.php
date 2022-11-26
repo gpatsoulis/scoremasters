@@ -362,7 +362,7 @@ class FixtureSetup
             $home_payer_score_meta['fixture_id_' . $prev_fixture->ID ]['score-masters-cup'] = $score_masters_cup_home;
             $home_success = update_user_meta($home_player_id ,'score_points_seasonID_' . $season->ID, $home_payer_score_meta);
             if( $home_success == false){
-                error_log( __METHOD__ . ' error updating player\'s scoremasters cup data, player_id: ' . $home_player_id . ' for fixture_id: ' . $prev_fixture->ID);
+                error_log( __METHOD__ . ' error updating player\'s scoremasters cup data, home player_id: ' . $home_player_id . ' for fixture_id: ' . $prev_fixture->ID);
             }
 
             //away player
@@ -373,7 +373,7 @@ class FixtureSetup
             $away_payer_score_meta['fixture_id_' . $prev_fixture->ID ]['score-masters-cup'] = $score_masters_cup_away;
             $away_success = update_user_meta($away_player_id ,'score_points_seasonID_' . $season->ID, $away_payer_score_meta);
             if( $away_success == false){
-                error_log(__METHOD__ . ' error updating player\'s scoremasters cup data, player_id: ' . $away_player_id . ' for fixture_id: ' . $prev_fixture->ID);
+                error_log(__METHOD__ . ' error updating player\'s scoremasters cup data, away player_id: ' . $away_player_id . ' for fixture_id: ' . $prev_fixture->ID);
             }
         }
 
