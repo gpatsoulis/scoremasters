@@ -10,7 +10,7 @@ use Scoremasters\Inc\Services\CalculateScoremastersCupPoints;
 //week 10: 5764
 
 //$prev_fixture = ScmData::get_previous_fixture();
-$prev_fixture_id = 5764;
+$prev_fixture_id = 8550;
 
 $cup_competition_phase_array = ScmData::get_competition_phases_by_fixture_id($prev_fixture_id);
 
