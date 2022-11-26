@@ -29,7 +29,7 @@ final class DataQuery{
 
         if (empty($posts)) {
             error_log(static::class . ' exporter---- no active season');
-            throw new Exception(static::class . ' no active season');
+            throw new \Exception(static::class . ' no active season');
         }
 
         $curent_season = $posts[0];
@@ -57,7 +57,7 @@ final class DataQuery{
 
         if (empty($posts)) {
             error_log('exporter---- no active fixture');
-            throw new Exception(static::class . ' no active fixture');
+            throw new \Exception(static::class . ' no active fixture');
         }
 
         $current_fixture = $posts[0];
@@ -90,7 +90,7 @@ final class DataQuery{
         $matches = get_field('week-matches',$this->fixture->ID)[0]['week-match'];
 
         if(!$matches){
-            throw new Exception(static::class . ' get_field("week-matches") error');
+            throw new \Exception(static::class . ' get_field("week-matches") error');
         }
 
         $this->matches = $matches;

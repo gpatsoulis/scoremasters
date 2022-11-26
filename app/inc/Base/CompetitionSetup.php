@@ -41,7 +41,7 @@ class CompetitionSetup {
         $updated = wp_update_post(array('ID' => $post_id,'post_date' =>  $scm_season->post_date));
 
         if(is_wp_error( $updated )){
-            error_log($updated->get_error_messages());
+            error_log(json_encode($updated->get_error_messages()));
         }
         
         return $value;
