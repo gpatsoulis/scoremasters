@@ -28,6 +28,8 @@ final class CalculateScoremastersCupPoints
                 $matchups
             );
 
+            
+
             if (!isset($players[0]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'])) {
                 error_log(__METHOD__ . ' - error no score for player: ' . $players[0]->player_id);
                 $player_a_score = self::get_player_points_for_week($players[0],$fixture_id);
@@ -75,6 +77,12 @@ final class CalculateScoremastersCupPoints
                     ];
                 }
 
+            }
+
+
+            if(in_array($players[0]->player_id,[58,60,156,32,33,34]) || in_array($players[1]->player_id,[58,60,156,32,33,34])){
+                error_log('name: ' . $players[0]->wp_player->display_name . ' score: ' . $player_a_score);
+                error_log('name: ' . $players[1]->wp_player->display_name . ' score: ' . $player_b_score);                
             }
 
         }
