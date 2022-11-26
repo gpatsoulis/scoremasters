@@ -60,7 +60,7 @@ final class CalculateScoremastersCupPoints
                 ];
             }
 
-            if ($player_a_score == $player_b_score) {
+            if ($player_a_score === $player_b_score) {
                 // get players scm-league score, in case of draw player with most season-league points advances
                 $p1_points = $players[0]->player_points['total_points']['season-league'];
                 $p2_points = $players[1]->player_points['total_points']['season-league'];
@@ -84,7 +84,10 @@ final class CalculateScoremastersCupPoints
                 error_log('name: ' . $players[0]->wp_player->display_name . ' score: ' . $player_a_score);
                 error_log(json_encode($players[0]->player_points['fixture_id_' . $fixture_id]));
                 error_log('name: ' . $players[1]->wp_player->display_name . ' score: ' . $player_b_score); 
-                error_log(json_encode($players[1]->player_points['fixture_id_' . $fixture_id]));               
+                error_log(json_encode($players[1]->player_points['fixture_id_' . $fixture_id]));  
+                error_log($player_a_score > $player_b_score); 
+                error_log($player_a_score < $player_b_score);  
+
             }
 
         }
