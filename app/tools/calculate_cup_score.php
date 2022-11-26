@@ -27,7 +27,7 @@ $cup_competition_phase = $cup_competition_phase_array[0];
 $acf_matchups = get_field('groups__headsup', $cup_competition_phase->ID);
 
 echo '<pre>';
-var_dump( $acf_matchups );
+//var_dump( $acf_matchups );
 echo '</pre>';
 
 // $matchups array of wp_users
@@ -45,12 +45,17 @@ $cup_matchups = $matchups;
 $score_array = CalculateScoremastersCupPoints::calculate($cup_matchups, $prev_fixture_id);
 // $score_array = array [ [0:[player_id,cup_points],1:[player_id,cup_points]],[] ... ]
 
+echo '<pre>';
 var_dump( $score_array );
+echo '</pre>';
 
 //save points
 foreach ($score_array as $players_pairs) {
-
+    
+    echo '<pre>';
     var_dump( $players_pairs );
+    echo '</pre>';
+
     $home_player_id = $players_pairs[0]['player_id'];
     $home_player_score = $players_pairs[0]['cup_points'];
 
@@ -69,8 +74,10 @@ foreach ($score_array as $players_pairs) {
         'phase_id' => $cup_competition_phase->ID,
     );
 
+    echo '<pre>';
     var_dump( $score_masters_cup_home );
     var_dump( $score_masters_cup_away );
+    echo '</pre>';
 
     //ugly
     //todo: create players entity objects with save functionality
