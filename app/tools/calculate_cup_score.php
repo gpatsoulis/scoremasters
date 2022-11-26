@@ -26,7 +26,9 @@ $cup_competition_phase = $cup_competition_phase_array[0];
 
 $acf_matchups = get_field('groups__headsup', $cup_competition_phase->ID);
 
+echo '<pre>';
 var_dump( $acf_matchups );
+echo '</pre>';
 
 // $matchups array of wp_users
 $matchups = [];

@@ -30,14 +30,14 @@ final class CalculateScoremastersCupPoints
 
             if (!isset($players[0]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'])) {
                 error_log(__METHOD__ . ' - error no score for player: ' . $players[0]->player_id);
-                $player_a_score = 0;
+                $player_a_score = self::get_player_points_for_week($players[0],$fixture_id);
             } else {
                 $player_a_score = (int) $players[0]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'];
             }
 
             if (!isset($players[1]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'])) {
                 error_log(__METHOD__ . ' - error no score for player: ' . $players[1]->player_id);
-                $player_b_score = 0;
+                $player_b_score = self::get_player_points_for_week($players[1],$fixture_id);
             } else {
                 $player_b_score = (int) $players[1]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'];
             }
@@ -83,6 +83,36 @@ final class CalculateScoremastersCupPoints
 
         return $score;
     }
+
+    public static function get_player_points_for_week(Player $player,int $fixture_id){
+
+        if(!isset($player->player_points['fixture_id_' . $fixture_id])){
+            error_log(__METHOD__ . ' - error no score for player: ' . $player->player_id . ' in fixture: ' . $fixture_id );
+            return 0;
+        }
+
+        $week_data = $player->player_points['fixture_id_' . $fixture_id];
+
+        $score = 0;
+        foreach( $week_data as $key => $data ){
+            if( preg_match('/match_id_\d+/',$key)){
+                $score += $data['season-league']['points'];
+            }
+        }
+
+        return $score;
+    }
+
+     /*
+        [ 'total_points' => ['season-league' => int,'weekly-championship' => int]
+          'fixture_id_3709' => [ 
+            'match_id_3631' => ['season-league' => ['points' => int ]], 
+            'match_id_3637' => ...,
+            'weekly-championship' => [ 'points' => int,'score' => int,'opponent_id' => int,'home_field_advantage' => boolean],
+            'score-masters-cup' => [ 'score' => int ,'opponent_id' => int, 'phase_id'=> int]
+            ]
+        ]
+        */
 
     // in case of tie the player with most points in season league, advances
 }
