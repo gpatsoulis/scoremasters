@@ -28,9 +28,7 @@ final class CalculateScoremastersCupPoints
                 $matchups
             );
 
-            
-
-            if (!isset($players[0]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'])) {
+            if (!isset($players[0]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'])) {
                 error_log(__METHOD__ . ' - error no score for player: ' . $players[0]->player_id);
                 $player_a_score = self::get_player_points_for_week($players[0],$fixture_id);
                 error_log(__METHOD__ . ' - new score: ' . $player_a_score);
@@ -38,7 +36,7 @@ final class CalculateScoremastersCupPoints
                 $player_a_score = (int) $players[0]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'];
             }
 
-            if (!isset($players[1]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['score'])) {
+            if (!isset($players[1]->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'])) {
                 error_log(__METHOD__ . ' - error no score for player: ' . $players[1]->player_id);
                 $player_b_score = self::get_player_points_for_week($players[1],$fixture_id);
                 error_log(__METHOD__ . ' - new score: ' . $player_b_score);
@@ -79,7 +77,7 @@ final class CalculateScoremastersCupPoints
 
             }
 
-
+           /*
             if(in_array($players[0]->player_id,[58,60,156,32,33,34]) || in_array($players[1]->player_id,[58,60,156,32,33,34])){
                 error_log('name: ' . $players[0]->wp_player->display_name . ' score: ' . $player_a_score);
                 error_log(json_encode($players[0]->player_points['fixture_id_' . $fixture_id]));
@@ -89,11 +87,12 @@ final class CalculateScoremastersCupPoints
                 error_log($player_a_score < $player_b_score);  
 
             }
+            */
 
         }
 
         //returns
-        // array [ [0:[player_id,cup_points],1:[player_id,cup_points]],[] ... ]
+        // array [ [0:['player_id' => 1,'cup_points'=>1],1:['player_id' => 2,'cup_points' => 2 ]],[] ... ]
         //
 
         return $score;

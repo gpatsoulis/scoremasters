@@ -331,11 +331,11 @@ class FixtureSetup
          //save points
         foreach( $score_array as $players_pairs ){
             
-            $home_player_id = $players_pairs[0][0];
-            $home_player_score = $players_pairs[0][1];
+            $home_player_id = $players_pairs[0]['player_id'];
+            $home_player_score = $players_pairs[0]['cup_points'];
 
-            $away_player_id = $players_pairs[1][0];
-            $away_player_score = $players_pairs[1][1];
+            $away_player_id = $players_pairs[1]['player_id'];
+            $away_player_score = $players_pairs[1]['cup_points'];
             
             $score_masters_cup_home = array(
                 'score' => $home_player_score,
@@ -348,6 +348,10 @@ class FixtureSetup
                 'opponent_id' => $home_player_id,
                 'phase_id'=> $cup_competition_phase->ID,
             );
+
+            if(SCM_DEBUG){
+                //error_log();
+            }
 
            
             //ugly 
