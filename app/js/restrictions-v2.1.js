@@ -19,7 +19,7 @@ function restrictions(event, id, instance) {
     let scorerSelect = popup.querySelector('#form-field-scm_scorer');
 
     // todo : add restrictions
-    let doublePoints = popup.querySelector('#form-field-field_c61b597');
+    let doublePointsSelect = popup.querySelector('#form-field-field_c61b597');
 
 
 
@@ -204,6 +204,31 @@ function restrictions(event, id, instance) {
         }
 
 
+    }
+
+
+    doublePointsSelect.addEventListener('click', doublePointsRestrictions);
+
+    function doublePointsRestrictions( event ){
+        //console.log(event.target);
+
+        [...event.target.querySelectorAll('option')].map( option => option.disabled = false);
+        
+        
+        let fields = [
+            {'name': 'shmeioSelect', 'value':shmeioSelect.value, 'optionValue': 'SHMEIO'},
+            {'name': 'underOverSelect','value':underOverSelect.value, 'optionValue': 'UNDER / OVER'},
+            {'name': 'scorerSelect','value':scorerSelect.value, 'optionValue': 'SCORER'},
+        ];
+
+        let filteredFilds = fields.filter( x => x.value === '-');
+
+        // show only fields that have values
+        filteredFilds.map( x => event.target.querySelector( 'option[value="' + x.optionValue + '"]').disabled = true);
+        console.log( filteredFilds );
+       
+        // if score = 0-0 cant select scorer
+        
     }
 
 

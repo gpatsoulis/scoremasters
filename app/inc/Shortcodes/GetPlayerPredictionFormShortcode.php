@@ -52,7 +52,9 @@ class GetPlayerPredictionFormShortcode
         }
 
         if(is_page(3813)){
+            echo '<pre>';
             var_dump( $predictions );
+            echo '</pre>';
         }
 
 
