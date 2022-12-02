@@ -1,6 +1,6 @@
 import {
     restrictions
-} from '/wp-content/themes/scoremasters/app/js/restrictions-v2.1.js';
+} from '/wp-content/themes/scoremasters/app/js/restrictions-v2.2.js';
 
 import {
     disable_form_on_date

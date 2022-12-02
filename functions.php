@@ -151,7 +151,7 @@ function scoremasters_scripts()
         //wp_enqueue_script('scoremasters-activate-prediction-popup', get_template_directory_uri() . '/app/js/activate-prediction-popup-v2.1.js', array(), '1.0.1', true);
         wp_register_script(
             'scoremasters-activate-prediction-popup',
-            get_template_directory_uri() . '/app/js/activate-prediction-popup-v2.1.js',
+            get_template_directory_uri() . '/app/js/activate-prediction-popup-v2.2.js',
             array('jquery'), '1.0.3', true);
         wp_enqueue_script('scoremasters-activate-prediction-popup');
         wp_localize_script('scoremasters-activate-prediction-popup', 'scm_points_table', get_option('points_table'));
