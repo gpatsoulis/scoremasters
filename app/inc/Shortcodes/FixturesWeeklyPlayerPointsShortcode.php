@@ -57,7 +57,7 @@ class FixturesWeeklyPlayerPointsShortcode
             $post_value = filter_var($_POST['fixture_id'], FILTER_VALIDATE_INT);
         }
 
-        $fixture_id = ($post_value) ? $post_value : null;
+        $fixture_id = (isset($post_value)) ? $post_value : null;
 
         $current_fixture = ScmData::get_current_fixture($fixture_id);
 

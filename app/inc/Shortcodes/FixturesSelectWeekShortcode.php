@@ -34,7 +34,7 @@ class FixturesSelectWeekShortcode
             $post_value = filter_var($_POST['fixture_id'], FILTER_VALIDATE_INT);
         }
 
-        $selected_fixture_id = ($post_value) ? $post_value : null;
+        $selected_fixture_id = (isset($post_value)) ? $post_value : null;
 
 
         $fixtures = ScmData::get_all_fixtures_for_season(); 
