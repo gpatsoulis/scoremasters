@@ -27,6 +27,16 @@ class FixturesSelectWeekShortcode
 
     public function output(){
 
+        if (isset($_POST['fixture_id'])
+            && isset($_POST['scm_fixture_setup'])
+            && wp_verify_nonce($_POST['scm_fixture_setup'], 'submit_form')) {
+
+            $post_value = filter_var($_POST['fixture_id'], FILTER_VALIDATE_INT);
+        }
+
+        $selected_fixture_id = ($post_value) ? $post_value : null;
+
+
         $fixtures = ScmData::get_all_fixtures_for_season(); 
 
         $output = $this->template->container_start;
@@ -52,12 +62,18 @@ HTML;
 
         foreach( $fixtures as $fixture ){
 
+           
             $data = array(
                 'fixture_id' => $fixture->ID,
                 'fixture_title' => $fixture->post_title,
                 'fixture_start_date' => get_field('week-start-date',$fixture->ID),
                 'fixture_end_date' => get_field('week-end-date',$fixture->ID),
+                'selected' => ''
             );
+
+            if($fixture->ID == $selected_fixture_id){
+                $data['selected'] = 'selected';
+            }
 
             $output .= $this->template->get_html($data);
         }

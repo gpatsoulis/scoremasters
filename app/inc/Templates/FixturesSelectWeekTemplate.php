@@ -19,7 +19,7 @@ final class FixturesSelectWeekTemplate implements TemplateInterface
 
     public function get_html(array $data):string{
         $template_html = <<<HTML
-  <option value="{$data['fixture_id']}">{$data['fixture_title']} <!--{$data['fixture_start_date']} - {$data['fixture_end_date']}--></option>
+  <option value="{$data['fixture_id']}" {$data['selected']} >{$data['fixture_title']} <!--{$data['fixture_start_date']} - {$data['fixture_end_date']}--></option>
 HTML;
 
         return $template_html;
@@ -27,6 +27,6 @@ HTML;
 
     public function get_css( array $data = array()):string
     {
-
+        return '';
     }
 }
