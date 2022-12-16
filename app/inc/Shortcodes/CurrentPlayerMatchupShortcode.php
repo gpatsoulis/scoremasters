@@ -35,6 +35,8 @@ class CurrentPlayerMatchupShortcode
         $player_league = $player->get_league();
         $current_fixture = ScmData::get_current_fixture();
 
+       
+
         $current_weekly_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
         $weekly_matchups = new WeeklyMatchUps($current_weekly_competition->ID);
         //$weekly_matchups->get_all_matchups();
@@ -63,6 +65,18 @@ class CurrentPlayerMatchupShortcode
         //$my_pair = current(array_filter($new_pairs, fn($pair_array) => in_array($player->player_id, $pair_array)));
         //error with arrow function in production server
         $my_pair = current(array_filter($new_pairs, function($pair_array) use ($player) {return in_array($player->player_id, $pair_array);}));
+
+        if( $my_pair === false ){
+            error_log( __METHOD__ . ' error no pairs for player with id: '. $player->ID );
+
+            $output = $this->template->container_start;
+            $data = array();
+            $output .= $this->template->get_html($data);
+            $output .= $this->template->container_end;
+            $output .= $this->template->get_css();
+        
+            return $output;
+        }
         
         //$data['home'] = ($my_pair[0] === $player->player_id) ? $player : ( get_user_by( 'id', $my_pair[0] ) )->display_name;
         //$data['away'] = ($my_pair[1]=== $player->player_id) ? $player : ( get_user_by( 'id', $my_pair[1] ) )->display_name;

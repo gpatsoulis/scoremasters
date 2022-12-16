@@ -427,4 +427,80 @@ function start_scoremasters()
     //require_once dirname(__FILE__) . '/app/tools/calculate_cup_score.php';
 
 }
+
+function get_player_matchups($request)
+{
+
+    //$product_id = $request->get_param( 'prediction_title' );
+    //if(!isset($request['pre_title'])) return;
+
+    //return $request['pre_title'];
+
+    $player_id = filter_var($request['player_id'], FILTER_VALIDATE_INT);
+
+    if ($player_id === false) {
+        return new WP_Error('error data', 'Invalid player id', array('status' => 404));
+    }
+
+    //pre_title=1350-2&pre_author=2
+
+   $wp_user = get_user_by('id', intval( $player_id ) );
+   if( $wp_user === false ){
+        return new WP_Error('error data', 'No user found!', array('status' => 404));
+   }
+
+   $player = new Scoremasters\Inc\Classes\Player( $wp_user );
+   $score = $player->player_points;
+
+   $fixtures = [];
+   
+   foreach( $score as $key => $fixture_data){
+    if( !preg_match('/fixture_id_\d+/',$key) ) continue;
+    
+
+        if(!isset($fixture_data['weekly-championship']['opponent_id'])){
+            error_log(__FUNCTION__ . ' no data for opponent fixture:'. $key .' player_id:'. $player_id .'  data:' . json_encode( $fixture_data ));
+            continue;
+        }
+
+        $opponent_id =  $fixture_data['weekly-championship']['opponent_id'];
+        $wp_user_opponent = get_user_by('id', intval( $opponent_id ) );
+        $opponent_player = new Scoremasters\Inc\Classes\Player( $wp_user_opponent );
+        $opponent_score = $opponent_player->player_points;
+        $opponent_points = $opponent_score[$key]['weekly-championship']['points'];
+        
+        
+        $fixture_id_pattern = preg_match('/fixture_id_(\d+)/',$key,$matches);
+        $fixture_id = $matches[1];
+
+        $fixture = get_post($fixture_id);
+
+        $fixtures[] = array( 
+            'fixture_id'=> $fixture_id,
+            'fixture_title' => $fixture->post_title,
+            'user_name' => $player->wp_player->display_name,
+            'user_weekly_points' => $fixture_data['weekly-championship']['points'],
+            'opponent_name' => $opponent_player->wp_player->display_name,
+            'opponent_weekly_points' => $opponent_points,
+        );
+
+   
+   }
+
+    //return $posts[0]->post_title;
+    return new WP_REST_Response($fixtures, 200);
+}
+
+//
+add_action('rest_api_init', function () {
+    //register_rest_route('scm/v1', 'scm_prediction_title/(?P<pre_title>[0-9\-]+)/?(P<pre_author>[0-9]+)', array(
+    //register_rest_route('scm/v1', 'scm_prediction_title/?pre_title=(?P<pre_title>[0-9\-]+)&amp;pre_author=(?P<pre_author>[0-9]+)', array(
+    register_rest_route('scm/v1', '/scm_player_matchups/?player_id=(?P<player_id>[0-9]+)', array(
+        'methods' => 'GET',
+        'callback' => 'get_player_matchups',
+        'permission_callback' => '__return_true',
+    ));
+});
+
+
 add_action('init', 'start_scoremasters');

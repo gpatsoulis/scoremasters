@@ -85,7 +85,7 @@ function get_submited_predictions(popup) {
         .then(data => data.json())
         .then(data => {
                 //console.log(data);
-
+                //todo: handle 404 response
 
                 render_submited_prediction_data(popup, data);
 
