@@ -69,11 +69,8 @@ class LeagueWeeklyMatchupsShortcode
 
         }
 
-        //todo: WeeklyMatchUps, check for artio number o players, else return empty array;
+        //todo: WeeklyMatchUps, check for even number of players, else return empty array;
 
-        //echo '<pre>';
-        //var_dump($new_pairs);
-        //echo '</pre>';
 
         $output = $this->template->container_start;
         $data = array();
@@ -93,11 +90,11 @@ class LeagueWeeklyMatchupsShortcode
 
                 $home_score = 0;
                 $away_score = 0;
-                if (isset($home_player->player_points['fixture_id_' . $current_fixture->ID]['weekly-championship']['points'])) {
-                    $home_score = $home_player->player_points['fixture_id_' . $current_fixture->ID]['weekly-championship']['points'];
+                if (isset($home_player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'])) {
+                    $home_score = $home_player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'];
                 }
-                if (isset($away_player->player_points['fixture_id_' . $current_fixture->ID]['weekly-championship']['points'])) {
-                    $away_score = $away_player->player_points['fixture_id_' . $current_fixture->ID]['weekly-championship']['points'];
+                if (isset($away_player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'])) {
+                    $away_score = $away_player->player_points['fixture_id_' . $fixture_id]['weekly-championship']['points'];
                 }
 
                 $data['home_score'] = $home_score;
