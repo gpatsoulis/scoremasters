@@ -102,7 +102,7 @@ class CalculateWeeklyMatchups
 
         if($this->matchups_exists_for_fixture($new_fixture_id)){
             error_log(__METHOD__ . ' matchups exists for fixture: ' . $new_fixture_id);
-            return $this;
+            //return $this;
         }
 
         if( !$this->previous_matchups_exists( $new_fixture_id ) ){
