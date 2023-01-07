@@ -476,7 +476,8 @@ final class ScmData
         $posts = get_posts($args);
 
         if(empty($posts)){
-            return array();
+            error_log( __METHOD__ . ' no valid scm competition of type: ' . $scm_competition_taxonomy);
+            return ScmData::get_default_WP_Post();
         }
 
         return $posts[0];
@@ -611,6 +612,7 @@ final class ScmData
         $posts = get_posts($args);
 
         if(empty($posts)){
+            error_log( __METHOD__ . ' no valid scm competition of type: ' . $scm_competition_type);
             return self::get_default_WP_Post();
         }
 

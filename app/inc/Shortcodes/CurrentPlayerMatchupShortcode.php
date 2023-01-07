@@ -38,6 +38,19 @@ class CurrentPlayerMatchupShortcode
        
 
         $current_weekly_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
+
+        if($current_weekly_competition->ID < 0){
+            error_log( __METHOD__ . ' error output');
+            
+            $output = $this->template->container_start;
+            $data = array();
+            $output .= $this->template->get_html($data);
+            $output .= $this->template->container_end;
+            $output .= $this->template->get_css();
+        
+            return $output;
+        }
+
         $weekly_matchups = new WeeklyMatchUps($current_weekly_competition->ID);
         //$weekly_matchups->get_all_matchups();
 

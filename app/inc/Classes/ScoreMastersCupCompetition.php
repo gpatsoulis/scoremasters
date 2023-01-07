@@ -70,6 +70,13 @@ class ScoreMastersCupCompetition extends Competition {
         // get the first XX players with the highest score
         
         $curent_seasonleague = ScmData::get_current_scm_competition_of_type('season-league');
+
+        if($curent_seasonleague->ID < 0){
+            error_log( __METHOD__ . ' error init_get_participants');
+            $this->participants = array();
+            return;
+        }
+
         $season_league = new SeasonLeagueCompetition( $curent_seasonleague );
         $players = $season_league->get_players_shorted_by_score();
 

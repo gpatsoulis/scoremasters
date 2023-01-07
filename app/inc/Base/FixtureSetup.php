@@ -209,6 +209,12 @@ class FixtureSetup
 
         $all_leagues = ScmData::get_all_leagues();
         $weekly_competition_post = ScmData::get_current_scm_competition_of_type('weekly-championship');
+        
+        if($weekly_competition_post->ID < 0){
+            error_log( __METHOD__ . ' error calculating players_weekly_point_calculation');
+            return;
+        }
+
         $weekly_matchups = (new WeeklyMatchUps($weekly_competition_post->ID))->get_matchups();
         //$weekly_competition = new WeeklyChampionshipCompetition( $weekly_competition_post, $weekly_matchups );
 
@@ -252,6 +258,10 @@ class FixtureSetup
         // get competition WP_Post
         // todo: check competition is in current season 
         $weekly_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
+        if($weekly_competition->ID < 0){
+            error_log( __METHOD__ . ' error calculating weekly_championship_players_matchups');
+            return;
+        }
 
         $matchups = new WeeklyMatchUps($weekly_competition->ID);
 

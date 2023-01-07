@@ -52,6 +52,13 @@ class LeagueWeeklyMatchupsShortcode
         $current_fixture = ScmData::get_current_fixture();
 
         $current_weekly_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
+
+        if($current_weekly_competition->ID < 0){
+            error_log( __METHOD__ . ' error output, get_current_scm_competition_of_type');
+            return "";
+        }
+
+
         $weekly_matchups = new WeeklyMatchUps($current_weekly_competition->ID);
         //$weekly_matchups->get_all_matchups();
 
