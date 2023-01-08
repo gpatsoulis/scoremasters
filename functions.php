@@ -299,7 +299,7 @@ function get_prediction($request)
     $author = filter_var($request['pre_author'], FILTER_VALIDATE_INT);
 
     if ($author === false) {
-        return new WP_Error('error data', 'Invalid prediction title', array('status' => 404));
+        return new WP_Error('error_data', 'Invalid prediction title', array('status' => 404));
     }
 
     //pre_title=1350-2&pre_author=2
@@ -317,7 +317,7 @@ function get_prediction($request)
     $user_id = explode('-', $request['pre_title'])[1];
 
     if (empty($posts)) {
-        return new WP_Error('no_author', 'Invalid prediction title', array('status' => 404));
+        return new WP_Error('no_prediction', 'Invalid prediction title', array('status' => 404));
     }
 
     $current_user_prediction = '';
@@ -329,7 +329,7 @@ function get_prediction($request)
     }
 
     if ($current_user_prediction == '') {
-        return new WP_Error('no_author', 'Invalid prediction title', array('status' => 404));
+        return new WP_Error('no_post', 'Invalid prediction title', array('status' => 404));
     }
 
     //return $posts[0]->post_title;
@@ -501,6 +501,24 @@ add_action('rest_api_init', function () {
         'permission_callback' => '__return_true',
     ));
 });
+
+
+
+
+//How to Disable WordPress Deprecated Warnings
+
+add_filter('deprecated_function_trigger_error', 'disable_all_deprecated_warnings');
+add_filter('deprecated_argument_trigger_error', 'disable_all_deprecated_warnings');
+add_filter('deprecated_file_trigger_error',     'disable_all_deprecated_warnings');
+add_filter('deprecated_constructor_trigger_error',     'disable_all_deprecated_warnings');
+
+//Not to trigger any errors when a deprecated function or method is called.
+add_filter( 'deprecated_hook_trigger_error',    'disable_all_deprecated_warnings');
+
+function disable_all_deprecated_warnings($bolean) {
+    return false;
+}
+
 
 
 add_action('init', 'start_scoremasters');
