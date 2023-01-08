@@ -308,8 +308,9 @@ function get_prediction($request)
 
         'post_type' => 'scm-prediction',
         'post_status' => 'any',
-        //'author' => $author,
-        's' => $request['pre_title'],
+        'author' => $author,
+        'title' => $request['pre_title'],
+        //'s' => $request['pre_title'],
     );
 
     $posts = get_posts($args);
