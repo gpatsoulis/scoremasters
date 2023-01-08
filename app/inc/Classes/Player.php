@@ -240,6 +240,18 @@ class Player
         return $this->scm_league;
     }
 
+    public function current_fixture_points():int {
+        $current_fixture = $current_fixture = ScmData::get_current_fixture();
+
+        $current_fixture_points = 0;
+        if(is_array($this->player_points)){
+            $current_fixture_points = $this->player_points['fixture_id_' . strval($current_fixture->ID)]['total_points']['season-league'];
+        }
+
+        return intval($current_fixture_points);
+    }
+
+
 }
 
 /*
