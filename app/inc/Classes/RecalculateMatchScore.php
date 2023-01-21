@@ -10,6 +10,19 @@ namespace Scoremasters\Inc\Classes;
 //use Scoremasters\Inc\Base\CalculateScore;
 use Scoremasters\Inc\Classes\CalculateMatchScore;
 
+/*
+ How to use
+ $calc_score = new CalculateMatchScore(intval($post_id));
+
+$calc_score->get_predictions()
+    ->calculate_points()
+    ->save_points()
+    ->export_csv_predictions()
+    ->send_predictions_by_email();
+
+echo $calc_score->showDiff();
+ */
+
 class RecalculateMatchScore extends CalculateMatchScore {
 
     public $score_diff;
@@ -82,7 +95,8 @@ class RecalculateMatchScore extends CalculateMatchScore {
 
         if(!isset($players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'])){
             error_log( __METHOD__ . ' --error-- not a valid recalculation prev score doesn\'t exist player_id:'.$player_id . ' match_id:' . $match_id);
-            return false;
+            //return false;
+            return $players_score;
         }
 
         $prev_points = $players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'];
@@ -108,7 +122,7 @@ class RecalculateMatchScore extends CalculateMatchScore {
         if(empty($this->score_diff)){
             return '<h3> no score diffs </h3>';
         }
-        
+
         $output = '<ul>';
         foreach( $this->score_diff as $diff){
             $user_name = get_user_by('ID', $diff['player_id'])->display_name;
