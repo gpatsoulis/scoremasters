@@ -37,10 +37,8 @@ class RecalculateMatchScore extends CalculateMatchScore {
             $season_id = strval($player_score_data['season_id']);
             $score = $player_score_data['score'];
 
+            //current player score
             $players_score = get_user_meta((int) $player_id, 'score_points_seasonID_' . $season_id);
-
-            //important
-            $players_score = $this->resetTotalPlayerPoints($players_score, $fixture_id, $match_id, $player_id);
 
             //initialize
             if (!empty($players_score)) {
@@ -48,6 +46,9 @@ class RecalculateMatchScore extends CalculateMatchScore {
             } else {
                 $players_score = array();
             }
+
+            //important
+            $players_score = $this->resetTotalPlayerPoints($players_score, $fixture_id, $match_id, $player_id);
 
             // recalculate changes 
             //points already in db
@@ -76,14 +77,18 @@ class RecalculateMatchScore extends CalculateMatchScore {
 
 
             // save player score
-            $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $players_score);
+            //$success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $players_score);
 
+            /*
             if (!$success) {
                 error_log(__METHOD__ . ' error updating score metadata for user: ' . $player_id);
             }
+            */
 
             //update_user_meta($player_id, 'total_points', $old_meta_value['total_points']);
             //$find_key = preg_replace("/[^0-9.]/", "", 'fixture_id_850');
+
+            $this->logRecalculationDifferences( $players_score, $score, $fixture_id, $match_id, $player_id );
 
         }
 
@@ -91,7 +96,6 @@ class RecalculateMatchScore extends CalculateMatchScore {
     }
 
     protected function resetTotalPlayerPoints( array $players_score, int $fixture_id, int $match_id, int $player_id ):array {
-
 
         if(!isset($players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'])){
             error_log( __METHOD__ . ' --error-- not a valid recalculation prev score doesn\'t exist player_id:'.$player_id . ' match_id:' . $match_id);
@@ -103,6 +107,9 @@ class RecalculateMatchScore extends CalculateMatchScore {
 
         $players_score['fixture_id_' . $fixture_id]['weekly-championship']['points'] -= $prev_points;
         $players_score['total_points']['season-league'] -= $prev_points;
+        
+        //var_dump($prev_points);
+        //var_dump($players_score['fixture_id_' . $fixture_id]['weekly-championship']['points']);
 
         return $players_score;
     }
@@ -110,9 +117,9 @@ class RecalculateMatchScore extends CalculateMatchScore {
     protected function logRecalculationDifferences( array $players_score, $score, int $fixture_id, int $match_id, int $player_id){
         $prev_points = $players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'];
 
-        $diff = $score - intval($prev_points);
+        $diff = intval($score) - intval($prev_points);
 
-        if( $diff !== 0 ){
+        if( $diff != 0 ){
             $this->score_diff[] = array('player_id' => $player_id, 'match_id' => $match_id, 'score_diff' => $diff);
         }
     }
