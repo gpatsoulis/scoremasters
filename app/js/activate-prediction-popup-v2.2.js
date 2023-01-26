@@ -50,6 +50,8 @@ function onPopupEvent(event, id, instance) {
     disable_form_on_date(event, id, instance);
     //addPlayersList(event, id, instance);
     possible_player_points(event, id, instance);
+
+    in_option_render_points();
 }
 
 /*
@@ -82,10 +84,22 @@ function get_submited_predictions(popup) {
                 'Content-Type': 'application/json'
             }
         })
-        .then(data => data.json())
+        .then(
+            data => {
+                    console.log(data.status,data.statusText);
+                    //todo: handle 404 response
+
+                    if(data.status !== 200){
+                    return JSON.stringify([]);
+                }
+
+                return data.json();
+                }
+            )
         .then(data => {
                 //console.log(data);
-                //todo: handle 404 response
+               
+                
 
                 render_submited_prediction_data(popup, data);
 
@@ -348,6 +362,12 @@ function setUpPlayersList(data, popup) {
     let documentFragPlayers = new DocumentFragment();
 
 
+    let player_points_table = {
+        "Επιθετικός": 3,
+        "Μέσος": 4,
+        "Αμυντικός": 8,
+    };
+
 
     let homeTeam_id = data.filter(x => x.name == 'homeTeam_id')[0].value;
     let homeTeam_name = data.filter(x => x.name == 'homeTeam_name')[0].value;
@@ -366,7 +386,7 @@ function setUpPlayersList(data, popup) {
                 let playerID = x.id;
                 let playerName = x.title.rendered;
 
-                let option = new Option(awayTeam_name + ' - ' + playerName, playerID);
+                let option = new Option(awayTeam_name + ' - ' + playerName + '   πόντοι: ' + player_points_table[x.position], playerID);
                 option.dataset.position = x.position;
                 option.dataset.points = x.points;
                 return option;
@@ -390,7 +410,7 @@ function setUpPlayersList(data, popup) {
                 let playerID = x.id;
                 let playerName = x.title.rendered;
 
-                let option = new Option(homeTeam_name + ' - ' + playerName, playerID);
+                let option = new Option(homeTeam_name + ' - ' + playerName + '   πόντοι: ' + player_points_table[x.position], playerID);
                 option.dataset.position = x.position;
                 option.dataset.points = x.points;
 
@@ -504,8 +524,59 @@ function calc_possible_points(event){
         possible_points = ' - ';
     }
 
-    points_text.textContent = 'Πιθανοί Πόντοι: ' + possible_points;
+    points_text.textContent = ' Πόντοι: ' + possible_points;
 
     parent.appendChild(points_text);
+
+}
+
+function getMatchDataFromURL(){
+    let params = new URLSearchParams(document.location.search);
+    let match_id = params.get('match_id');
+
+    let match_el = document.querySelector('[data-match_id="'+ match_id +'"]'); //2417
+
+    //selectedItem,match element
+    let scoreTable = JSON.parse(document.getElementById('match_'+ match_id +'_pointstable').dataset.pointstable);
+
+    let home_team_capability = match_el.querySelector('h4.scm-home-team').dataset.home_team_capability;
+    let away_team_capability = match_el.querySelector('h4.scm-away-team').dataset.away_team_capability;
+
+    
+    let capabilityDiff = parseInt(home_team_capability) - parseInt(away_team_capability);
+
+    return {
+        'capabilityDiff': capabilityDiff,
+        'scoreTable': scoreTable,
+    } 
+}
+
+
+function in_option_render_points(){
+
+    console.log('hello malakia_render_points');
+    let data = getMatchDataFromURL();
+
+    let simeioOptions = document.querySelectorAll('#form-field-field_b324dff option');
+    let underoverOptions = document.querySelectorAll('#form-field-field_eba581d option');
+    let scoreOptions = document.querySelectorAll('#form-field-field_4879a1e option');
+    let playerOptions = document.querySelectorAll('#form-field-scm_scorer option');
+
+    let fromScoreTable = [simeioOptions,underoverOptions,scoreOptions];
+
+    console.log(playerOptions);
+
+    fromScoreTable.map( formElement => [...formElement].map( option => showPossiblePointsInOption(option) ));
+
+    function showPossiblePointsInOption ( option ){
+        let points = data.scoreTable[data.capabilityDiff.toString()][option.value];
+
+        if(!points){
+            option.innerText += '';
+            return;
+        }
+
+        option.innerText += '     πόντοι: ' + points;
+    }
 
 }
