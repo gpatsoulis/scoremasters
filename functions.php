@@ -152,7 +152,7 @@ function scoremasters_scripts()
         wp_register_script(
             'scoremasters-activate-prediction-popup',
             get_template_directory_uri() . '/app/js/activate-prediction-popup-v2.2.js',
-            array('jquery'), '1.0.3', true);
+            array('jquery'), '1.0.4', true);
         wp_enqueue_script('scoremasters-activate-prediction-popup');
         wp_localize_script('scoremasters-activate-prediction-popup', 'scm_points_table', get_option('points_table'));
     }
@@ -292,13 +292,18 @@ function get_prediction($request)
 {
 
     //$product_id = $request->get_param( 'prediction_title' );
-    //if(!isset($request['pre_title'])) return;
 
-    //return $request['pre_title'];
+    // FILTER_VALIDATE_INT returns int
+    $author_id = filter_var($request['pre_author'], FILTER_VALIDATE_INT);
 
-    $author = filter_var($request['pre_author'], FILTER_VALIDATE_INT);
+    // FILTER_SANITIZE_NUMBER_INT returns string
+    $title = filter_var($request['pre_title'], FILTER_SANITIZE_NUMBER_INT);
 
-    if ($author === false) {
+    if ($author_id === false) {
+        return new WP_Error('error_data', 'Invalid prediction title', array('status' => 404));
+    }
+
+    if ($title === false) {
         return new WP_Error('error_data', 'Invalid prediction title', array('status' => 404));
     }
 
@@ -308,19 +313,24 @@ function get_prediction($request)
 
         'post_type' => 'scm-prediction',
         'post_status' => 'any',
-        'author' => $author,
-        'title' => $request['pre_title'],
+        'author' => $author_id,
+        'title' => $title,
         //'s' => $request['pre_title'],
     );
 
     $posts = get_posts($args);
 
-    $user_id = explode('-', $request['pre_title'])[1];
+    $user_id = explode('-', $title)[1];
+
+    if( intval($user_id) !== $author_id){
+        return new WP_Error('error_user_data', 'Invalid prediction title', array('status' => 404));
+    }
 
     if (empty($posts)) {
         return new WP_Error('no_prediction', 'Invalid prediction title', array('status' => 404));
     }
 
+    
     $current_user_prediction = '';
 
     foreach ($posts as $post) {
@@ -328,6 +338,7 @@ function get_prediction($request)
             $current_user_prediction = $post;
         }
     }
+    
 
     if ($current_user_prediction == '') {
         return new WP_Error('no_post', 'Invalid prediction title', array('status' => 404));
