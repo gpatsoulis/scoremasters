@@ -62,7 +62,8 @@ class CategoryChampionshipCompetition extends Competition {
     }
 
     public function score_comparator($player_1,$player_2){
-        return $player_1->current_season_points < $player_2->current_season_points;
+        //return $player_1->current_season_points < $player_2->current_season_points;
+        return $player_2->current_season_points <=> $player_1->current_season_points;
     }
 
 

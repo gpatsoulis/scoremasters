@@ -16,9 +16,7 @@ use Scoremasters\Inc\Classes\CalculateMatchScore;
 
 $calc_score->get_predictions()
     ->calculate_points()
-    ->save_points()
-    ->export_csv_predictions()
-    ->send_predictions_by_email();
+    ->save_points();
 
 echo $calc_score->showDiff();
  */
@@ -47,7 +45,10 @@ class RecalculateMatchScore extends CalculateMatchScore {
                 $players_score = array();
             }
 
-            //important
+            //log diffs before reseting score
+            $this->logRecalculationDifferences( $players_score, $score, $fixture_id, $match_id, $player_id );
+
+            //important - reset totals before adding new score and after $player_score initialization
             $players_score = $this->resetTotalPlayerPoints($players_score, $fixture_id, $match_id, $player_id);
 
             // recalculate changes 
@@ -77,18 +78,13 @@ class RecalculateMatchScore extends CalculateMatchScore {
 
 
             // save player score
-            //$success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $players_score);
+            $success = update_user_meta($player_id, 'score_points_seasonID_' . $season_id, $players_score);
 
-            /*
+            
             if (!$success) {
                 error_log(__METHOD__ . ' error updating score metadata for user: ' . $player_id);
             }
-            */
-
-            //update_user_meta($player_id, 'total_points', $old_meta_value['total_points']);
-            //$find_key = preg_replace("/[^0-9.]/", "", 'fixture_id_850');
-
-            $this->logRecalculationDifferences( $players_score, $score, $fixture_id, $match_id, $player_id );
+            
 
         }
 
@@ -108,17 +104,15 @@ class RecalculateMatchScore extends CalculateMatchScore {
         $players_score['fixture_id_' . $fixture_id]['weekly-championship']['points'] -= $prev_points;
         $players_score['total_points']['season-league'] -= $prev_points;
         
-        //var_dump($prev_points);
-        //var_dump($players_score['fixture_id_' . $fixture_id]['weekly-championship']['points']);
-
         return $players_score;
     }
 
     protected function logRecalculationDifferences( array $players_score, $score, int $fixture_id, int $match_id, int $player_id){
+
         $prev_points = $players_score['fixture_id_' . $fixture_id]['match_id_' . $match_id]['season-league']['points'];
 
-        $diff = intval($score) - intval($prev_points);
-
+        $diff = floatval($score) - floatval($prev_points);
+     
         if( $diff != 0 ){
             $this->score_diff[] = array('player_id' => $player_id, 'match_id' => $match_id, 'score_diff' => $diff);
         }

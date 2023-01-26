@@ -179,6 +179,8 @@ class MatchSetup
 
         $competition_round = get_post_meta($match_data['fixture_id'], 'competition_round_for_season_id_' . $match_data['season_id'], true);
 
+        // error no initialization of variable $competition_round_id
+        // todo: fix initialization of variable $competition_round_id
         if ($competition_round_id === false) {
             throw new Exception(__METHOD__ . ' invalid fixture_id');
         }

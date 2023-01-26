@@ -66,10 +66,6 @@ class ShowPlayerScoreShortcode
 
         $category_position = $aa;
 
-       
-
-        
-
         //$palyer_league = $player->get_league();
         //$current_fixture = ScmData::get_current_fixture();
 

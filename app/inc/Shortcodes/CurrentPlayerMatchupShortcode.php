@@ -80,7 +80,7 @@ class CurrentPlayerMatchupShortcode
         $my_pair = current(array_filter($new_pairs, function($pair_array) use ($player) {return in_array($player->player_id, $pair_array);}));
 
         if( $my_pair === false ){
-            error_log( __METHOD__ . ' error no pairs for player with id: '. $player->ID );
+            error_log( __METHOD__ . ' error no pairs for player with id: '. $player->player_id );
 
             $output = $this->template->container_start;
             $data = array();
@@ -100,7 +100,7 @@ class CurrentPlayerMatchupShortcode
         }
 
         if(!$home_user){
-            error_log(__METHOD__ . ' error user not found id: ' . $my_pair[0] . ' current user:' . $player->display_name . ' id:' . $player->ID);
+            error_log(__METHOD__ . ' error user not found id: ' . $my_pair[0] . ' current user:' . $player->wp_player->display_name . ' id:' . $player->wp_player->ID);
             $home_user_name = '';
         }
 
@@ -112,7 +112,7 @@ class CurrentPlayerMatchupShortcode
         }
         
         if(!$away_user){
-            error_log(__METHOD__ . ' error user not found id: ' . $my_pair[1] . ' current user:' . $player->display_name . ' id:' . $player->ID);
+            error_log(__METHOD__ . ' error user not found id: ' . $my_pair[1] . ' current user:' . $player->wp_player->display_name . ' id:' . $player->wp_player->ID);
             $away_user_name = '';
         }
 
