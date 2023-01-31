@@ -50,6 +50,11 @@ HTML;
         foreach($players as $player){
 
             unset($data);
+            
+            if(!$player->can_make_predictions()){
+                continue;
+            }
+
             $data = [];
             $data['aa'] = $aa;
             $aa +=1;
