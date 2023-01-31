@@ -576,7 +576,7 @@ function in_option_render_points(){
             return;
         }
 
-        option.innerText += '&nbsp;&nbsp;|&nbsp;&nbsp;πόντοι: ' + points;
+        option.innerText += '  |  πόντοι: ' + points;
     }
 
 }
