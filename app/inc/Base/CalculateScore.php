@@ -246,6 +246,7 @@ class CalculateScore
             }
 
             //if pro-player has not custom points use defaults
+            // todo: delete;
             if(!$p_scorer_points){
 
                 if (get_field("scm-player-position", $p_scorer) == "Επιθετικός") {
@@ -253,11 +254,11 @@ class CalculateScore
     
                 } elseif (get_field("scm-player-position", $p_scorer) == "Μέσος") {
     
-                    $prediction_points_scorer = 4;
+                    $prediction_points_scorer = 5;
     
                 } elseif (get_field("scm-player-position", $p_scorer) == "Αμυντικός") {
     
-                    $prediction_points_scorer = 8;
+                    $prediction_points_scorer = 10;
     
                 }
             }
