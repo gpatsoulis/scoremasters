@@ -6,7 +6,12 @@ import {
     disable_form_on_date
 } from '/wp-content/themes/scoremasters/app/js/dateRestrictions-v2.1.js';
 
-
+// todo: delete;
+const player_points_table = {
+    "Επιθετικός": 3,
+    "Μέσος": 5,
+    "Αμυντικός": 10,
+};
 
 let btns = document.querySelectorAll('.activate-prediction-popup');
 
@@ -361,12 +366,13 @@ function setUpPlayersList(data, popup) {
     //console.log(playersPlaceholder);
     let documentFragPlayers = new DocumentFragment();
 
-
+    // todo: delete
+    /*
     let player_points_table = {
         "Επιθετικός": 3,
         "Μέσος": 4,
         "Αμυντικός": 8,
-    };
+    };*/
 
 
     let homeTeam_id = data.filter(x => x.name == 'homeTeam_id')[0].value;
@@ -377,16 +383,23 @@ function setUpPlayersList(data, popup) {
 
 
     let awayTeamPlayers = getPlayersList(awayTeam_id);
-    
-    console.log(awayTeamPlayers);
 
     awayTeamPlayers.then(pdata => {
+        console.log( pdata );
+
         let optionData = pdata.map(
             x => {
                 let playerID = x.id;
                 let playerName = x.title.rendered;
 
-                let option = new Option(awayTeam_name + ' - ' + playerName + '   πόντοι: ' + player_points_table[x.position], playerID);
+                // todo: delete player_points_table
+                //let option = new Option(awayTeam_name + ' - ' + playerName + '   πόντοι: ' + player_points_table[x.position], playerID);
+                let points = x.points;
+                if(!points){
+                    points = player_points_table[x.position];
+                }
+
+                let option = new Option(awayTeam_name + ' - ' + playerName + '   πόντοι: ' + points, playerID);
                 option.dataset.position = x.position;
                 option.dataset.points = x.points;
                 return option;
@@ -410,7 +423,13 @@ function setUpPlayersList(data, popup) {
                 let playerID = x.id;
                 let playerName = x.title.rendered;
 
-                let option = new Option(homeTeam_name + ' - ' + playerName + '   πόντοι: ' + player_points_table[x.position], playerID);
+                // todo: delete player_points_table
+                //let option = new Option(homeTeam_name + ' - ' + playerName + '   πόντοι: ' + player_points_table[x.position], playerID);
+                let points = x.points;
+                if(!points){
+                    points = player_points_table[x.position];
+                }
+                let option = new Option(homeTeam_name + ' - ' + playerName + '   πόντοι: ' + points, playerID);
                 option.dataset.position = x.position;
                 option.dataset.points = x.points;
 
@@ -485,11 +504,12 @@ function calc_possible_points(event){
     //selectedItem,match element
     let scoreTable = JSON.parse(document.getElementById('match_'+ match_id +'_pointstable').dataset.pointstable);
    
-    let player_points_table = {
+    // todo: delete;
+    /*let player_points_table = {
         "Επιθετικός": 3,
         "Μέσος": 4,
         "Αμυντικός": 8,
-    };
+    };*/
 
     let home_team_capability = match_el.querySelector('h4.scm-home-team').dataset.home_team_capability;
     let away_team_capability = match_el.querySelector('h4.scm-away-team').dataset.away_team_capability;
@@ -509,6 +529,7 @@ function calc_possible_points(event){
         if(playerPosition.dataset.points !== ''){
             possible_points = playerPosition.dataset.points;
         }else{
+            // todo: delete;
             possible_points = player_points_table[playerPosition.dataset.position];
         }
         
@@ -554,7 +575,7 @@ function getMatchDataFromURL(){
 
 function in_option_render_points(){
 
-    console.log('hello malakia_render_points');
+   
     let data = getMatchDataFromURL();
 
     let simeioOptions = document.querySelectorAll('#form-field-field_b324dff option');
