@@ -3,7 +3,7 @@
  * @package scoremasters
  */
 
-namespace Scoremasters\Inc\Classes;
+namespace Scoremasters\Inc\Services;
 
 //use Scoremasters\Inc\Base\ScmData;
 //use Scoremasters\Inc\Classes\FootballMatch;

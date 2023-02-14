@@ -10,6 +10,8 @@
 namespace Scoremasters\Inc\Base;
 
 use Scoremasters\Inc\Classes\CalculateMatchScore;
+use Scoremasters\Inc\Classes\WeeklyMatchUps;
+use Scoremasters\Inc\Services\CalculateWeeklyPoints;
 
 class MatchSetup
 {
@@ -19,7 +21,6 @@ class MatchSetup
         add_filter('acf/update_value/name=scm-match-end-time', array(static::class, 'scm_match_trigger_players_point_calculation'), 99, 4);
         add_filter('acf/upload_prefilter/name=scm_custom_match_points_table', array(static::class,'set_new_points_table_in_match'), 10, 3);
         //add_action('scm_calculate_match_points_finished', array(static::class, 'scm_match_trigger_players_weekly_point_calculation'), 10, 2);
-        //add_action('scm_calculate_match_points_finished', array(static::class, 'scm_match_trigger_players_scoresmasters_cup_point_calculation'), 15, 2);
     }
 
     /**
@@ -47,7 +48,7 @@ class MatchSetup
         $updated = wp_update_post(array('ID' => $post_id, 'post_date' => $wp_formated_date));
 
         if (is_wp_error($updated)) {
-            error_log($updated->get_error_messages());
+            error_log(__METHOD__ . json_encode($updated->get_error_messages()));
         }
 
         return $value;
@@ -157,66 +158,6 @@ class MatchSetup
         $datetime1 = new \DateTime($match1->post_date, new \DateTimeZone('Europe/Athens'));
         $datetime2 = new \DateTime($match2->post_date, new \DateTimeZone('Europe/Athens'));
         return $datetime1 < $datetime2;
-    }
-
-    public static function scm_match_trigger_players_scoresmasters_cup_point_calculation($match_data, $players_data)
-    {
-
-        $args = array(
-            'post_type' => 'scm-fixture',
-            'post_status' => 'publish',
-            'posts_per_page' => -1,
-        );
-
-        $no_of_fixtures = get_posts($args);
-
-        // score masters cup starts at fixture number 3 each season
-        if (count($no_of_fixtures) < 3) {
-            return;
-        }
-
-        //check if there is competition round
-
-        $competition_round = get_post_meta($match_data['fixture_id'], 'competition_round_for_season_id_' . $match_data['season_id'], true);
-
-        // error no initialization of variable $competition_round_id
-        // todo: fix initialization of variable $competition_round_id
-        if ($competition_round_id === false) {
-            throw new Exception(__METHOD__ . ' invalid fixture_id');
-        }
-
-        if ($competition_round_id === '') {
-            return;
-        }
-
-        if (!isset($competition_round['score-masters-cup']['round_id'])) {
-            return;
-        }
-
-        $scoremasterscup_round_id = $competition_round['score-masters-cup']['round_id'];
-
-        $competition = (get_field('scm-related-competition', $scoremasterscup_round_id))[0];
-
-        if ($competition !== 'score-masters-cup') {
-            throw new Exception(__METHOD__ . ' invalid competition round competition relationship');
-        }
-
-        $matchups = (get_field('groups_headsup', $scoremasterscup_round_id));
-
-        $pairs = [];
-        $i = 0;
-        foreach ($matchups as $group) {
-
-            foreach ($group['group__headsup'] as $player) {
-                $pairs[$i][] = $player['scm-group-player']->ID;
-            }
-            $i += 1;
-
-        }
-
-        // get cup pairs
-        // add points to each player
-
     }
 
     //When user sets scm-match-end-time, restrict user from editing acf fields, filter by post id

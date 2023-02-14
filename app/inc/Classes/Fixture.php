@@ -9,7 +9,7 @@ class Fixture {
 
     public $fixture;
 
-    public function __construct (WP_POST $scm_fixture){
+    public function __construct (\WP_POST $scm_fixture){
         
     }
 

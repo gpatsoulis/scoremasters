@@ -1,7 +1,7 @@
 <?php 
 
 use Scoremasters\Inc\Base\ScmData;
-use Scoremasters\Inc\Classes\RecalculateMatchScore;
+use Scoremasters\Inc\Services\RecalculateMatchScore;
 
 
 if (isset($_POST['match_id'])

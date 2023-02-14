@@ -11,6 +11,7 @@ use Scoremasters\Inc\Classes\WeeklyMatchUps;
 use Scoremasters\Inc\Services\CalculateWeeklyMatchups;
 use Scoremasters\Inc\Services\CalculateWeeklyPoints;
 use Scoremasters\Inc\Services\CalculateScoremastersCupPoints;
+use Scoremasters\Inc\Classes\CreateCustomAdminErrorMsg;
 
 //todo: remove all logic add only actions for new fixture
 
@@ -19,7 +20,8 @@ class FixtureSetup
 
     public static function init()
     {
-        add_filter('acf/update_value/name=week-start-date', array(static::class, 'scm_fixture_update_post_date'), 10, 4);
+       
+        add_filter('acf/update_value/name=week-start-date', array(static::class, 'scm_fixture_update_post_date'), 5, 4);
         add_filter('wp_insert_post_data',array(static::class,'set_fixture_status_to_future'),99,4);
         add_action('elementor_pro/forms/new_record', array(static::class, 'scm_player_prediction'), 10, 2);
         
@@ -41,6 +43,7 @@ class FixtureSetup
         //add_action('wp_after_insert_post',array(static::class,'set_fixture_status_to_future2'),99,4);
     }
 
+   
     public static function new_fixture_published( string $new_status, string $old_status, \WP_Post $fixture_post ){
 
         $post_type = 'scm-fixture';
@@ -94,11 +97,18 @@ class FixtureSetup
             return $data;
         }
 
+        //debug data test error msg
+        //var_dump($postarr['ID']);exit;
+        $user_id = get_current_user_id();
+        $msg = new CreateCustomAdminErrorMsg('test error in: ' . __METHOD__ ,$postarr['ID'],$user_id);
+        $msg->init();
+
+        //$tr = delete_transient( $post_type . '_post_errors_' . $postarr['ID'] .'_' . $user_id);
+       
+
         if ($update) {
             return $data;
         }
-
-        
 
         $post_date = new \DateTime($data['post_date'], new \DateTimeZone('Europe/Athens'));
         $current_date = new \DateTime('',new \DateTimeZone('Europe/Athens'));

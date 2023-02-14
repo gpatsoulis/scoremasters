@@ -12,6 +12,7 @@ class CalculateWeeklyPoints
     public $fixture_id;
     public $season_id;
     public $matchups;
+    public $players_weekly_points = array();
 
     public function __construct(array $match_data, array $matchups)
     {
@@ -127,6 +128,11 @@ class CalculateWeeklyPoints
 
     public function save()
     {
+
+        if(empty($this->players_weekly_points)){
+            error_log(__METHOD__ . ' empty array : players_weekly_points' . json_encode($this->players_weekly_points));
+            return;
+        } 
 
         $current_season_id = $this->season_id;
 

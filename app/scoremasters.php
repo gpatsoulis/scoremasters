@@ -11,13 +11,15 @@ use Scoremasters\Inc\Base\ShortcodeController;
 use Scoremasters\Inc\Base\PlayerSelectLeague;
 use Scoremasters\Inc\Base\CompetitionRoundSetup;
 use Scoremasters\Inc\Base\ThemeSetup;
+use Scoremasters\Inc\Classes\CreateCustomAdminErrorMsg;
 
 define('EXPORT_PATH', __DIR__ . '/export_predictions');
 
 define('SCM_DEBUG', true);
 define('SCM_DEBUG_PATH', __DIR__ . '/debug');
 
-define('SCM_STAGING', true);
+define('SCM_STAGING', false);
+
 
 FixtureSetup::init();
 PlayerSetup::init();

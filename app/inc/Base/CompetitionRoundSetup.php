@@ -9,6 +9,7 @@
 namespace Scoremasters\Inc\Base;
 
 use Scoremasters\Inc\Base\ScmData;
+use Scoremasters\Inc\Services\CalculateScoremastersCupPoints;
 
 class CompetitionRoundSetup
 {
@@ -39,6 +40,7 @@ class CompetitionRoundSetup
             return;
         }
 
+        error_log(__METHOD__ . '  new Competition Round with id: ' . $competion_round->ID );
         error_log(__METHOD__ . '  new_status: ' . $new_status . ' --- ' . 'old_status: ' . $old_status);
 
         self::setup_date($competion_round);
@@ -160,12 +162,13 @@ class CompetitionRoundSetup
 
                 $meta_key = 'score_points_seasonID_' . $current_season->ID;
                 $score_0 = get_user_meta($player_id_0,$meta_key, true);
-                $score_0['fixture_id_' . $prev_fixture->ID]['score-masters-cup'] = ['score' => $cup_score ,'phase_id'=> $cup_phase_id,'opponent_id' => $player_id_1 ];
+                //minor edit $cup_score to $cup_score_0
+                $score_0['fixture_id_' . $prev_fixture->ID]['score-masters-cup'] = ['score' => $cup_score_0 ,'phase_id'=> $cup_phase_id,'opponent_id' => $player_id_1 ];
 
                 $success_0 = update_user_meta($player_id_0, $meta_key, $score_0);
 
                 $score_1 = get_user_meta($player_id_1,$meta_key, true);
-                $score_1['fixture_id_' . $prev_fixture->ID]['score-masters-cup'] = ['score' => $cup_score ,'phase_id'=> $cup_phase_id,'opponent_id' => $player_id_0 ];
+                $score_1['fixture_id_' . $prev_fixture->ID]['score-masters-cup'] = ['score' => $cup_score_1 ,'phase_id'=> $cup_phase_id,'opponent_id' => $player_id_0 ];
             
                 $success_1 = update_user_meta($player_id_1, $meta_key, $score_1);
 

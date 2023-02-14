@@ -532,5 +532,4 @@ function disable_all_deprecated_warnings($boolean) {
 }
 
 
-
 add_action('init', 'start_scoremasters');
