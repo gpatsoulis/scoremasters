@@ -140,7 +140,7 @@ class FixtureSetup
         }
 
         // Set fixture date to future if post status = publish --- Initial Publish Event --- runs only once
-        if( ($data['post_status'] === 'publish') && ($postarr['original_post_status'] === 'auto-draft') ){
+        if( ($data['post_status'] === 'publish') && ($postarr['original_post_status'] === 'auto-draft')){
             if( $acf_fixture_start_date > $current_post_date) {
                 $data['post_date'] = $acf_fixture_start_date->format('Y-m-d H:i:s');
                 $data['post_date_gmt'] = get_gmt_from_date($acf_fixture_start_date->format('Y-m-d H:i:s'));
@@ -150,9 +150,35 @@ class FixtureSetup
                     error_log( __METHOD__ . ' ---- Set Fixture To Future ---EVENT--- ! id: ' . $postarr['ID'] . ' author_id: ' . $data['post_author']);
                 }
     
+                
+                $success = CustomAdminErrorMsg::removeMsgTransient($post_type,$postarr['ID'],get_current_user_id());
+                if( $success ){
+                    error_log( __METHOD__ . ' ---- Transient Error Deleted ---EVENT--- ! post_id: ' . $postarr['ID']);
+                }
+
                 return $data;
             }
-        }
+        } 
+
+        if( ($data['post_status'] === 'publish') && ($postarr['original_post_status'] === 'draft') && CustomAdminErrorMsg::getMsgTransient($post_type,$postarr['ID'],get_current_user_id())){
+            if( $acf_fixture_start_date > $current_post_date) {
+                $data['post_date'] = $acf_fixture_start_date->format('Y-m-d H:i:s');
+                $data['post_date_gmt'] = get_gmt_from_date($acf_fixture_start_date->format('Y-m-d H:i:s'));
+                $data['post_status'] = 'future';
+    
+                if( SCM_DEBUG ){
+                    error_log( __METHOD__ . ' ---- Set Fixture To Future ---EVENT--- ! id: ' . $postarr['ID'] . ' author_id: ' . $data['post_author']);
+                }
+    
+                
+                $success = CustomAdminErrorMsg::removeMsgTransient($post_type,$postarr['ID'],get_current_user_id());
+                if( $success ){
+                    error_log( __METHOD__ . ' ---- Transient Error Deleted ---EVENT--- ! post_id: ' . $postarr['ID']);
+                }
+
+                return $data;
+            }
+        } 
         
 
         if( SCM_DEBUG ){
@@ -193,7 +219,7 @@ class FixtureSetup
         if($acf_post_date < $current_date){
             //setup error msg
             $user_id = get_current_user_id();
-            $msg = new CustomAdminErrorMsg('test error in: ' . __METHOD__ ,$postarr['ID'],$user_id);
+            $msg = new CustomAdminErrorMsg('test error in: ' . __METHOD__ . ' Λάθος ημερομηνία έναρξης αγωνιστικής εβδομάδας',$postarr['ID'],$user_id);
             $msg->addMsgTransient();
 
             if( SCM_DEBUG ){

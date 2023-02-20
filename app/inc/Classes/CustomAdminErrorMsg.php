@@ -45,4 +45,10 @@ class CustomAdminErrorMsg
         return $success;
     }
 
+    public static function getMsgTransient( $post_type,$post_id,$user_id ){
+        $value = get_transient("{$post_type}_post_errors_{$post_id}_{$user_id}");
+
+        return $value;
+    }
+
 }
