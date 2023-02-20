@@ -7,7 +7,7 @@ namespace Scoremasters\Inc\Classes;
 
 
 
-class CreateCustomAdminErrorMsg 
+class CustomAdminErrorMsg 
 {
     private string $message;
     private string $post_id;
@@ -28,13 +28,21 @@ class CreateCustomAdminErrorMsg
         return $output;
     }
 
-    public function init():void {
+    public function addMsgTransient($seconds = 120):void {
 
         $user_id = $this->user_id;
         $post_id = $this->post_id;
         $post_type = get_post_type($post_id);
 
-        set_transient("{$post_type}_post_errors_{$post_id}_{$user_id}", $this->createErrorNotice(), 300);
+        set_transient("{$post_type}_post_errors_{$post_id}_{$user_id}", $this->createErrorNotice(), $seconds);
+    }
+
+    public static function removeMsgTransient($post_type,$post_id,$user_id):bool 
+    {
+        //delete_transient( $post_type . '_post_errors_' . $postarr['ID'] .'_' . $user_id);
+        $success = delete_transient( "{$post_type}_post_errors_{$post_id}_{$user_id}");
+
+        return $success;
     }
 
 }

@@ -15,9 +15,6 @@ class ThemeSetup
         add_filter('wp_nav_menu_objects', array(static::class, 'scm_menu_objects'), 10, 2);
         add_filter('use_block_editor_for_post_type',array(static::class,'disableBlockEditorForCustomPostTypes'),10,2);
         add_action( 'admin_notices', array(static::class,'addAdminNotice') );
-
-        //diasble post save 
-        add_filter( 'wp_insert_post_empty_content', array(static::class,'disablePostSave'), 99999, 2 );
     }
 
     public static function scm_menu_objects($sorted_menu_items, $args)
@@ -83,29 +80,6 @@ class ThemeSetup
             //delete_transient( $current_screen->post_type . '_post_errors_' . $post_id .'_' . $user_id );
         }
 
-    }
-
-    public static function disablePostSave( $maybe_empty, $postarr ){
-
-        
-        if($postarr['post_type'] !== 'scm-fixture') return $maybe_empty;
-
-
-        $post_id = $postarr['ID'];
-        $post_type = $postarr['post_type'];
-        $user_id = get_current_user_id();
-
-        var_dump($postarr);
-        var_dump($postarr['acf']);
-        //var_dump(get_transient( $post_type . '_post_errors_' . $post_id .'_' . $user_id));
-
-        if( false !== ($error_msg = get_transient( $post_type . '_post_errors_' . $post_id .'_' . $user_id)) ){
-            $maybe_empty = true;
-            return $maybe_empty;
-        }
-
-
-        return $maybe_empty;
     }
 
 }

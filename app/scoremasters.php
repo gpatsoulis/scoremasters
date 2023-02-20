@@ -11,7 +11,8 @@ use Scoremasters\Inc\Base\ShortcodeController;
 use Scoremasters\Inc\Base\PlayerSelectLeague;
 use Scoremasters\Inc\Base\CompetitionRoundSetup;
 use Scoremasters\Inc\Base\ThemeSetup;
-use Scoremasters\Inc\Classes\CreateCustomAdminErrorMsg;
+use Scoremasters\Inc\Base\WeeklyChampionshipSetup;
+use Scoremasters\Inc\Base\PredictionSetup;
 
 define('EXPORT_PATH', __DIR__ . '/export_predictions');
 
@@ -29,6 +30,8 @@ ProPlayerSetup::init();
 PlayerSelectLeague::init();
 
 //-- debug --
+PredictionSetup::init();
+WeeklyChampionshipSetup::init();
 CompetitionRoundSetup::init();
 
 ThemeSetup::init();
