@@ -210,7 +210,7 @@ class FixtureSetup
         }
 
         if( SCM_DEBUG ){
-            error_log( __METHOD__ . ' ---- new fixture ---FILTER DATA EVENT--- ! original_post_status: ' . $postarr['original_post_status']);
+            error_log( __METHOD__ . ' ---- new fixture ---START FILTER DATA EVENT--- ! original_post_status: ' . $postarr['original_post_status']);
         }
 
         $current_date = new \DateTime('',new \DateTimeZone('Europe/Athens'));
