@@ -19,8 +19,9 @@ class MatchSetup
     {
         add_filter('acf/update_value/name=match-date', array(static::class, 'scm_match_update_post_date'), 10, 4);
         add_filter('acf/update_value/name=scm-match-end-time', array(static::class, 'scm_match_trigger_players_point_calculation'), 99, 4);
-        add_filter('acf/upload_prefilter/name=scm_custom_match_points_table', array(static::class,'set_new_points_table_in_match'), 10, 3);
+        add_filter('acf/upload_prefilter/name=scm_custom_match_points_table', array(static::class, 'set_new_points_table_in_match'), 10, 3);
         //add_action('scm_calculate_match_points_finished', array(static::class, 'scm_match_trigger_players_weekly_point_calculation'), 10, 2);
+        add_filter('acf/fields/relationship/query/name=scm-scorers', array(static::class, 'modify_scorers_query'), 10, 3);
     }
 
     /**
@@ -66,7 +67,7 @@ class MatchSetup
     public static function scm_match_trigger_players_point_calculation($value, $post_id, array $field, $original)
     {
 
-        if($value == ''){
+        if ($value == '') {
             return $value;
         }
 
@@ -88,7 +89,7 @@ class MatchSetup
             return $value;
         }
 
-        if(SCM_DEBUG){
+        if (SCM_DEBUG) {
             error_log(__METHOD__ . ' match event calculate score');
         }
 
@@ -121,7 +122,6 @@ class MatchSetup
         return $value;
     }
 
-    
     // todo: use match object instead of match_data array
     public static function scm_match_trigger_players_weekly_point_calculation($match_data, $players_data)
     {
@@ -129,15 +129,14 @@ class MatchSetup
         // find if is the last match of current fixture
         // and calculate weekly-championship score
 
-        $matches = get_field('week-matches',$match_data['fixture_id'])[0]['week-match'];
+        $matches = get_field('week-matches', $match_data['fixture_id'])[0]['week-match'];
         //usort($matches, self::date_compare);
-
 
         $all_leagues = ScmData::get_all_leagues();
         $weekly_competition_post = ScmData::get_current_scm_competition_of_type('weekly-championship');
-        
-        if($weekly_competition_post->ID < 0){
-            error_log( __METHOD__ . ' error calculating scm_match_trigger_players_weekly_point_calculation');
+
+        if ($weekly_competition_post->ID < 0) {
+            error_log(__METHOD__ . ' error calculating scm_match_trigger_players_weekly_point_calculation');
             return;
         }
 
@@ -154,7 +153,8 @@ class MatchSetup
 
     }
 
-    public static function date_compare($match1,$match2){
+    public static function date_compare($match1, $match2)
+    {
         $datetime1 = new \DateTime($match1->post_date, new \DateTimeZone('Europe/Athens'));
         $datetime2 = new \DateTime($match2->post_date, new \DateTimeZone('Europe/Athens'));
         return $datetime1 < $datetime2;
@@ -167,48 +167,49 @@ class MatchSetup
      * Set custom points table for single match, the new table is saved in custom post
      * meta field named "match_points_table"
      *
-     * @param array        $errors     An array of error messages (strings) for the given attachment. 
+     * @param array        $errors     An array of error messages (strings) for the given attachment.
      * @param array        $file       An array containing the $_FILE data for the attachment about to be uploaded
      * @param array        $field      The field array containing all settings.
      */
-    public static function set_new_points_table_in_match($errors, $file, $field) {
+    public static function set_new_points_table_in_match($errors, $file, $field)
+    {
 
         /* Test ajax file upload*/
-        if( SCM_DEBUG ){
+        if (SCM_DEBUG) {
             //$logfile = SCM_DEBUG_PATH .'/upload_points_table.json';
             //$content = file_get_contents($_FILES['async-upload']['tmp_name']);
             //file_put_contents($logfile,json_encode($file));
         }
-        
+
         $csvdata = file_get_contents($_FILES['async-upload']['tmp_name']);
-    
+
         $lines = explode("\n", $csvdata); // split data by new lines
-    
+
         $new_points_table = array(
-            "0"=>array(),
-            "1"=>array(),
-            "2"=>array(),
-            "3"=>array(),
-            "-1"=>array(),
-            "-2"=>array(),
-            "-3"=>array()
+            "0" => array(),
+            "1" => array(),
+            "2" => array(),
+            "3" => array(),
+            "-1" => array(),
+            "-2" => array(),
+            "-3" => array(),
         );
-    
+
         foreach ($lines as $i => $line) {
-    
+
             $values = explode(',', $line); // split lines by commas
-    
+
             // set values removing them as we ago
-            $key=$values[0];
-    
-            $new_points_table["0"][$key]= trim($values[1]); unset($values[1]);
-            $new_points_table["1"][$key]= trim($values[2]); unset($values[2]);
-            $new_points_table["2"][$key]= trim($values[3]); unset($values[3]);
-            $new_points_table["3"][$key]= trim($values[4]); unset($values[4]);
-            $new_points_table["-1"][$key]= trim($values[5]); unset($values[5]);
-            $new_points_table["-2"][$key]= trim($values[6]); unset($values[6]);
-            $new_points_table["-3"][$key]= trim($values[7]); unset($values[7]);
-    
+            $key = $values[0];
+
+            $new_points_table["0"][$key] = trim($values[1]);unset($values[1]);
+            $new_points_table["1"][$key] = trim($values[2]);unset($values[2]);
+            $new_points_table["2"][$key] = trim($values[3]);unset($values[3]);
+            $new_points_table["3"][$key] = trim($values[4]);unset($values[4]);
+            $new_points_table["-1"][$key] = trim($values[5]);unset($values[5]);
+            $new_points_table["-2"][$key] = trim($values[6]);unset($values[6]);
+            $new_points_table["-3"][$key] = trim($values[7]);unset($values[7]);
+
         }
 
         // filter user input
@@ -217,13 +218,36 @@ class MatchSetup
         $match = get_post($match_id);
 
         // if post not exists throw exception
-        if(is_null($match)){
+        if (is_null($match)) {
             error_log(__METHOD__ . ' error post_id  ID : ' . $match_id);
-            throw new \Exception(__METHOD__ . ' invalid id for match ( upload custom csv points table) : ' . $match_id );
+            throw new \Exception(__METHOD__ . ' invalid id for match ( upload custom csv points table) : ' . $match_id);
         }
 
-        update_post_meta( $match_id , 'match_points_table', $new_points_table);
-    } 
+        update_post_meta($match_id, 'match_points_table', $new_points_table);
+    }
+
+    /* Filter the query to show scorers only from the teams of each match */
+
+    public function modify_scorers_query($args, $field, $post_id)
+    {
+
+        //Save home and away teams ids
+        //$home_id = get_post_meta($post_id,'match-teams_0_home-team',true)[0];
+        //$away_id = get_post_meta($post_id,'match-teams_0_away-team',true)[0];
+
+        $home_id = get_field('match-teams', $post_id)[0]['home-team'][0]->ID;
+        $away_id = get_field('match-teams', $post_id)[0]['away-team'][0]->ID;
+
+        // Restrict results to players of the current teams only.
+        $args['meta_query'] = array(
+            array(
+                'key' => 'scm-player-team', //name of custom field
+                'value' => [serialize([strval($home_id)]), serialize([strval($away_id)])],
+                'compare' => 'IN',
+            ),
+        );
+
+        return $args;
+    }
 
 }
-
