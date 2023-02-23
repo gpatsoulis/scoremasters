@@ -228,7 +228,7 @@ class MatchSetup
 
     /* Filter the query to show scorers only from the teams of each match */
 
-    public function modify_scorers_query($args, $field, $post_id)
+    public static function modify_scorers_query($args, $field, $post_id)
     {
 
         //Save home and away teams ids
