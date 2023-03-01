@@ -25,7 +25,7 @@ class ScoremastersCupSetup {
         $prev_fixture = ScmData::get_previous_fixture();
 
         if(SCM_DEBUG){
-            error_log( __METHOD__ . ' ---- calculating cup points for fixture: ' .  $prev_fixture->ID);
+            error_log( __METHOD__ . ' ----EVENT---- calculating cup points for fixture: ' .  $prev_fixture->ID);
         }
 
       

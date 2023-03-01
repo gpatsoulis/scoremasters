@@ -4,7 +4,17 @@ use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\WeeklyMatchUps;
 use Scoremasters\Inc\Services\CalculateWeeklyMatchups;
 
+if(!is_admin()) exit;
+
 //only for first fixture!!!!
+
+//prev_fixture should be default post
+$prev_fixture = ScmData::get_previous_fixture();
+if($prev_fixture->ID > 0) exit('Only for first fixture!');
+
+//if current fixture is default post no published fixture exists
+$current_fixture = ScmData::get_current_fixture();
+if($current_fixture->ID < 0) exit('No active published-active fixture!');
 
 
 function add_weekly_championship_players_matchups( \WP_Post $fixture_post)
@@ -39,3 +49,6 @@ function add_weekly_championship_players_matchups( \WP_Post $fixture_post)
         // seasonid_XXX [ 'fid_XXX' => ['leagueid_XXX' => ['pairs'],'leagueid_XXX' => ['pairs']]];
 
     }
+
+    add_weekly_championship_players_matchups($current_fixture);
+    exit('Matchups Recalculation Done!');

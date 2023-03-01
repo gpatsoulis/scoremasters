@@ -31,7 +31,7 @@ class WeeklyChampionshipSetup {
         }
 
         if(SCM_DEBUG){
-            error_log( __METHOD__ . ' calculating weekly matchups for fixture: ' .  $fixture_post->ID);
+            error_log( __METHOD__ . ' ----EVENT---- calculating weekly matchups for fixture: ' .  $fixture_post->ID);
         }
         //weekly-championship
 
@@ -39,7 +39,7 @@ class WeeklyChampionshipSetup {
         // todo: check competition is in current season 
         $weekly_competition = ScmData::get_current_scm_competition_of_type('weekly-championship');
         if($weekly_competition->ID < 0){
-            error_log( __METHOD__ . ' error calculating weekly_championship_players_matchups');
+            error_log( __METHOD__ . ' ----ERROR EVENT---- error calculating weekly_championship_players_matchups');
             return;
         }
 
@@ -56,6 +56,7 @@ class WeeklyChampionshipSetup {
                 ->save();
         }
 
+        error_log( __METHOD__ . ' ----END MATCHUP CALC----');
         // setup matchups for each championship
         // save matchups in custom meta for each championship
 
@@ -77,7 +78,7 @@ class WeeklyChampionshipSetup {
 
 
        if(SCM_DEBUG){
-        error_log( __METHOD__ . ' ---- calculating weekly points for fixture: ' . $prev_fixture->ID . ' current_fixture: ' . $fixture_post->ID);
+        error_log( __METHOD__ . ' ----EVENT---- calculating weekly points for fixture: ' . $prev_fixture->ID . ' current_fixture: ' . $fixture_post->ID);
        }
 
         $match_data = array(

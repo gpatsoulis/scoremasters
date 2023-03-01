@@ -112,7 +112,10 @@ class FootballMatch {
         foreach($acf_scorers as $acf_score){
             
             //$match_scorer[] = array('scm-scorers' => $acf_score['scm-scorers'],'scm-goal-minute'=>$acf_score['scm-goal-minute']);
-            $scorers[] = $acf_score['scm-scorers'][0]->ID;
+            if(isset($acf_score['scm-scorers'][0])){
+                $scorers[] = $acf_score['scm-scorers'][0]->ID;
+            }
+            
         }
 
         $this->scorers = $scorers;

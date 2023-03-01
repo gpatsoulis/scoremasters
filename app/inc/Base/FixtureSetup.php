@@ -51,7 +51,7 @@ class FixtureSetup
         }
         
         if( SCM_DEBUG ){
-            error_log( __METHOD__ . ' ---- new fixture published ---EVENT--- ! id: ' .  $fixture_post->ID );
+            error_log( __METHOD__ . ' ----EVENT---- new fixture published! id: ' .  $fixture_post->ID );
         }
 
         do_action('new_fixture_published_event', $new_status, $old_status, $fixture_post);
@@ -75,7 +75,7 @@ class FixtureSetup
         }
 
         if( SCM_DEBUG ){
-            error_log( __METHOD__ . ' ---- new fixture  ---FUTURE EVENT--- ! id: ' .  $post_after->ID );
+            error_log( __METHOD__ . ' ----FUTURE EVENT---- new fixture! id: ' .  $post_after->ID );
         }
 
         do_action('new_fixture_future_event', $post_after);
@@ -94,7 +94,7 @@ class FixtureSetup
         $post_status = $postarr['post_status'];
 
         if( SCM_DEBUG ){
-            error_log( __METHOD__ . ' ---- Edit Post Data ---EVENT--- ! id: ' . $postarr['ID'] . ' action: ' . $action . ' post status: '. $post_status);
+            error_log( __METHOD__ . ' ----EVENT---- Edit Post Data! id: ' . $postarr['ID'] . ' action: ' . $action . ' post status: '. $post_status);
         }
 
         if( $data['post_status'] == 'auto-draft'){
@@ -103,7 +103,7 @@ class FixtureSetup
 
         if(!isset($postarr['acf'])){
             if( SCM_DEBUG ){
-                error_log( __METHOD__ . ' ---- Edit Post Data ---EVENT--- ! ACF DATE NOT SET ');
+                error_log( __METHOD__ . ' ----EVENT---- Edit Post Data! ACF DATE NOT SET ');
             }
             return $data;
         }
@@ -167,13 +167,13 @@ class FixtureSetup
                 $data['post_status'] = 'future';
     
                 if( SCM_DEBUG ){
-                    error_log( __METHOD__ . ' ---- Set Fixture To Future ---EVENT--- ! id: ' . $postarr['ID'] . ' author_id: ' . $data['post_author']);
+                    error_log( __METHOD__ . ' ----EVENT---- Set Fixture To Future  ! id: ' . $postarr['ID'] . ' author_id: ' . $data['post_author']);
                 }
     
                 
                 $success = CustomAdminErrorMsg::removeMsgTransient($post_type,$postarr['ID'],get_current_user_id());
                 if( $success ){
-                    error_log( __METHOD__ . ' ---- Transient Error Deleted ---EVENT--- ! post_id: ' . $postarr['ID']);
+                    error_log( __METHOD__ . ' ----EVENT---- Transient Error Deleted! post_id: ' . $postarr['ID']);
                 }
 
                 return $data;
@@ -182,8 +182,8 @@ class FixtureSetup
         
 
         if( SCM_DEBUG ){
-            error_log( __METHOD__ . ' ---- Edit Post Data ---EVENT--- ' . $acf_fixture_start_date->format('Y-m-d H:i:s') . ' --- ' . $current_post_date->format('Y-m-d H:i:s'));
-            error_log( __METHOD__ . ' ---- Edit Post Data ---EVENT--- ! END EVENT ');
+            error_log( __METHOD__ . ' ----EVENT---- Edit Post Data ' . $acf_fixture_start_date->format('Y-m-d H:i:s') . ' --- ' . $current_post_date->format('Y-m-d H:i:s'));
+            error_log( __METHOD__ . ' ----END EVENT---- Edit Post Data!');
         }
 
         return $data;
@@ -210,7 +210,7 @@ class FixtureSetup
         }
 
         if( SCM_DEBUG ){
-            error_log( __METHOD__ . ' ---- new fixture ---START FILTER DATA EVENT--- ! original_post_status: ' . $postarr['original_post_status']);
+            error_log( __METHOD__ . ' ----START FILTER DATA EVENT---- new fixture  ! original_post_status: ' . $postarr['original_post_status']);
         }
 
         $current_date = new \DateTime('',new \DateTimeZone('Europe/Athens'));
@@ -223,7 +223,7 @@ class FixtureSetup
             $msg->addMsgTransient();
 
             if( SCM_DEBUG ){
-                error_log( __METHOD__ . ' ---- new fixture ---ERROR FILTER DATA EVENT--- ! original_post_status: ' . $postarr['original_post_status']);
+                error_log( __METHOD__ . ' ----ERROR FILTER DATA EVENT---- new fixture  ! original_post_status: ' . $postarr['original_post_status']);
             }
 
             return true;

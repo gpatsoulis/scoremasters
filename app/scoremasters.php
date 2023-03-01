@@ -13,6 +13,7 @@ use Scoremasters\Inc\Base\CompetitionRoundSetup;
 use Scoremasters\Inc\Base\ThemeSetup;
 use Scoremasters\Inc\Base\WeeklyChampionshipSetup;
 use Scoremasters\Inc\Base\PredictionSetup;
+use Scoremasters\Inc\Base\ScoremastersCupSetup;
 
 define('EXPORT_PATH', __DIR__ . '/export_predictions');
 
@@ -33,6 +34,7 @@ PlayerSelectLeague::init();
 PredictionSetup::init();
 WeeklyChampionshipSetup::init();
 CompetitionRoundSetup::init();
+ScoremastersCupSetup::init();
 
 ThemeSetup::init();
 

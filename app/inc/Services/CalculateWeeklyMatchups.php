@@ -166,7 +166,8 @@ class CalculateWeeklyMatchups
         $this->next_matchups = $next_matchups;
 
         if(SCM_DEBUG){
-            error_log(__METHOD__ . ' week number :' . ($fixture_no % 2) );
+            //error_log(__METHOD__ . ' week number :' . ($fixture_no % 2) );
+            error_log(__METHOD__ . ' ----CALCULATE MATCHUPS---- : fixture_id:' .  $new_fixture_id . ' matchups: ' . json_encode($next_matchups));
         }
 
         return $this;
@@ -239,10 +240,12 @@ class CalculateWeeklyMatchups
         $id = update_post_meta($this->competition_id, $this->meta_key, $data);
 
         if ($id === false) {
+            error_log(__METHOD__ . ' ----ERROR---- update_post_meta for competition: '. $this->competition_id);
             throw new \Exception(__METHOD__ . ' failure or same value for meta "competition_matchups", id: ' . $this->competition_id);
         }
 
         if(SCM_DEBUG){
+            //error_log(__METHOD__ . ' ----DATA--- end calc matchups data: ' . json_encode($data));
             file_put_contents(SCM_DEBUG_PATH . '/test_matchups.json', json_encode($data) . "\n",FILE_APPEND);
         }
 

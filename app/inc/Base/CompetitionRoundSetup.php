@@ -40,7 +40,7 @@ class CompetitionRoundSetup
             return;
         }
 
-        error_log(__METHOD__ . '  new Competition Round with id: ' . $competion_round->ID );
+        error_log(__METHOD__ . '  ----EVENT---- new Competition Round with id: ' . $competion_round->ID );
         error_log(__METHOD__ . '  new_status: ' . $new_status . ' --- ' . 'old_status: ' . $old_status);
 
         self::setup_date($competion_round);
