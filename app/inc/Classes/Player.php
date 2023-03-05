@@ -244,7 +244,7 @@ class Player
         $current_fixture = $current_fixture = ScmData::get_current_fixture();
 
         $current_fixture_points = 0;
-        if(is_array($this->player_points)){
+        if(is_array($this->player_points && isset($this->player_points['fixture_id_' . strval($current_fixture->ID)])) ){
             $current_fixture_points = $this->player_points['fixture_id_' . strval($current_fixture->ID)]['total_points']['season-league'];
         }
 

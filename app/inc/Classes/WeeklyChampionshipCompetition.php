@@ -15,6 +15,7 @@ class WeeklyChampionshipCompetition extends Competition {
     public string $type = 'weekly-championship';
     public bool $is_active;
     public WeeklyMatchUps $matchups;
+    public $closure;
 
     public function __construct(\WP_Post $scm_competition, WeeklyMatchUps $matchups){
 
@@ -64,7 +65,7 @@ class WeeklyChampionshipCompetition extends Competition {
     }
 
     public function score_comparator($player_1,$player_2){
-        return $player_1->weekly_competition_points < $player_2->weekly_competition_points;
+        return $player_2->weekly_competition_points <=> $player_1->weekly_competition_points ;
     }
 
     public function short( ){

@@ -12,10 +12,10 @@ class ScoremastersCupSetup {
 
     public static function init()
     {
-        add_action('new_fixture_published_event', array(static::class, 'trigger_players_cup_point_calculation'), 10, 1);
+        add_action('new_fixture_published_event', array(static::class, 'trigger_players_cup_point_calculation'), 10, 3);
     }
 
-    public static function trigger_players_cup_point_calculation( \WP_Post $fixture_post){
+    public static function trigger_players_cup_point_calculation( string $new_status, string $old_status, \WP_Post $fixture_post){
         
 
         if( $fixture_post->post_type !== 'scm-fixture'){
