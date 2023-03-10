@@ -29,8 +29,8 @@ class CalculatePossiblePlayerPoints
 
         $player_points_table = array(
             "Επιθετικός" => 3,
-            "Μέσος" => 4,
-            "Αμυντικός" => 8,
+            "Μέσος" => 5,
+            "Αμυντικός" => 10,
         );
 
         $data = array();
