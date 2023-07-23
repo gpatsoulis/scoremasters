@@ -8,6 +8,7 @@ namespace Scoremasters\Inc\Classes;
 use Scoremasters\Inc\Base\ScmData;
 
 // 'weekly_score'
+// deprecated class
 
 class WeeklyPoints {
 

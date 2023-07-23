@@ -13,7 +13,7 @@ class LeaguesCupCompetition
     public \WP_post $post_object;
     public int $competition_id;
     public string $description;
-    public string $type = 'league-competition';
+    public string $type = 'league-cup';
     public WeeklyLeagueMatchUps $matchups;
     public array $participants;
     public $standings;

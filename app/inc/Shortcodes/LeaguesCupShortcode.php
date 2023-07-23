@@ -10,7 +10,7 @@ use Scoremasters\Inc\Classes\WeeklyLeagueMatchUps;
 use Scoremasters\Inc\Classes\League;
 
 // todo: fix show points
-//[Scoremasters\Inc\Shortcodes\LeagueWeeklyMatchupsShortcode]
+//[Scoremasters\Inc\Shortcodes\LeaguesCupShortcode]
 class LeaguesCupShortcode
 {
     public $template;
@@ -46,18 +46,21 @@ class LeaguesCupShortcode
         }
 
 
-        $current_leaguesCup_competition = ScmData::get_current_scm_competition_of_type('league-competition');
+        $current_leaguesCup_competition = ScmData::get_current_scm_competition_of_type('leagues-cup');
         $league_matchups = new WeeklyLeagueMatchUps($current_leaguesCup_competition->ID);
+        $league_matchups->get_all_matchups();
         $current_matchups = $league_matchups->for_fixture_id($fixture_id);
 
         $output = $this->template->container_start;
-        $data = array();
+        $output = '<h3>Leagues Cup</h3>';
 
+        $data = array();
         $data['fixture'] = (isset($fixture)) ? $fixture->post_name: (ScmData::get_current_fixture($fixture_id))->post_name;
 
         for ($i = 0; $i < count($current_matchups); $i += 2) {
             $leagueH = new League(get_post($current_matchups[$i])); 
             $leagueA = new League(get_post($current_matchups[$i + 1]));
+            
 
             $data['home'] = $leagueH->post_data->post_title;
             $data['home_points'] = $leagueH->get_leagues_cup_total_points_for_fixture($fixture_id);

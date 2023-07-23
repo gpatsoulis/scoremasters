@@ -19,6 +19,7 @@ use \Scoremasters\Inc\Shortcodes\LeagueWeeklyMatchupsShortcode;
 use \Scoremasters\Inc\Shortcodes\CupShortcode;
 use \Scoremasters\Inc\Shortcodes\GetPlayerPredictionFormShortcode;
 use \Scoremasters\Inc\Shortcodes\CurrentFixtureTotalPlayerPointsShortcode;
+use \Scoremasters\Inc\Shortcodes\LeaguesCupShortcode;
 
 class ShortcodeController {
 
@@ -42,6 +43,7 @@ class ShortcodeController {
 			\Scoremasters\Inc\Shortcodes\CupShortcode::class,
 			\Scoremasters\Inc\Shortcodes\GetPlayerPredictionFormShortcode::class,
 			\Scoremasters\Inc\Shortcodes\CurrentFixtureTotalPlayerPointsShortcode::class,
+			\Scoremasters\Inc\Shortcodes\LeaguesCupShortcode::class,
         );
     }
 

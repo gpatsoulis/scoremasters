@@ -30,6 +30,9 @@ class CalculateLeaguesCupPoints
             $leagueAplayers = (new League(get_post($this->matchUps[$i])))->short_players_by_fixture_points($this->fixture_id);
             $leagueBplayers = (new League(get_post($this->matchUps[$i + 1])))->short_players_by_fixture_points($this->fixture_id);
 
+            error_log(__METHOD__ . 'Calculating league cup points - leagueAplayers: ' . json_encode($leagueAplayers));
+            error_log(__METHOD__ . 'Calculating league cup points - leagueBplayers: ' . json_encode($leagueBplayers));
+
             $leagueApoints = $this->totalPoints($leagueAplayers);
             $leagueBpoints = $this->totalPoints($leagueBplayers);
 
@@ -49,8 +52,7 @@ class CalculateLeaguesCupPoints
         $this->totalScore = $totalScore;
 
         error_log(__METHOD__ . 'Calculating league cup points - leagueA: ' . $leagueApoints . ' leagueB: ' . $leagueBpoints);
-        error_log(__METHOD__ . 'Calculating league cup points - leagueAplayers: ' . json_encode($leagueAplayers));
-        error_log(__METHOD__ . 'Calculating league cup points - leagueBplayers: ' . json_encode($leagueBplayers));
+        
         error_log(__METHOD__ . 'Calculating league cup points - total Score: ' . json_encode($totalScore));
         return $totalScore;
 
