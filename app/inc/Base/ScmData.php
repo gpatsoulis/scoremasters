@@ -510,6 +510,7 @@ final class ScmData
         return $posts;
     }
 
+
     /**
      * args WP_Post
      * return array of Players

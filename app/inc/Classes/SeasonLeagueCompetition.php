@@ -70,7 +70,7 @@ class SeasonLeagueCompetition extends Competition {
         $terms = get_the_terms( $this->$post_object, 'scm_competition_type' );
 
         if(false === $terms || is_wp_error( $terms )){
-            throw new Exception( __METHOD__ . ' no terms in scm_competition_type post id: ' . $this->$post_object->ID);
+            throw new \Exception( __METHOD__ . ' no terms in scm_competition_type post id: ' . $this->$post_object->ID);
         }
 
         //use slug or term id
