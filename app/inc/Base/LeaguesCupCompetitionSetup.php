@@ -70,14 +70,15 @@ class LeaguesCupCompetitionSetup
         }
 
         $matchups = new WeeklyLeagueMatchUps($weekly_competition->ID);
+        $matchups->get_all_matchups();
 
-        $currentMatchups = $matchups->for_fixture_id($fixture_post->ID);
+        $currentMatchups = $matchups->for_fixture_id($prev_fixture->ID);
 
         //CalculateLeaguesCupPoints class needs rewrite
-        $score = new CalculateLeaguesCupPoints($currentMatchups, $fixture_post->ID);
+
+        $score = new CalculateLeaguesCupPoints($currentMatchups, $prev_fixture->ID);
         $score->calculate();
         $score->save();
-
 
     }
 }
