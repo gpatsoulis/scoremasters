@@ -155,7 +155,7 @@ class CalculateWeeklyLeagueMatchups
 
         if(SCM_DEBUG){
             //error_log(__METHOD__ . ' week number :' . ($fixture_no % 2) );
-            error_log(__METHOD__ . ' ----CALCULATE MATCHUPS---- : fixture_id:' .  $new_fixture_id . ' matchups: ' . json_encode($next_matchups));
+            error_log(__METHOD__ . ' ----CALCULATE LEAGUE MATCHUPS---- : fixture_id:' .  $new_fixture_id . ' matchups: ' . json_encode($next_matchups));
         }
 
         return $this;
@@ -235,7 +235,7 @@ class CalculateWeeklyLeagueMatchups
 
         if(SCM_DEBUG){
             //error_log(__METHOD__ . ' ----DATA--- end calc matchups data: ' . json_encode($data));
-            file_put_contents(SCM_DEBUG_PATH . '/test_matchups.json', json_encode($data) . "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_matchups.json', json_encode($data) . "\n",FILE_APPEND);
         }
 
     }

@@ -30,7 +30,7 @@ class LeaguesCupShortcode
 
     public function output()
     {
-        //use [Scoremasters\Inc\Shortcodes\FixturesSelectWeekShortcode]
+        //use [Scoremasters\Inc\Shortcodes\LeaguesCupShortcode]
         if (isset($_POST['fixture_id'])
             && isset($_POST['scm_fixture_setup'])
             && wp_verify_nonce($_POST['scm_fixture_setup'], 'submit_form')) {
