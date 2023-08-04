@@ -59,18 +59,23 @@ class LeaguesCupShortcode
 
         for ($i = 0; $i < count($current_matchups); $i += 2) {
             $leagueH = new League(get_post($current_matchups[$i])); 
+            $playersH = array_slice($leagueH->short_players_by_fixture_points($fixture_id), 0, 4);
+
             $leagueA = new League(get_post($current_matchups[$i + 1]));
+            $playersA = array_slice($leagueA->short_players_by_fixture_points($fixture_id), 0, 4);
             
 
             $data['home'] = $leagueH->post_data->post_title;
             $data['home_points'] = $leagueH->get_leagues_cup_total_points_for_fixture($fixture_id);
             $data['home_thumbnail'] = get_the_post_thumbnail($leagueH->post_data->ID);
             $data['home_league_url'] = get_permalink( $leagueH->post_data->ID );
+            $data['home_players'] = $playersH;
 
             $data['away'] = $leagueA->post_data->post_title;
             $data['away_points'] = $leagueA->get_leagues_cup_total_points_for_fixture($fixture_id);
             $data['away_thumbnail'] = get_the_post_thumbnail($leagueA->post_data->ID);
             $data['away_league_url'] = get_permalink( $leagueA->post_data->ID );
+            $data['away_players'] = $playersA;
 
             $output .= $this->template->get_html($data);
             /*

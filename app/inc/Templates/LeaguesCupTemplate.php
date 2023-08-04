@@ -23,6 +23,9 @@ final class LeaguesCupTemplate implements TemplateInterface
             return '<!-- No Player League Data -->';
         }
 
+        $home_players = $this->getPlayersHTML($data['home_players'],$data['fixture']);
+        $away_players = $this->getPlayersHTML($data['away_players'],$data['fixture']);
+
         $template_html = <<<HTML
 
         <div class="leaguescup-fixture-results">
@@ -34,14 +37,15 @@ final class LeaguesCupTemplate implements TemplateInterface
                     <div class="scm-leaguescup-leaguelogo-home">{$data['home_thumbnail']}</div>
                 </a>
                 <div class="player-list">
-                    <div class="league-player">
+                    {$home_players}
+                    <!--<div class="league-player">
                         <div class="leaguescup-player-name">Φραγκίσκος Σαγκινέτος</div>
                         <div class="leaguescup-player-score">32</div>
                     </div>
                     <div class="league-player">
                         <div class="leaguescup-player-name">Φραγκίσκος Σαγκινέτος</div>
                         <div class="leaguescup-player-score">32</div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <div class="leaguescup-middleboard">
@@ -61,14 +65,15 @@ final class LeaguesCupTemplate implements TemplateInterface
                                 <div class="scm-leaguescup-leaguelogo-away">{$data['away_thumbnail']}</div>
                 </a>
                 <div class="player-list">
-                        <div class="league-player">
+                        {$away_players}
+                        <!--<div class="league-player">
                             <div class="leaguescup-player-score">32</div>
                             <div class="leaguescup-player-name">Φραγκίσκος Σαγκινέτος</div>
                         </div>
                         <div class="league-player">
                             <div class="leaguescup-player-score">32</div>
                             <div class="leaguescup-player-name">Φραγκίσκος Σαγκινέτος</div>
-                        </div>
+                        </div>-->
                 </div>
             </div>
 </div>
@@ -246,6 +251,20 @@ HTML;
 HTML;
 
         return $css;
+    }
+
+    public function getPlayersHTML(array $players,string $fixture_id){//$data['fixture']
+        $html = '';
+        
+        foreach($players as $player){
+            $html .= <<<HTML
+                <div class="league-player">
+                    <div class="leaguescup-player-name">{$player->wp_player->display_name}</div>
+                    <div class="leaguescup-player-score">{$player->current_fixture_points()}</div>
+                </div>
+HTML; 
+        }
+        return $html;
     }
 
 }
