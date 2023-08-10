@@ -246,7 +246,7 @@ class CalculateWeeklyMatchups
 
         if(SCM_DEBUG){
             //error_log(__METHOD__ . ' ----DATA--- end calc matchups data: ' . json_encode($data));
-            file_put_contents(SCM_DEBUG_PATH . '/test_matchups.json', json_encode($data) . "\n",FILE_APPEND);
+            //file_put_contents(SCM_DEBUG_PATH . '/test_matchups.json', json_encode($data) . "\n",FILE_APPEND);
         }
 
     }
