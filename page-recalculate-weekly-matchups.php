@@ -4,7 +4,8 @@ use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Classes\WeeklyMatchUps;
 use Scoremasters\Inc\Services\CalculateWeeklyMatchups;
 
-if(!is_admin()) exit;
+
+//if(!is_admin()) exit;
 
 //only for first fixture!!!!
 
