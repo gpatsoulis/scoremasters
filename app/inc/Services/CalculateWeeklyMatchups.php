@@ -61,7 +61,6 @@ class CalculateWeeklyMatchups
 
         return false;
         
-
     }
 
     public function previous_matchups_exists( $new_fixture_id ){

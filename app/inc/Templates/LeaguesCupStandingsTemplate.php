@@ -23,8 +23,9 @@ final class LeaguesCupStandingsTemplate implements TemplateInterface
             return '<!-- No Player League Data -->';
         }
 
-        $home_players = $this->getPlayersHTML($data['home_players'],$data['fixture']);
-        $away_players = $this->getPlayersHTML($data['away_players'],$data['fixture']);
+        $form = $data['form'];
+        $html_form = $this->setFormHtml($form);
+
 
         $template_html = <<<HTML
 
@@ -51,61 +52,51 @@ final class LeaguesCupStandingsTemplate implements TemplateInterface
                     Η
                 </div>
                 <div class="leaguescup-pluspoints leaguescup-header">
-                    Π+
+                    <!-- Π+ -->
                 </div>
                 <div class="leaguescup-minuspoints leaguescup-header">
-                    Π-
+                    <!-- Π- -->
                 </div>
             </div>
             <!-- Standing Rows-->
             <div class="leaguescupstandingsrow">
                 <div class="leaguescup-position">
-                    1
+                    {$data['league_position']}
                 </div>
                     <div class="leaguescup-tea-logmo">
-                        <img src="http://localhost/wpsetup/wp-content/uploads/2022/06/antikouvades.png">
-                        </img>
+                        {$data['home_thumbnail']}
                     </div>
                     <div class="team-bestplayer">
-                        <div class="team-name">Roligans</div>
-                        <div class="bestplayer">Γρηγόρης Μαθιουδάκης</div>
+                        <div class="team-name">{$data['league_name']}</div>
+                        <div class="bestplayer">{$data['lead_scorer']}</div>
                     </div>
                 <div class="leaguescup-points-space">
-                    <div class="leaguescup-points">42</div>
-                    <div class="leaguescup-bestplayerpoints">379</div>
+                    <div class="leaguescup-points">{$data['score']}</div>
+                    <div class="leaguescup-bestplayerpoints">{$data['lead_scorer_points']}</div>
                 </div>
                 <div class="statsandpoints">
                     <div class="top-row">
                         <div class="column-1">
-                                <div class="leaguescup-matches">18</div>
+                                <div class="leaguescup-matches">{$data['total_matches']}</div>
                         </div>
                         <div class="column-2">
-                            <div class="leaguescup-wins">14</div>
+                            <div class="leaguescup-wins">{$data['total_win']}</div>
                         </div>
                         <div class="column-3">
-                            <div class="leaguescup-draws">0</div>
+                            <div class="leaguescup-draws">{$data['total_draw']}</div>
                         </div>
                         <div class="column-4">
-                            <div class="leaguescup-loses">4</div>
+                            <div class="leaguescup-loses">{$data['total_loss']}</div>
                         </div>
                         <div class="column-5">
-                            <div class="leaguescup-pluspoints">2007</div>
+                            <div class="leaguescup-pluspoints"></div>
                         </div>
                         <div class="column-6">
-                            <div class="leaguescup-minuspoints">1521</div>
+                            <div class="leaguescup-minuspoints"></div>
                         </div>
                     </div>
                     <div class="bottom-row">
-                        <div class="leaguescup-stats-w">N</div>
-                        <div class="leaguescup-stats-l">H</div>
-                        <div class="leaguescup-stats-d">I</div>
-                        <div class="leaguescup-stats-w">N</div>
-                        <div class="leaguescup-stats-l">H</div>
-                        <div class="leaguescup-stats-d">I</div>
-                        <div class="leaguescup-stats-w">N</div>
-                        <div class="leaguescup-stats-l">H</div>
-                        <div class="leaguescup-stats-d">I</div>
-                        <div class="leaguescup-stats-w">N</div>
+                        {$html_form}
                     </div>
                 </div>
             </div>
@@ -272,18 +263,19 @@ HTML;
         return $css;
     }
 
-    public function getPlayersHTML(array $players,string $fixture_id){//$data['fixture']
+    public function setFormHtml(array $form): string
+    {
         $html = '';
-        
-        foreach($players as $player){
+        foreach ($form as $symbol){
+            $lower_symbol = strtolower($symbol);
             $html .= <<<HTML
-                <div class="league-player">
-                    <div class="leaguescup-player-name">{$player->wp_player->display_name}</div>
-                    <div class="leaguescup-player-score">{$player->current_fixture_points()}</div>
-                </div>
-HTML; 
+                <div class="leaguescup-stats-{$lower_symbol}">{$symbol}</div>
+HTML;
         }
+        
         return $html;
     }
+
+    
 
 }

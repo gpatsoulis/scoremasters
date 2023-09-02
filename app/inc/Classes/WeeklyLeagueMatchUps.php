@@ -41,7 +41,7 @@ class WeeklyLeagueMatchUps
         return $this->matchups;
     }
 
-    //ramove default false should be int
+    //remove default false should be int
     public function for_fixture_id($fixture_id = 0): array
     {
 
