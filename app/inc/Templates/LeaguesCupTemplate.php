@@ -54,7 +54,7 @@ final class LeaguesCupTemplate implements TemplateInterface
                     <span class="leaguescup-away-score">{$data['away_points']}</span>
                 </div>
                 <div class="leaguescup-logo">
-                    <img src="http://localhost/wpsetup/wp-content/uploads/2022/04/LEAGUES-CUP.png"></img>
+                    <img src="https://scoremasters.gr/wp-content/uploads/2022/04/LEAGUES-CUP.png"></img>
                 </div>
             </div>
             <div class="leaguescup-away-league">
@@ -130,7 +130,7 @@ HTML;
             }
 
             .leaguescup-home-league img {
-                width:auto;
+                width:150px;
                 display: inline;
                 align-self: start;
                 margin-left: 2%;
@@ -172,7 +172,7 @@ HTML;
             }
             
             .leaguescup-away-league img {
-                width:auto;
+                width:150px;
                 display: inline;
                 align-self: end;
                 margin-right: 2%;
