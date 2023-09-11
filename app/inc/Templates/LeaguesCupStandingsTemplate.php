@@ -255,6 +255,10 @@ HTML;
                 .leaguescupstandingsrow .leaguescup-position, .leaguescup-points-space .leaguescup-points, .team-name {
                     font-size: 16px;
                 }
+
+                .team-name , .leaguescup-points-space .leaguescup-points {
+                    font-size:20px;
+                }
             }
             
         </style>

@@ -108,6 +108,7 @@ HTML;
             .leaguescup-home-team-name h2 {
                 text-align: start;
                 margin-bottom: 0px;
+                height:120px;
             }
 
             .leaguescup-home-team-name h2::after {
@@ -169,6 +170,7 @@ HTML;
             .leaguescup-away-team-name h2 {
                 text-align: end;
                 margin-bottom: 0px;
+                height:120px;
             }
             
             .leaguescup-away-league img {
@@ -199,6 +201,10 @@ HTML;
 
             .leaguescup-home-league .leaguescup-player-name{
                 text-align:start;
+            }
+
+            .leaguescup-home-league a,.leaguescup-away-league a {
+                height:200px;
             }
 
             .leaguescup-away-league .leaguescup-player-name{
@@ -235,11 +241,15 @@ HTML;
             @media only screen and (max-width: 600px) {
                 .leaguescup-home-team-name h2, .leaguescup-away-team-name h2 {
                     font-size:16px;
+                    height:40px;
+                }
+
+                .leaguescup-home-league a,.leaguescup-away-league a {
+                    height:100px;
                 }
 
                 .leaguescup-away-league img, .leaguescup-home-league img {
                     max-width:80px;
-                    max-height:80px;
                 }
 
                 span.leaguescup-away-score, span.leaguescup-home-score {
