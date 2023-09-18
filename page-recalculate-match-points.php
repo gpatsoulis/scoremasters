@@ -3,7 +3,7 @@
 use Scoremasters\Inc\Base\ScmData;
 use Scoremasters\Inc\Services\RecalculateMatchScore;
 
-if(!is_admin()) exit;
+if (!current_user_can( 'manage_options' )) exit;
 
 if (isset($_POST['match_id'])
 && wp_verify_nonce($_POST['scm_match_id_'], 'submit_recalculate_form')) {
