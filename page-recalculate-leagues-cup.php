@@ -13,3 +13,5 @@ $currentMatchups = $matchups->for_fixture_id(17298);
 $score = new CalculateLeaguesCupPoints($currentMatchups, 17298);
 $score->calculate();
 $score->save();
+
+echo '-- recalcution finished!!!';
