@@ -23,6 +23,10 @@ class CalculateLeaguesCupPoints
 
     public function calculate(): array
     {
+
+        error_log(__METHOD__ . 'Calculating league cup points ' . $this->fixture_id);
+        error_log(__METHOD__ . 'Calculating league cup points ' . json_encode($this->matchUps));
+        
         $totalScore = [];
 
         for ($i = 0; $i < count($this->matchUps); $i += 2) {
@@ -44,14 +48,16 @@ class CalculateLeaguesCupPoints
                 $totalScore[] = ['league_id' => $this->matchUps[1], 'points' => $leagueBpoints, 'score' => 0, 'opponent_id' => $this->matchUps[0]];
             } else {
                 $totalScore[] = ['league_id' => $this->matchUps[0], 'points' => $leagueApoints, 'score' => 0, 'opponent_id' => $this->matchUps[1]];
+              
                 $totalScore[] = ['league_id' => $this->matchUps[1], 'points' => $leagueBpoints, 'score' => 3, 'opponent_id' => $this->matchUps[0]];
             }
+            error_log(__METHOD__ . 'Calculating league cup points - leagueA: ' . $leagueApoints . ' leagueB: ' . $leagueBpoints);
 
         }
 
         $this->totalScore = $totalScore;
 
-        error_log(__METHOD__ . 'Calculating league cup points - leagueA: ' . $leagueApoints . ' leagueB: ' . $leagueBpoints);
+        
         
         error_log(__METHOD__ . 'Calculating league cup points - total Score: ' . json_encode($totalScore));
         return $totalScore;
