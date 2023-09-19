@@ -97,6 +97,10 @@ class CalculateLeaguesCupPoints
                 $score_meta = [];
             }
 
+            //for recalculation only !!!!!!!!
+            $score_meta = [];
+
+
             array_push($score_meta,$scoreArray);
 
             $id = update_post_meta($league_id, 'score_points_seasonID_' . $current_season_id, $score_meta);
