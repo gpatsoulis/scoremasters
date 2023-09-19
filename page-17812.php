@@ -15,6 +15,7 @@ if ($weekly_competition->ID < 0) {
     error_log(__METHOD__ . ' ----ERROR EVENT---- error calculating add_leagues_cup_matchups');
     return;
 }
+var_dump($weekly_competition);
 
 $matchups = new WeeklyLeagueMatchUps($weekly_competition->ID);
 $all = $matchups->get_all_matchups();
@@ -22,6 +23,8 @@ $all = $matchups->get_all_matchups();
 var_dump($all);
 
 $currentMatchups = $matchups->for_fixture_id(17298);
+
+var_dump($currentMatchups);
 
 $score = new CalculateLeaguesCupPoints($currentMatchups, 17298);
 $score->calculate();
