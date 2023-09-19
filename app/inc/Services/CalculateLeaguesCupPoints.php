@@ -98,7 +98,7 @@ class CalculateLeaguesCupPoints
             }
 
             //for recalculation only !!!!!!!!
-            $score_meta = [];
+            //$score_meta = [];
 
 
             array_push($score_meta,$scoreArray);
