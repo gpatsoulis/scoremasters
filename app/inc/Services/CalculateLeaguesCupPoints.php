@@ -52,7 +52,7 @@ class CalculateLeaguesCupPoints
                 $totalScore[] = ['league_id' => $this->matchUps[1], 'points' => $leagueBpoints, 'score' => 3, 'opponent_id' => $this->matchUps[0]];
             }
             error_log(__METHOD__ . 'Calculating league cup points - leagueA: ' . $leagueApoints . ' leagueB: ' . $leagueBpoints);
-            error_log(__METHOD__ . 'Calculating league cup points - total score: ' . json_encode($totalScore[]));
+            error_log(__METHOD__ . 'Calculating league cup points - total score: ' . json_encode($totalScore));
 
         }
 
