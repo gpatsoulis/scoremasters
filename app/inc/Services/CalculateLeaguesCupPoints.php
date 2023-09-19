@@ -87,7 +87,7 @@ class CalculateLeaguesCupPoints
             $score_meta = get_post_meta($league_id,'score_points_seasonID_'.$current_season_id,true);
             if(!$score_meta){
                 error_log(__METHOD__ . ' INIT LEAGUE SCORE -- no previus score for league: '. $league_id);
-                $get_score_meta = [];
+                $score_meta = [];
             }
 
             array_push($score_meta,$scoreArray);
