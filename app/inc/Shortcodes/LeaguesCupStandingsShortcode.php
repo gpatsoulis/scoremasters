@@ -55,6 +55,7 @@ class LeaguesCupStandingsShortcode
         if(count($league_matchups->matchups) !== 0){
             $all_leagues = current($league_matchups->matchups);
             $all_leagues_sorted = $this->short_leagues_by_score($all_leagues);
+            $all_leagues_sorted = array_reverse($all_leagues_sorted);
         }
 
         //var_dump($all_leagues_sorted);
