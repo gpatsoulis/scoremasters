@@ -24,9 +24,9 @@ class CalculateLeaguesCupPoints
     public function calculate(): array
     {
 
-        error_log(__METHOD__ . 'Calculating league cup points ' . $this->fixture_id);
-        error_log(__METHOD__ . 'Calculating league cup points ' . json_encode($this->matchUps));
-        
+        error_log(__METHOD__ . 'league cup fixture id ' . $this->fixture_id);
+        error_log(__METHOD__ . 'league cup matchups ' . json_encode($this->matchUps));
+
         $totalScore = [];
 
         for ($i = 0; $i < count($this->matchUps); $i += 2) {
