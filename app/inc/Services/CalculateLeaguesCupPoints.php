@@ -41,15 +41,15 @@ class CalculateLeaguesCupPoints
             $leagueBpoints = $this->totalPoints($leagueBplayers);
 
             if ($leagueApoints === $leagueBpoints) {
-                $totalScore[] = ['league_id' => $this->matchUps[0], 'points' => $leagueApoints, 'score' => 1, 'opponent_id' => $this->matchUps[1]];
-                $totalScore[] = ['league_id' => $this->matchUps[1], 'points' => $leagueBpoints, 'score' => 1, 'opponent_id' => $this->matchUps[0]];
+                $totalScore[] = ['league_id' => $this->matchUps[$i], 'points' => $leagueApoints, 'score' => 1, 'opponent_id' => $this->matchUps[$i+1]];
+                $totalScore[] = ['league_id' => $this->matchUps[$i+1], 'points' => $leagueBpoints, 'score' => 1, 'opponent_id' => $this->matchUps[$i]];
             } elseif ($leagueApoints > $leagueBpoints) {
-                $totalScore[] = ['league_id' => $this->matchUps[0], 'points' => $leagueApoints, 'score' => 3, 'opponent_id' => $this->matchUps[1]];
-                $totalScore[] = ['league_id' => $this->matchUps[1], 'points' => $leagueBpoints, 'score' => 0, 'opponent_id' => $this->matchUps[0]];
+                $totalScore[] = ['league_id' => $this->matchUps[$i], 'points' => $leagueApoints, 'score' => 3, 'opponent_id' => $this->matchUps[$i+1]];
+                $totalScore[] = ['league_id' => $this->matchUps[$i+1], 'points' => $leagueBpoints, 'score' => 0, 'opponent_id' => $this->matchUps[$i]];
             } else {
-                $totalScore[] = ['league_id' => $this->matchUps[0], 'points' => $leagueApoints, 'score' => 0, 'opponent_id' => $this->matchUps[1]];
+                $totalScore[] = ['league_id' => $this->matchUps[$i], 'points' => $leagueApoints, 'score' => 0, 'opponent_id' => $this->matchUps[$i+1]];
               
-                $totalScore[] = ['league_id' => $this->matchUps[1], 'points' => $leagueBpoints, 'score' => 3, 'opponent_id' => $this->matchUps[0]];
+                $totalScore[] = ['league_id' => $this->matchUps[$i+1], 'points' => $leagueBpoints, 'score' => 3, 'opponent_id' => $this->matchUps[$i]];
             }
             error_log(__METHOD__ . 'Calculating league cup points - leagueA: ' . $leagueApoints . ' leagueB: ' . $leagueBpoints);
             error_log(__METHOD__ . 'Calculating league cup points - total score: ' . json_encode($totalScore));
