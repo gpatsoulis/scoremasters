@@ -8,6 +8,7 @@ if (!current_user_can('manage_options')) {
     exit;
 }
 
+die('Don\'t run this script, will destroy any valid leagues score');
 echo '-- recalcution started!!! <pre>';
 
 $weekly_competition = ScmData::get_current_scm_competition_of_type('leagues-cup');
