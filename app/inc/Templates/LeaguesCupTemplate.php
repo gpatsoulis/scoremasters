@@ -23,8 +23,8 @@ final class LeaguesCupTemplate implements TemplateInterface
             return '<!-- No Player League Data -->';
         }
 
-        $home_players = $this->getPlayersHTML($data['home_players'],$data['fixture']);
-        $away_players = $this->getPlayersHTML($data['away_players'],$data['fixture']);
+        $home_players = $this->getHomePlayersHTML($data['home_players'],$data['fixture']);
+        $away_players = $this->getAwayPlayersHTML($data['away_players'],$data['fixture']);
 
         $template_html = <<<HTML
 
@@ -263,7 +263,7 @@ HTML;
         return $css;
     }
 
-    public function getPlayersHTML(array $players,string $fixture_id){//$data['fixture']
+    public function getHomePlayersHTML(array $players,string $fixture_id){//$data['fixture']
         $html = '';
         
         foreach($players as $player){
@@ -271,6 +271,20 @@ HTML;
                 <div class="league-player">
                     <div class="leaguescup-player-name">{$player->wp_player->display_name}</div>
                     <div class="leaguescup-player-score">{$player->current_fixture_points()}</div>
+                </div>
+HTML; 
+        }
+        return $html;
+    }
+
+    public function getAwayPlayersHTML(array $players,string $fixture_id){//$data['fixture']
+        $html = '';
+        
+        foreach($players as $player){
+            $html .= <<<HTML
+                <div class="league-player">
+                    <div class="leaguescup-player-score">{$player->current_fixture_points()}</div>
+                    <div class="leaguescup-player-name">{$player->wp_player->display_name}</div>
                 </div>
 HTML; 
         }

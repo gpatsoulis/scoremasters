@@ -228,21 +228,21 @@ HTML;
                 grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr ;
             }
             
-            .leaguescup-stats-w, .leaguescup-stats-l , .leaguescup-stats-d{
+            .leaguescup-stats-h, .leaguescup-stats-i, .leaguescup-stats-n{
                 text-align: center;
                 border-radius: 8px;
                 margin-right: 8px;
             }
             
-            .leaguescup-stats-w{
+            .leaguescup-stats-n{
                 background-color: green;
             }
             
-            .leaguescup-stats-l{
+            .leaguescup-stats-h{
                 background-color: red;
             }
             
-            .leaguescup-stats-d{
+            .leaguescup-stats-i{
                 background-color: orange;
             }
             
@@ -258,6 +258,11 @@ HTML;
 
                 .team-name , .leaguescup-points-space .leaguescup-points {
                     font-size:20px;
+                }
+
+                /* Show row header info only in first row */
+                .leaguescupstandings:not(:first-of-type) .leaguescupstandingsheader { 
+                    display:none !important;
                 }
             }
             
