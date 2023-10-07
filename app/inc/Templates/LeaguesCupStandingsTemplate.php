@@ -232,6 +232,7 @@ HTML;
                 text-align: center;
                 border-radius: 8px;
                 margin-right: 8px;
+                width: 30px;
             }
             
             .leaguescup-stats-n{
