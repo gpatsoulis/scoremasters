@@ -257,6 +257,31 @@ class Player
         return intval($current_fixture_points);
     }
 
+    public function get_league_cup_total_points()
+    {
+        // fixture_id_xxx
+        $leagues_cup = ScmData::get_current_scm_competition_of_type('leagues-cup');
+
+        $matchups = get_post_meta( $leagues_cup->ID, 'weekly_league_matchups', true );
+        $fixtures = array_keys($matchups);
+
+        $fixture_ids = [];
+        foreach ($fixtures as  $fixture) {
+            preg_match('/[0-9]+/',$fixture,$matches);
+            if (isset($matches[0])) {
+                $fixture_ids[] = $matches[0];
+            }
+        }
+
+        $total_league_cup_points = 0;
+        foreach ($fixture_ids as $id) {
+            $points = $this->current_fixture_points($id);
+            $total_league_cup_points += (int) $points;
+        }
+
+        return $total_league_cup_points;
+    }
+
 }
 
 /*
