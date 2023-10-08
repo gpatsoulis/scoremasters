@@ -56,6 +56,7 @@ class LeaguesCupShortcode
 
         $data = array();
         $data['fixture'] = (isset($fixture)) ? $fixture->post_name: (ScmData::get_current_fixture($fixture_id))->post_name;
+        $data['fixture_id'] = $fixture_id;
 
         for ($i = 0; $i < count($current_matchups); $i += 2) {
             $leagueH = new League(get_post($current_matchups[$i])); 

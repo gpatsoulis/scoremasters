@@ -23,8 +23,8 @@ final class LeaguesCupTemplate implements TemplateInterface
             return '<!-- No Player League Data -->';
         }
 
-        $home_players = $this->getHomePlayersHTML($data['home_players'],$data['fixture']);
-        $away_players = $this->getAwayPlayersHTML($data['away_players'],$data['fixture']);
+        $home_players = $this->getHomePlayersHTML($data['home_players'],$data['fixture_id']);
+        $away_players = $this->getAwayPlayersHTML($data['away_players'],$data['fixture_id']);
 
         $template_html = <<<HTML
 
@@ -270,7 +270,7 @@ HTML;
             $html .= <<<HTML
                 <div class="league-player">
                     <div class="leaguescup-player-name">{$player->wp_player->display_name}</div>
-                    <div class="leaguescup-player-score">{$player->current_fixture_points()}</div>
+                    <div class="leaguescup-player-score">{$player->current_fixture_points($fixture_id)}</div>
                 </div>
 HTML; 
         }
@@ -283,7 +283,7 @@ HTML;
         foreach($players as $player){
             $html .= <<<HTML
                 <div class="league-player">
-                    <div class="leaguescup-player-score">{$player->current_fixture_points()}</div>
+                    <div class="leaguescup-player-score">{$player->current_fixture_points($fixture_id)}</div>
                     <div class="leaguescup-player-name">{$player->wp_player->display_name}</div>
                 </div>
 HTML; 
