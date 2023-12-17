@@ -75,6 +75,9 @@ class LeaguesCupStandingsShortcode
             $lead_scorer = current($league->short_players_by_total_points());
 
             $form = LeaguesCupCompetition::get_league_form($league_data['league_id']);
+            $how_many_form_matches = 10;
+            $form = array_slice($form,0,$how_many_form_matches);
+
 
             //$data['leagues'][$league_id] = [
             $data = [
